@@ -23,7 +23,10 @@ export default function PaymentRemainder() {
   useEffect(() => {
     if (paymentId) {
 axios.get(
-  `https://autoportal.onrender.com/payment/${paymentId}`
+  axios.get(
+  `https://autoportal.onrender.com/auth/fetch/single/payment/data/${paymentId}`
+)
+
 )
 
   .then((res) => {
