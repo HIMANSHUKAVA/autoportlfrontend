@@ -21,22 +21,19 @@ export default function PaymentRemainder() {
   const buynow =  BuyNow();
 
   useEffect(() => {
-    if (paymentId) {
-axios.get(
-  axios.get(
-  `https://autoportal.onrender.com/auth/fetch/single/payment/data/${paymentId}`
-)
+  if (paymentId) {
+    axios
+      .get(
+        `https://autoportal.onrender.com/auth/fetch/single/payment/data/${paymentId}`
+      )
+      .then((res) => {
+        console.log("PAYMENT DATA:", res.data);
+        setPayment(res.data);
+      })
+      .catch((err) => console.log(err));
+  }
+}, [paymentId]);
 
-)
-
-  .then((res) => {
-    console.log("PAYMENT DATA:", res.data);
-    setPayment(res.data);
-  })
-  .catch((err) => console.log(err));
-
-    }
-  }, [paymentId]);
 
  const handlePay = () => {
   console.log("PAY CLICKED");
