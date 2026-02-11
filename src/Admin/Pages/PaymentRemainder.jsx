@@ -85,7 +85,7 @@ axios.get(
 
           <Divider sx={{ my: 2, borderColor: "rgba(255,255,255,0.1)" }} />
 
-          {payment && (
+          {payment?.car && (
             <Stack spacing={1.2}>
               <Typography>
                 🚗 <b>{payment.car.brand}</b> ({payment.car.model})
