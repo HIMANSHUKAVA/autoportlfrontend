@@ -105,7 +105,7 @@ export default function Oldcarshow() {
       };
 
       const response = await axios.post(
-        `http://localhost:3000/buyer/car/payment/add/${user_id}/${id}`,
+         `https://autoportal.onrender.com/buyer/car/payment/add/${user_id}/${id}`,
         payload,
         {
           headers: {

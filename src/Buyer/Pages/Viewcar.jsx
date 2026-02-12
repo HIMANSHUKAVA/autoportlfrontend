@@ -41,15 +41,16 @@ export default function Viewcar() {
         paymentMethod: "RAZORPAY",
       };
 
-      const response = await axios.post(
-        `http://localhost:3000/buyer/car/payment/add/${user_id}/${car.id}`,
-        payload,
-        {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        }
-      );
+const response = await axios.post(
+  `https://autoportal.onrender.com/buyer/car/payment/add/${user_id}/${car.id}`,
+  payload,
+  {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+  }
+);
+
 
       buynow.payNow(response.data.amount, response.data.razorpayOrderId);
     } catch (error) {
