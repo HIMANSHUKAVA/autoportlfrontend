@@ -24,10 +24,7 @@ export default function PaymentRemainder() {
   if (paymentId) {
     axios
       .get(
-      axios.get(
-  `https://autoportal.onrender.com/auth/fetch/single/payment/data/${paymentId}`
-)
-
+        `https://autoportal.onrender.com/auth/fetch/single/payment/data/${paymentId}`
       )
       .then((res) => {
         console.log("PAYMENT DATA:", res.data);
