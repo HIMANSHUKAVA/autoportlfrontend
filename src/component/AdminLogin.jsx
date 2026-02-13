@@ -64,11 +64,14 @@ const navigate = useNavigate();
     }
     setpending(true)
 
-    axios.post(
-  "https://autoportal.onrender.com/auth/login-check", null,
+   axios.post(
+  "https://autoportal.onrender.com/auth/login-check",
+  null,
   {
-    email: state.email,
-    password: state.password
+    params: {
+      email: state.email,
+      password: state.password
+    }
   }
 )
 .then((response) => {
@@ -83,9 +86,8 @@ const navigate = useNavigate();
   navigate("/admin/dash");
 })
 .catch((error) => {
-  showErrorAlert("Invalid Credentials");
   console.log(error);
-  dispatch({ type: "reset" });
+  showErrorAlert("Invalid credentials");
   setpending(false);
 });
 
