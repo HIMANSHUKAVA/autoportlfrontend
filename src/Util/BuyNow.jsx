@@ -25,4 +25,7 @@ const BuyNow = () => {
   return { payNow };
 };
 
+
+
+
 export default BuyNow;

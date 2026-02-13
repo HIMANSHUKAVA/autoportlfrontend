@@ -9,8 +9,9 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import BuyNow from "../../Util/BuyNow";
+import { PanoramaSharp } from "@mui/icons-material";
 
 export default function PaymentRemainder() {
   const [searchParams] = useSearchParams();
@@ -35,17 +36,68 @@ export default function PaymentRemainder() {
 }, [paymentId]);
 
 
- const handlePay = () => {
-  console.log("PAY CLICKED");
-  console.log("Payment:", payment);
+ const handlePay = async () => {
 
   if (!payment) {
     alert("Payment data not loaded yet");
     return;
   }
 
-  buynow.payNow(40000, payment.razorpayOrderId);
+  try {
+
+    const userId = searchParams.get("userId");
+    const paymentId = searchParams.get("paymentId");
+
+    // 1️ Validate payment from backend
+    const response = await axios.get(
+      `https://autoportal.onrender.com/auth/payment/link/${paymentId}/${userId}`
+    );
+
+    const validatedPayment = response.data;
+
+    // 2️ Open Razorpay using validated data
+    const options = {
+      key: "rzp_test_S0XseAdZlcbad2",
+      amount: 40000 * 100,
+      currency: "INR",
+      name: "AutoPortal",
+      description: "Pending Payment",
+      order_id: validatedPayment.razorpayOrderId,
+
+      handler: async function (razorResponse) {
+
+        try {
+
+         await axios.put(
+      `https://autoportal.onrender.com/auth/pending/amount/${validatedPayment.paymentId}`,
+      null,
+      {
+        params: {
+          amount: 40000
+        }
+      }
+    );
+          alert("Payment Successful 🎉");
+          window.location.reload();
+
+        } catch (err) {
+          console.log("Update Failed:", err);
+          alert("Payment done but update failed");
+        }
+      },
+
+      theme: { color: "#f5c46b" },
+    };
+
+    new window.Razorpay(options).open();
+
+  } catch (error) {
+    console.log(error);
+    alert("Payment validation failed");
+  }
+
 };
+
 
 
 
