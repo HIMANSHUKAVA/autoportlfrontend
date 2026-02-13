@@ -64,7 +64,7 @@ const navigate = useNavigate();
     }
     setpending(true)
 
-   axios.post(
+ axios.post(
   "https://autoportal.onrender.com/auth/login-check",
   null,
   {
@@ -73,8 +73,7 @@ const navigate = useNavigate();
       password: state.password
     }
   }
-)
-.then((response) => {
+).then((response) => {
   const { token, user } = response.data;
 
   localStorage.setItem("token", token);
