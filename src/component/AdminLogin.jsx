@@ -64,27 +64,31 @@ const navigate = useNavigate();
     }
     setpending(true)
 
-    axios.post(`http://localhost:3000/auth/login-check?email=${state.email}&password=${state.password} `)
-    .then((response)=>{
-       const { token, user } = response.data;
+    axios.post(
+  "https://autoportal.onrender.com/auth/login-check", null,
+  {
+    email: state.email,
+    password: state.password
+  }
+)
+.then((response) => {
+  const { token, user } = response.data;
 
   localStorage.setItem("token", token);
   localStorage.setItem("user", JSON.stringify(user));
 
-      console.log(response.data);
-      showSuccessAlert("Login Successfull");
-      dispatch({type:"reset"})
-      setpending(false)
-      navigate("/admin/dash")
+  showSuccessAlert("Login Successful");
+  dispatch({ type: "reset" });
+  setpending(false);
+  navigate("/admin/dash");
+})
+.catch((error) => {
+  showErrorAlert("Invalid Credentials");
+  console.log(error);
+  dispatch({ type: "reset" });
+  setpending(false);
+});
 
-
-      })
-      .catch((error)=>{
-        showErrorAlert(error);
-        console.log(error);
-        dispatch({type:"reset"})
-        setpending(false)
-      })
 
 
 
