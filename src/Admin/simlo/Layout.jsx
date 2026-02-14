@@ -94,7 +94,7 @@ export default function Layout() {
           },
         }}
       >
-        <MenuItem>
+        <MenuItem component={Link} to="/admin/add">
           <ListItemIcon>
             <Add />
           </ListItemIcon>
@@ -106,19 +106,19 @@ export default function Layout() {
           </ListItemIcon>
           <ListItemText>View New Car</ListItemText>
         </MenuItem>
-        <MenuItem onClick={() => setbuyer(null)}>
+        <MenuItem onClick={() => setbuyer(null)} component={Link} to="/admin/view/Booking/list">
           <ListItemIcon>
             <TimeToLeave />
           </ListItemIcon>
           <ListItemText>Book Drive</ListItemText>
         </MenuItem>
-        <MenuItem onClick={() => setbuyer(null)}>
+        <MenuItem onClick={() => setbuyer(null)} component={Link} to="/admin/view/new/car/payment">
           <ListItemIcon>
             <PaymentIcon />
           </ListItemIcon>
           <ListItemText>Payment</ListItemText>
         </MenuItem>
-        <MenuItem onClick={() => setbuyer(null)}>
+        <MenuItem onClick={() => setbuyer(null)} component={Link} to="/admin/view/quary/buyer">
           <ListItemIcon>
             <CallIcon />
           </ListItemIcon>
@@ -147,7 +147,7 @@ export default function Layout() {
           },
         }}
       >
-        <MenuItem onClick={() => setold(null)}>
+        <MenuItem onClick={() => setold(null)} component={Link} to="/admin/view/request/sellar" >
           <ListItemIcon>
             <AssignmentTurnedIn />
           </ListItemIcon>
@@ -184,7 +184,7 @@ export default function Layout() {
           gap:1
         }}
         >
-          <ListItemButton>
+          <ListItemButton component={Link} to="/admin/dash">
             <ListItemIcon>
               <DashboardIcon />
             </ListItemIcon>
@@ -211,35 +211,35 @@ export default function Layout() {
                 mt: 2,
               }}
             >
-              <ListItemButton sx={menuButtonStyle}>
+              <ListItemButton sx={menuButtonStyle} component={Link} to="/admin/add">
                 <ListItemIcon>
                   <AddCircleOutlineIcon />
                 </ListItemIcon>
                 <ListItemText>Add New Car</ListItemText>
               </ListItemButton>
 
-              <ListItemButton sx={menuButtonStyle}>
+              <ListItemButton sx={menuButtonStyle} component={Link}>
                 <ListItemIcon>
                   <AddCircleOutlineIcon />
                 </ListItemIcon>
                 <ListItemText>View New Car</ListItemText>
               </ListItemButton>
 
-              <ListItemButton sx={menuButtonStyle}>
+              <ListItemButton sx={menuButtonStyle} component={Link} to="/admin/view/Booking/list">
                 <ListItemIcon>
                   <AddAPhotoOutlined />
                 </ListItemIcon>
                 <ListItemText>Book Drive</ListItemText>
               </ListItemButton>
 
-              <ListItemButton sx={menuButtonStyle}>
+              <ListItemButton sx={menuButtonStyle} component={Link} to="/admin/view/new/car/payment">
                 <ListItemIcon>
                   <PaymentIcon />
                 </ListItemIcon>
                 <ListItemText>Payment</ListItemText>
               </ListItemButton>
 
-              <ListItemButton sx={menuButtonStyle}>
+              <ListItemButton sx={menuButtonStyle} component={Link} to="/admin/view/quary/buyer">
                 <ListItemIcon>
                   <CallIcon />
                 </ListItemIcon>
@@ -258,7 +258,7 @@ export default function Layout() {
             : <ExpandMore />}
           </ListItemButton>
           <Collapse in={sellarcollapse} unmountOnExit timeout="auto">
-            <ListItemButton>
+            <ListItemButton component={Link} to="/admin/view/request/sellar">
               <ListItemIcon>
                 <AssignmentTurnedIn />
               </ListItemIcon>
@@ -283,14 +283,14 @@ export default function Layout() {
             : <ExpandMore />}
           </ListItemButton>
           <Collapse in={admin} unmountOnExit timeout="auto">
-            <ListItemButton>
+            <ListItemButton component={Link} to="/admin/add/admin">
               <ListItemIcon>
                 <AddCircleOutlineIcon />
               </ListItemIcon>
               <ListItemText>Add</ListItemText>
             </ListItemButton>
 
-            <ListItemButton>
+            <ListItemButton component={Link} to="/admin/view/admin/list">
               <ListItemIcon>
                 <AddCircleOutlineIcon />
               </ListItemIcon>
@@ -422,6 +422,8 @@ export default function Layout() {
                 color="inherit"
                 sx={menuButtonStyle}
                 endIcon={<DashboardIcon sx={{ color: "#f5c46b" }} />}
+                component={Link}
+                to="/admin/dash"
               >
                 Dashboard
               </Button>
@@ -436,7 +438,7 @@ export default function Layout() {
                 {buyer ?
                   <ExpandLess />
                 : <ExpandMore />}
-                {/* <ExpandMore/> */}
+
               </Button>
               {s}
 

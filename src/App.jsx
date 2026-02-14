@@ -247,7 +247,7 @@ function App() {
           }
         />
         <Route path="/admin/login" element={<AdminLogin/>}/>
-        <Route path="/admin" element={<Layout />}>
+          <Route path="/admin" element={<Layout />}>
           <Route path="dash" element={<AdminDashboard />} />
           <Route path="add" element={<Add_new/>} />
           <Route path="img/:id" element={<Mulimages/>}/>

@@ -8,6 +8,7 @@ import {
   TableCell,
   TableContainer,
   TableHead,
+  TablePagination,
   TableRow,
   TextField,
   Tooltip,
@@ -16,6 +17,7 @@ import {
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { showSuccessAlert, showErrorAlert } from "../../Util/Alert";
+import Footer from "../../Buyer/Layout/Footer";
 export default function ViewnewPayment() {
   const [newcarPayment, setnewcarPayment] = useState([]);
 
@@ -79,33 +81,34 @@ export default function ViewnewPayment() {
 
   const [order, setorder] = useState("asc");
 
-  const handlsort = (name)=>{
-    const sorting =  [...newcarPayment].sort((a,b)=>{
-      if(name=="asc"){
-        setorder("des")
-       return a[name] < b[name] ? -1:1
-      }
-      else
-      {
-        setorder("asc")
-         return a[name] > b[name] ? -1 : 1;
-      }
-     })
-     setnewcarPayment(sorting)
+  const handlsort = (column) => {
 
-  }
+  const sortedData = [...newcarPayment].sort((a, b) => {
+
+    if (order === "asc") {
+      return a[column] > b[column] ? 1 : -1;
+    } else {
+      return a[column] < b[column] ? 1 : -1;
+    }
+
+  });
+
+  setnewcarPayment(sortedData);
+  setorder(order === "asc" ? "desc" : "asc");
+};
 
   const [page, setpage] = useState(0);
-  const [rowperpage, setrowperpage] = useState(5);
+  const [rowperpage, setrowperpage] = useState(4);
 
-  const handlpage = (e)=>{
-    setpage(e.target.value)
-  }
+const handlpage = (event, newPage) => {
+  setpage(newPage);
+};
 
-  const handlrowperpage = (e)=>{
-   setrowperpage(e.target.value);
-    setpage(0);
-  }
+const handlrowperpage = (event) => {
+  setrowperpage(parseInt(event.target.value, 10));
+  setpage(0);
+};
+
   const [statusFilter, setStatusFilter] = useState("PENDING");
 
 
@@ -136,15 +139,15 @@ export default function ViewnewPayment() {
           </Button>
 
           <Button
-            variant={statusFilter === "APPROVED" ? "contained" : "outlined"}
-            onClick={() => setStatusFilter("APPROVED")}
+            variant={statusFilter === "RESOLVED" ? "contained" : "outlined"}
+            onClick={() => setStatusFilter("RESOLVED")}
             sx={{
-              bgcolor: statusFilter === "APPROVED" ? "#22c55e" : "transparent",
-              color: statusFilter === "APPROVED" ? "white" : "#22c55e",
+              bgcolor: statusFilter === "RESOLVED" ? "#22c55e" : "transparent",
+              color: statusFilter === "RESOLVED" ? "white" : "#22c55e",
               borderColor: "#22c55e",
             }}
           >
-            Approved
+            Resolved
           </Button>
         </Box>
 
@@ -184,6 +187,7 @@ export default function ViewnewPayment() {
             {newcarPayment
 
             .filter(c => c.paymentStatus === statusFilter)
+            .slice(page * rowperpage , page* rowperpage + rowperpage)
             .map((c) => (
               <>
                 <TableRow
@@ -337,7 +341,7 @@ export default function ViewnewPayment() {
 
                         </>
                       ) : (
-                        <Typography variant="h5">{c.paymentStatus}</Typography>
+                        <Typography variant="body2">{c.paymentStatus}</Typography>
                       )
                     }
 
@@ -388,7 +392,7 @@ export default function ViewnewPayment() {
                        </>
                       ):(
                         <>
-                        <Typography variant="h5">{c.paymentStatus}</Typography>
+                        <Typography variant="body2">{c.paymentStatus}</Typography>
                         </>
                       )
                     }
@@ -436,7 +440,33 @@ export default function ViewnewPayment() {
             ))}
           </TableBody>
         </Table>
+
+        <TablePagination
+            count={newcarPayment.filter(c => c.paymentStatus === statusFilter).length}
+            page={page}
+            onPageChange={handlpage}
+            onRowsPerPageChange={handlrowperpage}
+            rowsPerPageOptions={[2, 4, 5]}
+            sx={{
+              color: "#e5e7eb",
+              ".MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows":
+                {
+                  color: "#94a3b8",
+                },
+              ".MuiSvgIcon-root": {
+                color: "#facc15",
+              },
+              ".MuiSelect-select": {
+                color: "#facc15",
+              },
+              background: "linear-gradient(180deg, #020617, #020617)",
+              borderTop: "1px solid rgba(255,255,255,0.1)",
+            }}
+          />
+
       </TableContainer>
+
+      <Footer/>
     </>
   );
 }
