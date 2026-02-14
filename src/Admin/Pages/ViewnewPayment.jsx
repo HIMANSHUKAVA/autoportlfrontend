@@ -52,6 +52,22 @@ export default function ViewnewPayment() {
       });
   };
 
+ const handlstatus = (c) =>{
+
+
+  axios.put(`${API}/admin/car/payment/update/status/${c.paymentId}`,{
+    params:{
+     status : c.paymentStatus
+    },
+    headers:{
+      Authorization : "Bearer " + localStorage.getItem("token")
+    }
+  }).then(()=>{
+    showSuccessAlert("Status Updated Successfully")
+  }).catch(()=>{
+    showErrorAlert("Faild try Again")
+  })
+ }
   return (
     <>
       <Box
@@ -278,6 +294,9 @@ export default function ViewnewPayment() {
                           color: "rgba(255,255,255,0.4)",
                           boxShadow: "none",
                         },
+                      }}
+                      onClick={()=>{
+                        handlstatus(c)
                       }}
                     >
                       Update
