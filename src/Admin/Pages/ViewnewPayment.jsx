@@ -60,7 +60,7 @@ export default function ViewnewPayment() {
 
   if(c.paymentStatus == "RESOLVED")
   {
-  axios.put(`${API}/admin/car/payment/update/status/${c.paymentId}`,{
+  axios.put(`${API}/admin/car/payment/update/status/${c.paymentId}`,null , {
     params:{
      status : c.paymentStatus
     },
