@@ -49,7 +49,7 @@ export default function PaymentRemainder() {
     const paymentId = searchParams.get("paymentId");
 
     // 1️ Validate payment from backend
-    const response = await axios.get(
+    const response = await axios.post(
       `https://autoportal.onrender.com/auth/payment/link/${paymentId}/${userId}`
     );
 
