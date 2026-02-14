@@ -58,6 +58,8 @@ export default function ViewnewPayment() {
   console.log(c.paymentStatus)
 
 
+  if(c.paymentStatus == "RESOLVED")
+  {
   axios.put(`${API}/admin/car/payment/update/status/${c.paymentId}`,{
     params:{
      status : c.paymentStatus
@@ -70,6 +72,7 @@ export default function ViewnewPayment() {
   }).catch(()=>{
     showErrorAlert("Faild try Again")
   })
+}
  }
   return (
     <>
