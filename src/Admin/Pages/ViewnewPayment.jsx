@@ -54,6 +54,9 @@ export default function ViewnewPayment() {
 
  const handlstatus = (c) =>{
 
+  console.log(c.paymentId);
+  console.log(c.paymentStatus)
+
 
   axios.put(`${API}/admin/car/payment/update/status/${c.paymentId}`,{
     params:{
