@@ -14,12 +14,11 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import{showSuccessAlert , showErrorAlert} from "../../Util/Alert"
+import { showSuccessAlert, showErrorAlert } from "../../Util/Alert";
 export default function ViewnewPayment() {
   const [newcarPayment, setnewcarPayment] = useState([]);
 
   const API = import.meta.env.VITE_API_BASE_URL;
-
 
   useEffect(() => {
     axios
@@ -37,20 +36,21 @@ export default function ViewnewPayment() {
       });
   }, []);
 
-  const sendemail = (c)=>{
-    axios.post(`${API}/admin/remainder/payment/${c.paymentId}`,null , {
-      headers:{
-        Authorization: "Bearer " + localStorage.getItem("token")
-      }
-    }).then(()=>{
-      showSuccessAlert("Message Send Successfully");
-    }).catch((error)=>{
-      showErrorAlert("Something Went Wrong Please Try Again Later");
-      console.log(error);
-
-    })
-
-  }
+  const sendemail = (c) => {
+    axios
+      .post(`${API}/admin/remainder/payment/${c.paymentId}`, null, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
+      .then(() => {
+        showSuccessAlert("Message Send Successfully");
+      })
+      .catch((error) => {
+        showErrorAlert("Something Went Wrong Please Try Again Later");
+        console.log(error);
+      });
+  };
 
   return (
     <>
@@ -75,13 +75,17 @@ export default function ViewnewPayment() {
                   fontWeight: 600,
                   fontSize: "0.9rem",
                   borderBottom: "1px solid rgba(255,255,255,0.08)",
-                  textAlign:"center"
+                  textAlign: "center",
                 },
               }}
             >
-              <TableCell>Payment <br/> Id</TableCell>
+              <TableCell>
+                Payment <br /> Id
+              </TableCell>
               <TableCell>Car_id</TableCell>
-              <TableCell>User <br/> Id</TableCell>
+              <TableCell>
+                User <br /> Id
+              </TableCell>
 
               <TableCell>Total Amount</TableCell>
               <TableCell>Booking Amount</TableCell>
@@ -101,20 +105,23 @@ export default function ViewnewPayment() {
                     "& td": {
                       color: "white", //  BODY TEXT COLOR
                       borderBottom: "1px solid rgba(255,255,255,0.08)",
-                      textAlign:"center"
+                      textAlign: "center",
                     },
                     "&:hover": {
                       background: "rgba(255,255,255,0.04)",
                     },
-
                   }}
                   key={c.paymentId}
                 >
                   <TableCell>
-                    <Tooltip arrow placement="right" title={
-                      <Box>
-                        <Typography variant="subtitle2">
-                            PaymentDate :  {new Date(c.paymentAt).toLocaleString()}
+                    <Tooltip
+                      arrow
+                      placement="right"
+                      title={
+                        <Box>
+                          <Typography variant="subtitle2">
+                            PaymentDate :{" "}
+                            {new Date(c.paymentAt).toLocaleString()}
                           </Typography>
                           <Typography variant="body2">
                             Method: {c.paymentMethod}
@@ -125,14 +132,15 @@ export default function ViewnewPayment() {
                           <Typography variant="body2">
                             transactionNumber : {c.transactionNumber}
                           </Typography>
-
-                      </Box>
-                    }>
-                      <Typography sx={{cursor:"pointer"}}>{c.paymentId}</Typography>
-
+                        </Box>
+                      }
+                    >
+                      <Typography sx={{ cursor: "pointer" }}>
+                        {c.paymentId}
+                      </Typography>
                     </Tooltip>
                   </TableCell>
-                                    <TableCell>
+                  <TableCell>
                     <Tooltip
                       arrow
                       placement="right"
@@ -162,14 +170,13 @@ export default function ViewnewPayment() {
                       </Typography>
                     </Tooltip>
                   </TableCell>
-                                    <TableCell>
-
+                  <TableCell>
                     <Tooltip
-                    arrow
-                    placement="right-end"
-                    title={
-                      <Box>
-                        <Typography variant="subtitle2">
+                      arrow
+                      placement="right-end"
+                      title={
+                        <Box>
+                          <Typography variant="subtitle2">
                             Name: {c.r.username}
                           </Typography>
                           <Typography variant="body2">
@@ -178,23 +185,18 @@ export default function ViewnewPayment() {
                           <Typography variant="body2">
                             Role : {c.r.role}
                           </Typography>
-
-
-                      </Box>
-                    }
-
+                        </Box>
+                      }
                     >
                       <Typography
-                      sx={{
-                        cursor:"pointer"
-                      }}
+                        sx={{
+                          cursor: "pointer",
+                        }}
                       >
                         {c.r.id}
-
                       </Typography>
                     </Tooltip>
-
-                    </TableCell>
+                  </TableCell>
                   <TableCell>{c.car.price}</TableCell>
                   <TableCell>{c.paidBookingAmount}</TableCell>
                   <TableCell>{c.pendingAmount}</TableCell>
@@ -234,15 +236,12 @@ export default function ViewnewPayment() {
                             },
                           }}
                           onChange={(e) => {
-                            const update = newcarPayment.map((r) =>
-                              r.id === c.id ?
-                                {
-                                  ...r,
-                                  status: e.target.value,
-                                }
+                            const updated = newcarPayment.map((r) =>
+                              r.paymentId === c.paymentId ?
+                                { ...r, paymentStatus: e.target.value }
                               : r,
                             );
-                            setnewcarPayment(update);
+                            setnewcarPayment(updated);
                           }}
                         >
                           <MenuItem value="PENDING">Pendig</MenuItem>
@@ -252,82 +251,77 @@ export default function ViewnewPayment() {
                     : <>{c.paymentStatus}</>}
                   </TableCell>
                   <TableCell>
-                         <Button
-                          size="small"
-                          sx={{
-                            px: 3,
-                            py: 0.8,
-                            m:1,
-                            textTransform: "none",
-                            fontWeight: 600,
-                            borderRadius: "999px",
-                            color: "#0f172a",
-                            background:
-                              "linear-gradient(135deg, #f5c46b, #eab308)",
-                            boxShadow: "0 6px 18px rgba(245,196,107,0.35)",
-                            transition: "all 0.25s ease",
+                    <Button
+                      size="small"
+                      sx={{
+                        px: 3,
+                        py: 0.8,
+                        m: 1,
+                        textTransform: "none",
+                        fontWeight: 600,
+                        borderRadius: "999px",
+                        color: "#0f172a",
+                        background: "linear-gradient(135deg, #f5c46b, #eab308)",
+                        boxShadow: "0 6px 18px rgba(245,196,107,0.35)",
+                        transition: "all 0.25s ease",
 
-                            "&:hover": {
-                              background:
-                                "linear-gradient(135deg, #facc15, #f59e0b)",
-                              boxShadow: "0 10px 26px rgba(245,196,107,0.55)",
-                              transform: "translateY(-1px)",
-                            },
+                        "&:hover": {
+                          background:
+                            "linear-gradient(135deg, #facc15, #f59e0b)",
+                          boxShadow: "0 10px 26px rgba(245,196,107,0.55)",
+                          transform: "translateY(-1px)",
+                        },
 
-                            "&:active": {
-                              transform: "scale(0.96)",
-                            },
+                        "&:active": {
+                          transform: "scale(0.96)",
+                        },
 
-                            "&.Mui-disabled": {
-                              background: "rgba(255,255,255,0.15)",
-                              color: "rgba(255,255,255,0.4)",
-                              boxShadow: "none",
-                            },
-                          }}
-                          // onClick={() => {
-                          //   Handlupdatestatus(c);
-                          // }}
-                        >
-                          Update
-                        </Button>
-                                            <Button
-                          size="small"
-                          sx={{
-                            px: 3,
-                            py: 0.8,
-                            textTransform: "none",
-                            fontWeight: 600,
-                            borderRadius: "999px",
-                            color: "#0f172a",
-                            background:
-                              "linear-gradient(135deg, #f5c46b, #eab308)",
-                            boxShadow: "0 6px 18px rgba(245,196,107,0.35)",
-                            transition: "all 0.25s ease",
+                        "&.Mui-disabled": {
+                          background: "rgba(255,255,255,0.15)",
+                          color: "rgba(255,255,255,0.4)",
+                          boxShadow: "none",
+                        },
+                      }}
+                    >
+                      Update
+                    </Button>
+                    <Button
+                      size="small"
+                      sx={{
+                        px: 3,
+                        py: 0.8,
+                        textTransform: "none",
+                        fontWeight: 600,
+                        borderRadius: "999px",
+                        color: "#0f172a",
+                        background: "linear-gradient(135deg, #f5c46b, #eab308)",
+                        boxShadow: "0 6px 18px rgba(245,196,107,0.35)",
+                        transition: "all 0.25s ease",
 
-                            "&:hover": {
-                              background:
-                                "linear-gradient(135deg, #facc15, #f59e0b)",
-                              boxShadow: "0 10px 26px rgba(245,196,107,0.55)",
-                              transform: "translateY(-1px)",
-                            },
+                        "&:hover": {
+                          background:
+                            "linear-gradient(135deg, #facc15, #f59e0b)",
+                          boxShadow: "0 10px 26px rgba(245,196,107,0.55)",
+                          transform: "translateY(-1px)",
+                        },
 
-                            "&:active": {
-                              transform: "scale(0.96)",
-                            },
+                        "&:active": {
+                          transform: "scale(0.96)",
+                        },
 
-                            "&.Mui-disabled": {
-                              background: "rgba(255,255,255,0.15)",
-                              color: "rgba(255,255,255,0.4)",
-                              boxShadow: "none",
-                            },
-                          }}
-                          onClick={() => {
-                            sendemail(c);
-                          }}
-                        >
-                          {/* Mony Order */}
-                           Request Payment
-                        </Button>
+                        "&.Mui-disabled": {
+                          background: "rgba(255,255,255,0.15)",
+                          color: "rgba(255,255,255,0.4)",
+                          boxShadow: "none",
+                        },
+                      }}
+                      onClick={() => {
+                        sendemail(c);
+                      }}
+                    >
+                      {/* Mony Order */}
+                      Request Payment
+                    </Button>
                   </TableCell>
                 </TableRow>
               </>
