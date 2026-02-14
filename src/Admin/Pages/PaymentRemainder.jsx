@@ -21,11 +21,13 @@ export default function PaymentRemainder() {
 
   const buynow =  BuyNow();
 
+  const API = import.meta.env.VITE_API_BASE_URL;
+
   useEffect(() => {
   if (paymentId) {
     axios
       .get(
-        `https://autoportal.onrender.com/auth/fetch/single/payment/data/${paymentId}`
+        `${API}/auth/fetch/single/payment/data/${paymentId}`
       )
       .then((res) => {
         console.log("PAYMENT DATA:", res.data);
