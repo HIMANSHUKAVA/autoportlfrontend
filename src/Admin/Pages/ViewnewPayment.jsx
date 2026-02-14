@@ -9,6 +9,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -74,6 +75,40 @@ export default function ViewnewPayment() {
   })
 }
  }
+
+
+  const [order, setorder] = useState("asc");
+
+  const handlsort = (name)=>{
+    const sorting =  [...newcarPayment].sort((a,b)=>{
+      if(name=="asc"){
+        setorder("des")
+       return a[name] < b[name] ? -1:1
+      }
+      else
+      {
+        setorder("asc")
+         return a[name] > b[name] ? -1 : 1;
+      }
+     })
+     setnewcarPayment(sorting)
+
+  }
+
+  const [page, setpage] = useState(0);
+  const [rowperpage, setrowperpage] = useState(5);
+
+  const handlpage = (e)=>{
+    setpage(e.target.value)
+  }
+
+  const handlrowperpage = (e)=>{
+   setrowperpage(e.target.value);
+    setpage(0);
+  }
+  const [statusFilter, setStatusFilter] = useState("PENDING");
+
+
   return (
     <>
       <Box
@@ -85,6 +120,35 @@ export default function ViewnewPayment() {
         <Typography variant="body2">View Payment And Check History</Typography>
         <hr />
       </Box>
+       <Box
+          sx={{ display: "flex", gap: 2, mb: 2, justifyContent: "flex-end" }}
+        >
+          <Button
+            variant={statusFilter === "PENDING" ? "contained" : "outlined"}
+            onClick={() => setStatusFilter("PENDING")}
+            sx={{
+              bgcolor: statusFilter === "PENDING" ? "#FACC15" : "transparent",
+              color: statusFilter === "PENDING" ? "black" : "#FACC15",
+              borderColor: "#FACC15",
+            }}
+          >
+            Pending
+          </Button>
+
+          <Button
+            variant={statusFilter === "APPROVED" ? "contained" : "outlined"}
+            onClick={() => setStatusFilter("APPROVED")}
+            sx={{
+              bgcolor: statusFilter === "APPROVED" ? "#22c55e" : "transparent",
+              color: statusFilter === "APPROVED" ? "white" : "#22c55e",
+              borderColor: "#22c55e",
+            }}
+          >
+            Approved
+          </Button>
+        </Box>
+
+
 
       <TableContainer>
         <Table>
@@ -101,26 +165,26 @@ export default function ViewnewPayment() {
                 },
               }}
             >
-              <TableCell>
+              <TableCell onClick={()=>{handlsort("paymentId")}}>
                 Payment <br /> Id
               </TableCell>
-              <TableCell>Car_id</TableCell>
-              <TableCell>
+              <TableCell onClick={()=>{handlsort("carid")}}>Car_id</TableCell>
+              <TableCell onClick={()=>{handlsort("userid")}}>
                 User <br /> Id
               </TableCell>
 
-              <TableCell>Total Amount</TableCell>
-              <TableCell>Booking Amount</TableCell>
-              <TableCell>Pending Amount</TableCell>
-              {/* <TableCell>user_id</TableCell> */}
-              {/* <TableCell>Transection Number</TableCell> */}
+              <TableCell onClick={()=>{handlsort("totalamount")}}>Total Amount</TableCell>
+              <TableCell onClick={()=>{handlsort("paidBookingAmount")}}>Booking Amount</TableCell>
               <TableCell>Payment Status</TableCell>
               <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
-            {newcarPayment.map((c) => (
+            {newcarPayment
+
+            .filter(c => c.paymentStatus === statusFilter)
+            .map((c) => (
               <>
                 <TableRow
                   sx={{
@@ -224,7 +288,9 @@ export default function ViewnewPayment() {
                   <TableCell>{c.pendingAmount}</TableCell>
                   {/* <TableCell>{c.transactionNumber}</TableCell> */}
                   <TableCell sx={{ maxWidth: 120 }}>
-
+                    {
+                      c.paymentStatus !== "RESOLVED" ? (
+                        <>
                         <Select
                           value={(c.paymentStatus || "PENDING").toUpperCase()}
                           size="small"
@@ -268,9 +334,20 @@ export default function ViewnewPayment() {
                           <MenuItem value="PENDING">Pendig</MenuItem>
                           <MenuItem value="RESOLVED">RESOLVED</MenuItem>
                         </Select>
+
+                        </>
+                      ) : (
+                        <Typography variant="h5">{c.paymentStatus}</Typography>
+                      )
+                    }
+
+
                   </TableCell>
                   <TableCell>
-                    <Button
+                    {
+                      c.paymentStatus !== "RESOLVED" ? (
+                       <>
+                        <Button
                       size="small"
                       sx={{
                         px: 3,
@@ -307,6 +384,15 @@ export default function ViewnewPayment() {
                     >
                       Update
                     </Button>
+
+                       </>
+                      ):(
+                        <>
+                        <Typography variant="h5">{c.paymentStatus}</Typography>
+                        </>
+                      )
+                    }
+
                     <Button
                       size="small"
                       sx={{
