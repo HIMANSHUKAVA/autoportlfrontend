@@ -202,8 +202,7 @@ export default function ViewnewPayment() {
                   <TableCell>{c.pendingAmount}</TableCell>
                   {/* <TableCell>{c.transactionNumber}</TableCell> */}
                   <TableCell sx={{ maxWidth: 120 }}>
-                    {c.paymentStatus !== "RESOLVED" ?
-                      <>
+
                         <Select
                           value={(c.paymentStatus || "PENDING").toUpperCase()}
                           size="small"
@@ -247,8 +246,6 @@ export default function ViewnewPayment() {
                           <MenuItem value="PENDING">Pendig</MenuItem>
                           <MenuItem value="RESOLVED">RESOLVED</MenuItem>
                         </Select>
-                      </>
-                    : <>{c.paymentStatus}</>}
                   </TableCell>
                   <TableCell>
                     <Button
