@@ -18,9 +18,12 @@ import{showSuccessAlert , showErrorAlert} from "../../Util/Alert"
 export default function ViewnewPayment() {
   const [newcarPayment, setnewcarPayment] = useState([]);
 
+  const API = import.meta.env.VITE_API_BASE_URL;
+
+
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/admin/car/payment/view`, {
+      .get(`${API}/admin/car/payment/view`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
@@ -35,7 +38,7 @@ export default function ViewnewPayment() {
   }, []);
 
   const sendemail = (c)=>{
-    axios.post(`http://localhost:3000/admin/remainder/payment/${c.paymentId}`,null , {
+    axios.post(`${API}/admin/remainder/payment/${c.paymentId}`,null , {
       headers:{
         Authorization: "Bearer " + localStorage.getItem("token")
       }
