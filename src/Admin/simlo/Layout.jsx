@@ -100,7 +100,7 @@ export default function Layout() {
           </ListItemIcon>
           <ListItemText>Add New Car</ListItemText>
         </MenuItem>
-        <MenuItem onClick={() => setbuyer(null)}>
+        <MenuItem onClick={() => setbuyer(null)} to="/admin/view/newcar" component={Link}>
           <ListItemIcon>
             <DirectionsCarIcon />
           </ListItemIcon>
@@ -218,7 +218,7 @@ export default function Layout() {
                 <ListItemText>Add New Car</ListItemText>
               </ListItemButton>
 
-              <ListItemButton sx={menuButtonStyle} component={Link}>
+              <ListItemButton sx={menuButtonStyle} component={Link} to="/admin/view/newcar">
                 <ListItemIcon>
                   <AddCircleOutlineIcon />
                 </ListItemIcon>
