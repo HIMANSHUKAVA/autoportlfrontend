@@ -31,7 +31,15 @@ export default function ViewNewCar() {
       <hr/>
     </Box>
 
-    {/* <Typography variant='h1'>{car.id}</Typography> */}
+    {
+       car.map((c)=>(
+        <>
+
+        <Typography variant='h3' color='white'>{c.brand}</Typography>
+        </>
+       ))
+    }
+
 
 
 
