@@ -6,7 +6,7 @@ export default function SellarConects() {
 
 const [Sellar, setSellar] = useState([]);
 
-const API = import.meta.evn.VITE_API_BASE_URL;
+const API = import.meta.env.VITE_API_BASE_URL;
 
 useEffect(() => {
 
@@ -37,7 +37,12 @@ axios.get(`${API}/admin/sellar/contects`,{
 
         {
           Sellar.map((c)=>{
-            <Typography variant="h4" sx={{color:"white"}}>{c.email}</Typography>
+            return (
+<>
+
+<Typography variant="h4" sx={{color:"white"}}>{c.email}</Typography>
+</>
+            )
           })
         }
     </>
