@@ -106,6 +106,7 @@ const handlpage = (event, newPage) => {
 
 const handlrowperpage = (event) => {
   setrowperpage(parseInt(event.target.value, 10));
+
   setpage(0);
 };
 
