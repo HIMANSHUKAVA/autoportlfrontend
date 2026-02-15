@@ -1,8 +1,10 @@
-import { Box, TableContainer, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function SellarConects() {
+
+  console.log("Component Loaded");
 
 const [Sellar, setSellar] = useState([]);
 
@@ -10,7 +12,7 @@ const API = import.meta.env.VITE_API_BASE_URL;
 
 useEffect(() => {
 
-axios.get(`${API}/admin/sellar/contects`,{
+  axios.get(`${API}/admin/sellar/contects`,{
   headers:{
     Authorization: "Bearer " + localStorage.getItem("token")
   }
@@ -39,8 +41,7 @@ axios.get(`${API}/admin/sellar/contects`,{
           Sellar.map((c)=>{
             return (
 <>
-
-<Typography variant="h4" sx={{color:"white"}}>{c.email}</Typography>
+   <Typography variant="h4" sx={{color:"white"}}>{c.email}</Typography>
 </>
             )
           })
