@@ -7,6 +7,7 @@ import {
   Settings,
   TimeToLeave,
 } from "@mui/icons-material";
+import MenuIcon from "@mui/icons-material/Menu";
 import {
   AppBar,
   Avatar,
@@ -16,29 +17,25 @@ import {
   Drawer,
   IconButton,
   List,
-  ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
   Menu,
   MenuItem,
   Toolbar,
-  Typography,
+  Typography
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
 // import LogoutIcon from "@mui/icons-material/Logout";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import React, { useState } from "react";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import LogoutIcon from "@mui/icons-material/Logout";
-import EditIcon from "@mui/icons-material/Edit";
-import { Link, Outlet, useNavigate } from "react-router-dom";
-import DriveEtaIcon from "@mui/icons-material/DriveEta";
-import PaymentIcon from "@mui/icons-material/Payment";
 import CallIcon from "@mui/icons-material/Call";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
+import EditIcon from "@mui/icons-material/Edit";
+import LogoutIcon from "@mui/icons-material/Logout";
+import PaymentIcon from "@mui/icons-material/Payment";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import { useState } from "react";
+import { Link, Outlet } from "react-router-dom";
 export default function Layout() {
   const menuButtonStyle = {
     position: "relative",
@@ -153,7 +150,7 @@ export default function Layout() {
           </ListItemIcon>
           <ListItemText>Car request</ListItemText>
         </MenuItem>
-        <MenuItem onClick={() => setold(null)}>
+        <MenuItem onClick={() => setold(null)} component={Link} to="/admin/view/sellar/contect">
           <ListItemIcon>
             <CallIcon />
           </ListItemIcon>
@@ -265,7 +262,7 @@ export default function Layout() {
               <ListItemText>Car request</ListItemText>
             </ListItemButton>
 
-            <ListItemButton>
+            <ListItemButton component={Link} to="/admin/view/sellar/contect">
               <ListItemIcon>
                 <CallIcon />
               </ListItemIcon>
