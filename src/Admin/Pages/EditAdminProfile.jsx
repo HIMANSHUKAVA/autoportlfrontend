@@ -40,10 +40,10 @@ export default function EditAdminProfile() {
           username: res.data.username || "",
           email: res.data.email || "",
           role: res.data.role || "",
-          photo:
-            res.data.photo ?
-              `http://localhost:3000/images/${res.data.photo}`
-            : "",
+          photo: res.data.photo
+  ? `${api}/images/${res.data.photo}`
+  : "",
+
           password: "",
         });
       })
