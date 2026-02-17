@@ -49,6 +49,7 @@ import ViewnewPayment from "./Admin/Pages/ViewnewPayment";
 import PaymentRemainder from "./Admin/Pages/PaymentRemainder";
 import Viewewar from "./Admin/Pages/Viewewar";
 import SellarConects from "./Admin/Pages/SellarConects";
+import EditAdminProfile from "./Admin/Pages/EditAdminProfile";
 function App() {
   return (
     <BrowserRouter>
@@ -261,6 +262,7 @@ function App() {
           <Route path="view/new/car/payment"  element={<ViewnewPayment/>}/>
           <Route path="view/newcar" element={<Viewewar/>} />
           <Route path="view/sellar/contect" element={<SellarConects/>}/>
+          <Route path="edit/admins/profile/:id" element={<EditAdminProfile/>}/>
         </Route>
         <Route path="/pay" element={<PaymentRemainder />} />
       </Routes>

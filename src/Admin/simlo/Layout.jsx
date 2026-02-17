@@ -37,6 +37,8 @@ import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 export default function Layout() {
+
+  const id = localStorage.getItem("id");
   const menuButtonStyle = {
     position: "relative",
     overflow: "visible",
@@ -309,7 +311,7 @@ export default function Layout() {
             : <ExpandMore />}
           </ListItemButton>
           <Collapse in={profile} unmountOnExit timeout="auto">
-            <ListItemButton>
+            <ListItemButton component={Link} to={`/admin/edit/admins/profile/${id}`}>
               <ListItemIcon>
                 <EditIcon />
               </ListItemIcon>
@@ -476,7 +478,7 @@ export default function Layout() {
                 }}
 
               >
-                <MenuItem onClick={() => setbuttonprofile(null)}>
+                <MenuItem onClick={() => setbuttonprofile(null)} component={Link} to={`/admin/edit/admins/profile/${id}`}>
                   <ListItemIcon>
                     <EditIcon />
                   </ListItemIcon>

@@ -1,9 +1,9 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import axios from "axios";
-import React, { useEffect, useReducer, useRef, useState } from "react";
-import Typewriter from "typewriter-effect";
-import {showSuccessAlert , showErrorAlert} from "../Util/Alert"
+import { useEffect, useReducer, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Typewriter from "typewriter-effect";
+import { showErrorAlert, showSuccessAlert } from "../Util/Alert";
 const initialstate = {
   email : "",
   password : ""
@@ -49,6 +49,7 @@ export default function AdminLogin() {
     inputref.current.focus()
   }, [])
 
+  const API = import.meta.env.VITE_API_BASE_URL;
 const navigate = useNavigate();
 
   const [state  , dispatch] = useReducer(reducer  , initialstate)
@@ -65,7 +66,7 @@ const navigate = useNavigate();
     setpending(true)
 
  axios.post(
-  "https://autoportal.onrender.com/auth/login-check",
+  `${API}/auth/login-check`,
   {
     email: state.email,
     password: state.password
@@ -76,6 +77,9 @@ const navigate = useNavigate();
 
   localStorage.setItem("token", token);
   localStorage.setItem("user", JSON.stringify(user));
+  localStorage.setItem("id" , user.id);
+
+  console.log(user)
 
   showSuccessAlert("Login Successful");
   dispatch({ type: "reset" });
