@@ -1,55 +1,51 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import DashBoard from "./Buyer/Layout/DashBoard";
-import Viewcar from "./Buyer/Pages/Viewcar";
-import Carshow from "./Buyer/Pages/Carshow";
-import Wishlist from "./Buyer/Pages/Wishlist";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Login from "./component/Login";
-import Ragister from "./component/Ragister";
-import Otp from "./component/Otp";
-import Forget from "./component/Forget";
-import ResetPassword from "./component/ResetPassword";
-import Addtocart from "./Buyer/Pages/Addtocart";
+import DashBoard from "./Buyer/Layout/DashBoard";
 import About from "./Buyer/Pages/About";
-import Contect from "./Buyer/Pages/Contect";
-import Driive from "./Buyer/Pages/Driive";
-import Viewoldcar from "./Buyer/Pages/Viewoldcar";
-import Oldcarshow from "./Buyer/Pages/Oldcarshow";
+import Addtocart from "./Buyer/Pages/Addtocart";
 import Cars from "./Buyer/Pages/Cars";
+import Carshow from "./Buyer/Pages/Carshow";
+import Contect from "./Buyer/Pages/Contect";
 import Discover from "./Buyer/Pages/Discover";
+import Driive from "./Buyer/Pages/Driive";
+import Oldcarshow from "./Buyer/Pages/Oldcarshow";
 import Olddiscover from "./Buyer/Pages/Olddiscover";
+import Viewcar from "./Buyer/Pages/Viewcar";
+import Viewoldcar from "./Buyer/Pages/Viewoldcar";
+import Wishlist from "./Buyer/Pages/Wishlist";
+import Forget from "./component/Forget";
+import Login from "./component/Login";
+import Otp from "./component/Otp";
+import Ragister from "./component/Ragister";
+import ResetPassword from "./component/ResetPassword";
 // import { useEffect } from "react";
-import PrivateRoute from "./component/PrivateRoute";
-import Aos from "aos";
 import "aos/dist/aos.css";
-import NavbarAndDrawer from "./Sellar/layout/NavbarAndDrawer";
-import SellarDashboard from "./Sellar/pages/SellarDashboard";
-import Herosection from "./Sellar/layout/Herosection";
-import Vehicle from "./Sellar/layout/Vehicle";
-import Addcar from "./Sellar/pages/Addcar";
-import Viewcars from "./Sellar/pages/Viewcars";
-import Singlecarpage from "./Sellar/pages/Singlecarpage";
-import Message from "./Sellar/pages/Message";
-import Editprofile from "./Sellar/pages/Editprofile";
-import Changepass from "./Sellar/pages/Changepass";
-import Imageinsert from "./Sellar/pages/Imageinsert";
-import Edit from "./Sellar/pages/Edit";
-import AdminLogin from "./component/AdminLogin";
-import AdminDashboard from "./Admin/Pages/AdminDashboard";
-import Layout from "./Admin/simlo/Layout";
-import RequestTable from "./Admin/simlo/RequestTable";
-import Add_new from "./Admin/Pages/Add_new";
-import Mulimages from "./Admin/Pages/Mulimages";
 import AddAdmin from "./Admin/Pages/AddAdmin";
-import CarrequestView from "./Admin/Pages/CarrequestView";
-import ViewAdmin from "./Admin/Pages/ViewAdmin";
+import Add_new from "./Admin/Pages/Add_new";
+import AdminDashboard from "./Admin/Pages/AdminDashboard";
 import BookDrive from "./Admin/Pages/BookDrive";
+import CarrequestView from "./Admin/Pages/CarrequestView";
 import ContectFromUser from "./Admin/Pages/ContectFromUser";
-import ViewnewPayment from "./Admin/Pages/ViewnewPayment";
-import PaymentRemainder from "./Admin/Pages/PaymentRemainder";
-import Viewewar from "./Admin/Pages/Viewewar";
-import SellarConects from "./Admin/Pages/SellarConects";
 import EditAdminProfile from "./Admin/Pages/EditAdminProfile";
+import Mulimages from "./Admin/Pages/Mulimages";
+import OldCarPayment from "./Admin/Pages/OldCarPayment";
+import PaymentRemainder from "./Admin/Pages/PaymentRemainder";
+import SellarConects from "./Admin/Pages/SellarConects";
+import ViewAdmin from "./Admin/Pages/ViewAdmin";
+import Viewewar from "./Admin/Pages/Viewewar";
+import ViewnewPayment from "./Admin/Pages/ViewnewPayment";
+import Layout from "./Admin/simlo/Layout";
+import Addcar from "./Sellar/pages/Addcar";
+import Changepass from "./Sellar/pages/Changepass";
+import Edit from "./Sellar/pages/Edit";
+import Editprofile from "./Sellar/pages/Editprofile";
+import Imageinsert from "./Sellar/pages/Imageinsert";
+import Message from "./Sellar/pages/Message";
+import SellarDashboard from "./Sellar/pages/SellarDashboard";
+import Singlecarpage from "./Sellar/pages/Singlecarpage";
+import Viewcars from "./Sellar/pages/Viewcars";
+import AdminLogin from "./component/AdminLogin";
+import PrivateRoute from "./component/PrivateRoute";
 function App() {
   return (
     <BrowserRouter>
@@ -249,22 +245,27 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route path="/admin/login" element={<AdminLogin/>}/>
-          <Route path="/admin" element={<Layout />}>
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<Layout />}>
           <Route path="dash" element={<AdminDashboard />} />
-          <Route path="add" element={<Add_new/>} />
-          <Route path="img/:id" element={<Mulimages/>}/>
-          <Route path="add/admin" element={<AddAdmin/>}/>
-          <Route path="view/request/sellar" element={<CarrequestView/>}/>
-          <Route path="view/admin/list" element={<ViewAdmin/>}/>
-          <Route path ="view/Booking/list" element={<BookDrive/>}/>
-          <Route path="view/quary/buyer"  element={<ContectFromUser/>}/>
-          <Route path="view/new/car/payment"  element={<ViewnewPayment/>}/>
-          <Route path="view/newcar" element={<Viewewar/>} />
-          <Route path="view/sellar/contect" element={<SellarConects/>}/>
-          <Route path="edit/admins/profile/:id" element={<EditAdminProfile/>}/>
+          <Route path="add" element={<Add_new />} />
+          <Route path="img/:id" element={<Mulimages />} />
+          <Route path="add/admin" element={<AddAdmin />} />
+          <Route path="view/request/sellar" element={<CarrequestView />} />
+          <Route path="view/admin/list" element={<ViewAdmin />} />
+          <Route path="view/Booking/list" element={<BookDrive />} />
+          <Route path="view/quary/buyer" element={<ContectFromUser />} />
+          <Route path="view/new/car/payment" element={<ViewnewPayment />} />
+          <Route path="view/newcar" element={<Viewewar />} />
+          <Route path="view/sellar/contect" element={<SellarConects />} />
+          <Route
+            path="edit/admins/profile/:id"
+            element={<EditAdminProfile />}
+          />
+          <Route path="view/oldcar/payments" element={<OldCarPayment />} />
         </Route>
         <Route path="/pay" element={<PaymentRemainder />} />
+        <Route path="/oldpay" element={<PaymentRemainder />} />
       </Routes>
     </BrowserRouter>
   );

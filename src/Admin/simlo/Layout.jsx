@@ -111,6 +111,14 @@ export default function Layout() {
           </ListItemIcon>
           <ListItemText>Book Drive</ListItemText>
         </MenuItem>
+
+<MenuItem onClick={() => setbuyer(null)} component={Link} to="/admin/view/oldcar/payments">
+          <ListItemIcon>
+            <TimeToLeave />
+          </ListItemIcon>
+          <ListItemText>Old Car Payment</ListItemText>
+        </MenuItem>
+
         <MenuItem onClick={() => setbuyer(null)} component={Link} to="/admin/view/new/car/payment">
           <ListItemIcon>
             <PaymentIcon />
@@ -231,6 +239,15 @@ export default function Layout() {
                 <ListItemText>Book Drive</ListItemText>
               </ListItemButton>
 
+
+
+              <ListItemButton sx={menuButtonStyle} component={Link} to="/admin/view/oldcar/payments">
+                <ListItemIcon>
+                  <PaymentIcon />
+                </ListItemIcon>
+                <ListItemText>Old Car Payment</ListItemText>
+              </ListItemButton>
+
               <ListItemButton sx={menuButtonStyle} component={Link} to="/admin/view/new/car/payment">
                 <ListItemIcon>
                   <PaymentIcon />
@@ -316,13 +333,6 @@ export default function Layout() {
                 <EditIcon />
               </ListItemIcon>
               <ListItemText>Edit Profile</ListItemText>
-            </ListItemButton>
-
-            <ListItemButton>
-              <ListItemIcon>
-                <Settings />
-              </ListItemIcon>
-              <ListItemText>Change Password</ListItemText>
             </ListItemButton>
           </Collapse>
           <ListItemButton>

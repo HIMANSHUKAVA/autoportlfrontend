@@ -15,10 +15,11 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { showErrorAlert, showSuccessAlert } from "../../Util/Alert";
 import Footer from "../../Buyer/Layout/Footer";
+import { showErrorAlert, showSuccessAlert } from "../../Util/Alert";
 export default function CarrequestView() {
   const [request, setrequest] = useState([]);
+  const [selectedStatus, setSelectedStatus] = useState({});
 
   useEffect(() => {
     axios
@@ -29,6 +30,7 @@ export default function CarrequestView() {
       })
       .then((Response) => {
         console.log(Response.data);
+
         setrequest(Response.data);
       })
       .catch((error) => {
@@ -37,8 +39,12 @@ export default function CarrequestView() {
   }, []);
   // /request/add/oldcar
   const handlupdatestatus = (car) => {
-    const status = car.status;
+    const status = selectedStatus[car.sellarcarid];
     const id = car.sellarcarid;
+
+    console.log("button clicked")
+    console.log(status)
+    console.log(id);
 
     const payload = {
       brand: car.brand,
@@ -56,6 +62,7 @@ export default function CarrequestView() {
       carType: "OLD",
       carcondition: car.carcondition,
       image_url: car.photo,
+      status: status,
     };
     if (status === "APPROVED") {
       axios
@@ -119,6 +126,7 @@ export default function CarrequestView() {
     setrowperpage(e.target.value);
     setpage(0);
   };
+
   return (
     <>
       <Box
@@ -232,111 +240,108 @@ export default function CarrequestView() {
                 )
                 .slice(page * rowperpage, page * rowperpage + rowperpage)
                 .map((car) => (
-                  <>
-                    <TableRow
-                      key={car.sid}
-                      sx={{
-                        "& td": {
-                          color: "white", //  BODY TEXT COLOR
-                          borderBottom: "1px solid rgba(255,255,255,0.08)",
-                        },
-                        "&:hover": {
-                          background: "rgba(255,255,255,0.04)",
-                        },
-                      }}
-                    >
-                      <TableCell>
-                        <Box
-                          component="img"
-                          src={car.photo}
-                          sx={{
-                            // width:"60px"/
-                            width: 90,
-                            height: 60,
-                            borderRa1dius: 1,
-                            objectFit: "cover",
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell>{car.brand}</TableCell>
-                      <TableCell>{car.model}</TableCell>
-                      <TableCell>{car.price}</TableCell>
-                      <TableCell>{car.priceLabel}</TableCell>
-                      {/* <TableCell>{car.requestAt}</TableCell> */}
-                      <TableCell>{car.carcondition}</TableCell>
-                      <TableCell>
-                        {car.status !== "PENDING" ?
-                          <>{car.status}</>
-                        : <>
-                            <Select
-                              value={car.status}
-                              size="small"
-                              sx={{
-                                color: "#fff",
-                                background:
-                                  "linear-gradient(180deg, #0f172a, #020617)",
-                                borderRadius: 1.5,
-                                minWidth: 140,
-                                ".MuiOutlinedInput-notchedOutline": {
-                                  borderColor: "rgba(255,255,255,0.25)",
+                  <TableRow
+                    key={car.sellarcarid}
+                    sx={{
+                      "& td": {
+                        color: "white", //  BODY TEXT COLOR
+                        borderBottom: "1px solid rgba(255,255,255,0.08)",
+                      },
+                      "&:hover": {
+                        background: "rgba(255,255,255,0.04)",
+                      },
+                    }}
+                  >
+
+                    <TableCell>
+                      <Box
+                        component="img"
+                        src={car.photo}
+                        sx={{
+                          // width:"60px"/
+                          width: 90,
+                          height: 60,
+                          borderRa1dius: 1,
+                          objectFit: "cover",
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>{car.brand}</TableCell>
+                    <TableCell>{car.model}</TableCell>
+                    <TableCell>{car.price}</TableCell>
+                    <TableCell>{car.priceLabel}</TableCell>
+                    {/* <TableCell>{car.requestAt}</TableCell> */}
+                    <TableCell>{car.carcondition}</TableCell>
+                    <TableCell>
+                      {car.status !== "PENDING" ?
+                        <>{car.status}</>
+                      : <>
+                          <Select
+                            value={selectedStatus[car.sellarcarid] || car.status}
+                            size="small"
+                            sx={{
+                              color: "#fff",
+                              background:
+                                "linear-gradient(180deg, #0f172a, #020617)",
+                              borderRadius: 1.5,
+                              minWidth: 140,
+                              ".MuiOutlinedInput-notchedOutline": {
+                                borderColor: "rgba(255,255,255,0.25)",
+                              },
+                              "&:hover .MuiOutlinedInput-notchedOutline": {
+                                borderColor: "#f5c46b",
+                              },
+                              "& .MuiSvgIcon-root": {
+                                color: "#f5c46b",
+                              },
+                            }}
+                            MenuProps={{
+                              PaperProps: {
+                                sx: {
+                                  background:
+                                    "linear-gradient(180deg, #0f172a, #020617)",
+                                  color: "#ffffff",
+                                  borderRadius: 2,
+                                  boxShadow: "0 12px 30px rgba(0,0,0,0.6)",
+                                  mt: 1,
                                 },
-                                "&:hover .MuiOutlinedInput-notchedOutline": {
-                                  borderColor: "#f5c46b",
-                                },
-                                "& .MuiSvgIcon-root": {
-                                  color: "#f5c46b",
-                                },
-                              }}
-                              MenuProps={{
-                                PaperProps: {
-                                  sx: {
-                                    background:
-                                      "linear-gradient(180deg, #0f172a, #020617)",
-                                    color: "#ffffff",
-                                    borderRadius: 2,
-                                    boxShadow: "0 12px 30px rgba(0,0,0,0.6)",
-                                    mt: 1,
-                                  },
-                                },
-                              }}
-                              onChange={(e) => {
-                                const updated = request.map((r) =>
-                                  r.sellarcarid === car.sellarcarid ?
-                                    { ...r, status: e.target.value }
-                                  : r,
-                                );
-                                setrequest(updated);
-                              }}
-                            >
-                              <MenuItem value="PENDING">PENDING</MenuItem>
-                              <MenuItem value="APPROVED">APPROVED</MenuItem>
-                              <MenuItem value="REJECTED">REJECT</MenuItem>
-                            </Select>
-                          </>
-                        }
-                      </TableCell>
-                      <TableCell>
-                        {car.status !== "PENDING" ?
-                          <>
-                            <Typography variant="body2">Approved</Typography>
-                          </>
-                        : <>
-                            <Button
-                              sx={{
-                                border: "1px solid #FACC15",
-                                color: "#FACC15",
-                              }}
-                              onClick={() => {
-                                handlupdatestatus(car);
-                              }}
-                            >
-                              Update Status
-                            </Button>
-                          </>
-                        }
-                      </TableCell>
-                    </TableRow>
-                  </>
+                              },
+                            }}
+                            onChange={(e) => {
+                              setSelectedStatus((prev) => ({
+                                ...prev,
+                                [car.sellarcarid]: e.target.value,
+                              }));
+                            }}
+                          >
+                            <MenuItem value="PENDING">PENDING</MenuItem>
+                            <MenuItem value="APPROVED">APPROVED</MenuItem>
+                            <MenuItem value="REJECTED">REJECT</MenuItem>
+                          </Select>
+                        </>
+                      }
+                    </TableCell>
+                    <TableCell>
+                      {car.status !== "PENDING" ?
+                        <>
+                          <Typography variant="body2">Approved</Typography>
+                        </>
+                      : <>
+                          <Button
+                            sx={{
+                              border: "1px solid #FACC15",
+                              color: "#FACC15",
+                            }}
+                            onClick={() => {
+                              handlupdatestatus(car);
+                            }}
+                          >
+                            Update Status
+                          </Button>
+                        </>
+                      }
+                    </TableCell>
+                  </TableRow>
                 ))}
             </TableBody>
           </Table>
