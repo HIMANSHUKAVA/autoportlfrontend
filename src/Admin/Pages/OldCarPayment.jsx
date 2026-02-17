@@ -55,6 +55,7 @@ export default function OldCarPayment() {
       })
       .catch((error) => {
         showErrorAlert("Somthing Went Wrong");
+        console.log(error);
       });
   };
   return (
