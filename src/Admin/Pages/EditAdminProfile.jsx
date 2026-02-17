@@ -140,7 +140,6 @@ export default function EditAdminProfile() {
         sx={{
           width: "90%",
           border: "1px solid rgba(148,163,184,0.4)",
-          // height: "100vh",
           p: 2,
           gap: 3,
           display: "flex",
@@ -151,7 +150,7 @@ export default function EditAdminProfile() {
         {/* image box */}
         <Box
           sx={{
-            width: "20%",
+            width: {xs:"100%" , md : "20%"},
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
