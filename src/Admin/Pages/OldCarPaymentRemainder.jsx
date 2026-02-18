@@ -39,49 +39,34 @@ export default function OldCarPaymentRemainder() {
     }
 
     try {
-      // 1️⃣ Create fresh pending order from backend
+      // 🔥 Only create order
       const orderResponse = await axios.post(
         `${API}/auth/create-oldcar-pending-order/${paymentId}`,
       );
 
       const orderId = orderResponse.data;
 
-      console.log("NEW ORDER ID:", orderId);
-      console.log("Pending:", payment.pendingAmount);
+      console.log("ORDER ID:", orderId);
+      console.log("Amount:", payment.pendingAmount);
 
-      // 2️⃣ Open Razorpay
       const options = {
         key: "rzp_test_S0XseAdZlcbad2",
-        amount: payment.pendingAmount * 100, // 🔥 Dynamic amount
+        amount: payment.pendingAmount * 100,
         currency: "INR",
         name: "AutoPortal",
         description: "Pending Payment",
         order_id: orderId,
 
-        handler: async function () {
-          try {
-            await axios.put(
-              `${API}/auth/update/oldcarpaidamount/${paymentId}`,
-              null,
-              {
-                params: {
-                  amount: payment.pendingAmount,
-                },
-              },
-            );
-
-            alert("Payment Successful 🎉");
-            window.location.reload();
-          } catch (err) {
-            console.log("Update Failed:", err);
-            alert("Payment done but update failed");
-          }
+        handler: function (response) {
+          console.log("Payment Success Response:", response);
+          alert("Payment Success 🎉");
         },
 
         theme: { color: "#f5c46b" },
       };
 
-      new window.Razorpay(options).open();
+      const rzp = new window.Razorpay(options);
+      rzp.open();
     } catch (error) {
       console.log("PAYMENT ERROR:", error);
       alert("Payment failed");
