@@ -39,37 +39,54 @@ export default function OldCarPaymentRemainder() {
     }
 
     try {
-      // 🔥 Only create order
-      const orderResponse = await axios.post(
-        `${API}/auth/create-oldcar-pending-order/${paymentId}`,
+      const userId = searchParams.get("userId");
+      const paymentId = searchParams.get("paymentId");
+
+      console.log("UserId:", userId);
+      console.log("PaymentId:", paymentId);
+
+      // 1️ Validate payment from backend
+      const response = await axios.get(
+        `https://autoportal.onrender.com/auth/payment/linkbymobail//${paymentId}/${payment.r.id}`,
       );
 
-      const orderId = orderResponse.data;
+      const validatedPayment = response.data;
 
-      console.log("ORDER ID:", orderId);
-      console.log("Amount:", payment.pendingAmount);
-
+      // 2️ Open Razorpay using validated data
       const options = {
         key: "rzp_test_S0XseAdZlcbad2",
-        amount: payment.pendingAmount * 100,
+        amount: 40000 * 100,
         currency: "INR",
         name: "AutoPortal",
         description: "Pending Payment",
-        order_id: orderId,
+        order_id: validatedPayment.razorpayOrderId,
 
-        handler: function (response) {
-          console.log("Payment Success Response:", response);
-          alert("Payment Success 🎉");
-        },
+        // handler: async function (razorResponse) {
+        //   try {
+        //     await axios.put(
+        //       `https://autoportal.onrender.com/auth/pending/amount/${validatedPayment.paymentId}`,
+        //       null,
+        //       {
+        //         params: {
+        //           amount: 40000,
+        //         },
+        //       },
+        //     );
+        //     alert("Payment Successful 🎉");
+        //     window.location.reload();
+        //   } catch (err) {
+        //     console.log("Update Failed:", err);
+        //     alert("Payment done but update failed");
+        //   }
+        // },
 
         theme: { color: "#f5c46b" },
       };
 
-      const rzp = new window.Razorpay(options);
-      rzp.open();
+      new window.Razorpay(options).open();
     } catch (error) {
-      console.log("PAYMENT ERROR:", error);
-      alert("Payment failed");
+      console.log(error);
+      alert("Payment validation failed");
     }
   };
 
