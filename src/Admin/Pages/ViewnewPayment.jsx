@@ -10,18 +10,19 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { showSuccessAlert, showErrorAlert } from "../../Util/Alert";
+import { useEffect, useState } from "react";
 import Footer from "../../Buyer/Layout/Footer";
+import { showErrorAlert, showSuccessAlert } from "../../Util/Alert";
 export default function ViewnewPayment() {
   const [newcarPayment, setnewcarPayment] = useState([]);
 
   const API = import.meta.env.VITE_API_BASE_URL;
+
+  console.log(localStorage.getItem("token"));
 
   useEffect(() => {
     axios
@@ -55,63 +56,58 @@ export default function ViewnewPayment() {
       });
   };
 
- const handlstatus = (c) =>{
+  const handlstatus = (c) => {
+    console.log(c.paymentId);
+    console.log(c.paymentStatus);
 
-  console.log(c.paymentId);
-  console.log(c.paymentStatus)
-
-
-  if(c.paymentStatus == "RESOLVED")
-  {
-  axios.put(`${API}/admin/car/payment/update/status/${c.paymentId}`,null , {
-    params:{
-     status : c.paymentStatus
-    },
-    headers:{
-      Authorization : "Bearer " + localStorage.getItem("token")
+    if (c.paymentStatus == "RESOLVED") {
+      axios
+        .put(`${API}/admin/car/payment/update/status/${c.paymentId}`, null, {
+          params: {
+            status: c.paymentStatus,
+          },
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
+        .then(() => {
+          showSuccessAlert("Status Updated Successfully");
+        })
+        .catch(() => {
+          showErrorAlert("Faild try Again");
+        });
     }
-  }).then(()=>{
-    showSuccessAlert("Status Updated Successfully")
-  }).catch(()=>{
-    showErrorAlert("Faild try Again")
-  })
-}
- }
-
+  };
 
   const [order, setorder] = useState("asc");
 
   const handlsort = (column) => {
+    const sortedData = [...newcarPayment].sort((a, b) => {
+      if (order === "asc") {
+        return a[column] > b[column] ? 1 : -1;
+      } else {
+        return a[column] < b[column] ? 1 : -1;
+      }
+    });
 
-  const sortedData = [...newcarPayment].sort((a, b) => {
-
-    if (order === "asc") {
-      return a[column] > b[column] ? 1 : -1;
-    } else {
-      return a[column] < b[column] ? 1 : -1;
-    }
-
-  });
-
-  setnewcarPayment(sortedData);
-  setorder(order === "asc" ? "desc" : "asc");
-};
+    setnewcarPayment(sortedData);
+    setorder(order === "asc" ? "desc" : "asc");
+  };
 
   const [page, setpage] = useState(0);
   const [rowperpage, setrowperpage] = useState(4);
 
-const handlpage = (event, newPage) => {
-  setpage(newPage);
-};
+  const handlpage = (event, newPage) => {
+    setpage(newPage);
+  };
 
-const handlrowperpage = (event) => {
-  setrowperpage(parseInt(event.target.value, 10));
+  const handlrowperpage = (event) => {
+    setrowperpage(parseInt(event.target.value, 10));
 
-  setpage(0);
-};
+    setpage(0);
+  };
 
   const [statusFilter, setStatusFilter] = useState("PENDING");
-
 
   return (
     <>
@@ -124,35 +120,31 @@ const handlrowperpage = (event) => {
         <Typography variant="body2">View Payment And Check History</Typography>
         <hr />
       </Box>
-       <Box
-          sx={{ display: "flex", gap: 2, mb: 2, justifyContent: "flex-end" }}
+      <Box sx={{ display: "flex", gap: 2, mb: 2, justifyContent: "flex-end" }}>
+        <Button
+          variant={statusFilter === "PENDING" ? "contained" : "outlined"}
+          onClick={() => setStatusFilter("PENDING")}
+          sx={{
+            bgcolor: statusFilter === "PENDING" ? "#FACC15" : "transparent",
+            color: statusFilter === "PENDING" ? "black" : "#FACC15",
+            borderColor: "#FACC15",
+          }}
         >
-          <Button
-            variant={statusFilter === "PENDING" ? "contained" : "outlined"}
-            onClick={() => setStatusFilter("PENDING")}
-            sx={{
-              bgcolor: statusFilter === "PENDING" ? "#FACC15" : "transparent",
-              color: statusFilter === "PENDING" ? "black" : "#FACC15",
-              borderColor: "#FACC15",
-            }}
-          >
-            Pending
-          </Button>
+          Pending
+        </Button>
 
-          <Button
-            variant={statusFilter === "RESOLVED" ? "contained" : "outlined"}
-            onClick={() => setStatusFilter("RESOLVED")}
-            sx={{
-              bgcolor: statusFilter === "RESOLVED" ? "#22c55e" : "transparent",
-              color: statusFilter === "RESOLVED" ? "white" : "#22c55e",
-              borderColor: "#22c55e",
-            }}
-          >
-            Resolved
-          </Button>
-        </Box>
-
-
+        <Button
+          variant={statusFilter === "RESOLVED" ? "contained" : "outlined"}
+          onClick={() => setStatusFilter("RESOLVED")}
+          sx={{
+            bgcolor: statusFilter === "RESOLVED" ? "#22c55e" : "transparent",
+            color: statusFilter === "RESOLVED" ? "white" : "#22c55e",
+            borderColor: "#22c55e",
+          }}
+        >
+          Resolved
+        </Button>
+      </Box>
 
       <TableContainer>
         <Table>
@@ -169,16 +161,42 @@ const handlrowperpage = (event) => {
                 },
               }}
             >
-              <TableCell onClick={()=>{handlsort("paymentId")}}>
+              <TableCell
+                onClick={() => {
+                  handlsort("paymentId");
+                }}
+              >
                 Payment <br /> Id
               </TableCell>
-              <TableCell onClick={()=>{handlsort("carid")}}>Car_id</TableCell>
-              <TableCell onClick={()=>{handlsort("userid")}}>
+              <TableCell
+                onClick={() => {
+                  handlsort("carid");
+                }}
+              >
+                Car_id
+              </TableCell>
+              <TableCell
+                onClick={() => {
+                  handlsort("userid");
+                }}
+              >
                 User <br /> Id
               </TableCell>
 
-              <TableCell onClick={()=>{handlsort("totalamount")}}>Total Amount</TableCell>
-              <TableCell onClick={()=>{handlsort("paidBookingAmount")}}>Booking Amount</TableCell>
+              <TableCell
+                onClick={() => {
+                  handlsort("totalamount");
+                }}
+              >
+                Total Amount
+              </TableCell>
+              <TableCell
+                onClick={() => {
+                  handlsort("paidBookingAmount");
+                }}
+              >
+                Booking Amount
+              </TableCell>
               <TableCell>Payment Status</TableCell>
               <TableCell>Action</TableCell>
             </TableRow>
@@ -187,287 +205,284 @@ const handlrowperpage = (event) => {
           <TableBody>
             {newcarPayment
 
-            .filter(c => c.paymentStatus === statusFilter)
-            .slice(page * rowperpage , page* rowperpage + rowperpage)
-            .map((c) => (
-              <>
-                <TableRow
-                  sx={{
-                    "& td": {
-                      color: "white", //  BODY TEXT COLOR
-                      borderBottom: "1px solid rgba(255,255,255,0.08)",
-                      textAlign: "center",
-                    },
-                    "&:hover": {
-                      background: "rgba(255,255,255,0.04)",
-                    },
-                  }}
-                  key={c.paymentId}
-                >
-                  <TableCell>
-                    <Tooltip
-                      arrow
-                      placement="right"
-                      title={
-                        <Box>
-                          <Typography variant="subtitle2">
-                            PaymentDate :{" "}
-                            {new Date(c.paymentAt).toLocaleString()}
-                          </Typography>
-                          <Typography variant="body2">
-                            Method: {c.paymentMethod}
-                          </Typography>
-                          <Typography variant="body2">
-                            Order Id: {c.razorpayOrderId}
-                          </Typography>
-                          <Typography variant="body2">
-                            transactionNumber : {c.transactionNumber}
-                          </Typography>
-                        </Box>
-                      }
-                    >
-                      <Typography sx={{ cursor: "pointer" }}>
-                        {c.paymentId}
-                      </Typography>
-                    </Tooltip>
-                  </TableCell>
-                  <TableCell>
-                    <Tooltip
-                      arrow
-                      placement="right"
-                      title={
-                        <Box sx={{ p: 1 }}>
-                          <Typography variant="subtitle2">
-                            🚗 {c.car.brand}
-                          </Typography>
-                          <Typography variant="body2">
-                            Model: {c.car.model}
-                          </Typography>
-                          <Typography variant="body2">
-                            Type: {c.car.type}
-                          </Typography>
-                          <Typography variant="body2">
-                            Price: ₹{c.car.price.toLocaleString()}
-                          </Typography>
-                        </Box>
-                      }
-                    >
-                      <Typography
-                        sx={{
-                          cursor: "pointer",
-                        }}
+              .filter((c) => c.paymentStatus === statusFilter)
+              .slice(page * rowperpage, page * rowperpage + rowperpage)
+              .map((c) => (
+                <>
+                  <TableRow
+                    sx={{
+                      "& td": {
+                        color: "white", //  BODY TEXT COLOR
+                        borderBottom: "1px solid rgba(255,255,255,0.08)",
+                        textAlign: "center",
+                      },
+                      "&:hover": {
+                        background: "rgba(255,255,255,0.04)",
+                      },
+                    }}
+                    key={c.paymentId}
+                  >
+                    <TableCell>
+                      <Tooltip
+                        arrow
+                        placement="right"
+                        title={
+                          <Box>
+                            <Typography variant="subtitle2">
+                              PaymentDate :{" "}
+                              {new Date(c.paymentAt).toLocaleString()}
+                            </Typography>
+                            <Typography variant="body2">
+                              Method: {c.paymentMethod}
+                            </Typography>
+                            <Typography variant="body2">
+                              Order Id: {c.razorpayOrderId}
+                            </Typography>
+                            <Typography variant="body2">
+                              transactionNumber : {c.transactionNumber}
+                            </Typography>
+                          </Box>
+                        }
                       >
-                        {c.car.id}
-                      </Typography>
-                    </Tooltip>
-                  </TableCell>
-                  <TableCell>
-                    <Tooltip
-                      arrow
-                      placement="right-end"
-                      title={
-                        <Box>
-                          <Typography variant="subtitle2">
-                            Name: {c.r.username}
-                          </Typography>
-                          <Typography variant="body2">
-                            Email: {c.r.email}
-                          </Typography>
-                          <Typography variant="body2">
-                            Role : {c.r.role}
-                          </Typography>
-                        </Box>
-                      }
-                    >
-                      <Typography
-                        sx={{
-                          cursor: "pointer",
-                        }}
+                        <Typography sx={{ cursor: "pointer" }}>
+                          {c.paymentId}
+                        </Typography>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell>
+                      <Tooltip
+                        arrow
+                        placement="right"
+                        title={
+                          <Box sx={{ p: 1 }}>
+                            <Typography variant="subtitle2">
+                              🚗 {c.car.brand}
+                            </Typography>
+                            <Typography variant="body2">
+                              Model: {c.car.model}
+                            </Typography>
+                            <Typography variant="body2">
+                              Type: {c.car.type}
+                            </Typography>
+                            <Typography variant="body2">
+                              Price: ₹{c.car.price.toLocaleString()}
+                            </Typography>
+                          </Box>
+                        }
                       >
-                        {c.r.id}
-                      </Typography>
-                    </Tooltip>
-                  </TableCell>
-                  <TableCell>{c.car.price}</TableCell>
-                  <TableCell>{c.paidBookingAmount}</TableCell>
-                  <TableCell>{c.pendingAmount}</TableCell>
-                  {/* <TableCell>{c.transactionNumber}</TableCell> */}
-                  <TableCell sx={{ maxWidth: 120 }}>
-                    {
-                      c.paymentStatus !== "RESOLVED" ? (
-                        <>
-                        <Select
-                          value={(c.paymentStatus || "PENDING").toUpperCase()}
-                          size="small"
+                        <Typography
                           sx={{
-                            color: "#fff",
-                            background:
-                              "linear-gradient(180deg, #0f172a, #020617)",
-                            borderRadius: 1.5,
-                            minWidth: 140,
-                            ".MuiOutlinedInput-notchedOutline": {
-                              borderColor: "rgba(255,255,255,0.25)",
-                            },
-                            "&:hover .MuiOutlinedInput-notchedOutline": {
-                              borderColor: "#f5c46b",
-                            },
-                            "& .MuiSvgIcon-root": {
-                              color: "#f5c46b",
-                            },
-                          }}
-                          MenuProps={{
-                            PaperProps: {
-                              sx: {
-                                background:
-                                  "linear-gradient(180deg, #0f172a, #020617)",
-                                color: "#ffffff",
-                                borderRadius: 2,
-                                boxShadow: "0 12px 30px rgba(0,0,0,0.6)",
-                                mt: 1,
-                              },
-                            },
-                          }}
-                          onChange={(e) => {
-                            const updated = newcarPayment.map((r) =>
-                              r.paymentId === c.paymentId ?
-                                { ...r, paymentStatus: e.target.value }
-                              : r,
-                            );
-                            setnewcarPayment(updated);
+                            cursor: "pointer",
                           }}
                         >
-                          <MenuItem value="PENDING">Pendig</MenuItem>
-                          <MenuItem value="RESOLVED">RESOLVED</MenuItem>
-                        </Select>
-
-                        </>
-                      ) : (
-                        <Typography variant="body2">{c.paymentStatus}</Typography>
-                      )
-                    }
-
-
-                  </TableCell>
-                  <TableCell>
-                    {
-                      c.paymentStatus !== "RESOLVED" ? (
-                       <>
-                        <Button
-                      size="small"
-                      sx={{
-                        px: 3,
-                        py: 0.8,
-                        m: 1,
-                        textTransform: "none",
-                        fontWeight: 600,
-                        borderRadius: "999px",
-                        color: "#0f172a",
-                        background: "linear-gradient(135deg, #f5c46b, #eab308)",
-                        boxShadow: "0 6px 18px rgba(245,196,107,0.35)",
-                        transition: "all 0.25s ease",
-
-                        "&:hover": {
-                          background:
-                            "linear-gradient(135deg, #facc15, #f59e0b)",
-                          boxShadow: "0 10px 26px rgba(245,196,107,0.55)",
-                          transform: "translateY(-1px)",
-                        },
-
-                        "&:active": {
-                          transform: "scale(0.96)",
-                        },
-
-                        "&.Mui-disabled": {
-                          background: "rgba(255,255,255,0.15)",
-                          color: "rgba(255,255,255,0.4)",
-                          boxShadow: "none",
-                        },
-                      }}
-                      onClick={()=>{
-                        handlstatus(c)
-                      }}
-                    >
-                      Update
-                    </Button>
-
-                       </>
-                      ):(
+                          {c.car.id}
+                        </Typography>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell>
+                      <Tooltip
+                        arrow
+                        placement="right-end"
+                        title={
+                          <Box>
+                            <Typography variant="subtitle2">
+                              Name: {c.r.username}
+                            </Typography>
+                            <Typography variant="body2">
+                              Email: {c.r.email}
+                            </Typography>
+                            <Typography variant="body2">
+                              Role : {c.r.role}
+                            </Typography>
+                          </Box>
+                        }
+                      >
+                        <Typography
+                          sx={{
+                            cursor: "pointer",
+                          }}
+                        >
+                          {c.r.id}
+                        </Typography>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell>{c.car.price}</TableCell>
+                    <TableCell>{c.paidBookingAmount}</TableCell>
+                    <TableCell>{c.pendingAmount}</TableCell>
+                    {/* <TableCell>{c.transactionNumber}</TableCell> */}
+                    <TableCell sx={{ maxWidth: 120 }}>
+                      {c.paymentStatus !== "RESOLVED" ?
                         <>
-                        <Typography variant="body2">{c.paymentStatus}</Typography>
+                          <Select
+                            value={(c.paymentStatus || "PENDING").toUpperCase()}
+                            size="small"
+                            sx={{
+                              color: "#fff",
+                              background:
+                                "linear-gradient(180deg, #0f172a, #020617)",
+                              borderRadius: 1.5,
+                              minWidth: 140,
+                              ".MuiOutlinedInput-notchedOutline": {
+                                borderColor: "rgba(255,255,255,0.25)",
+                              },
+                              "&:hover .MuiOutlinedInput-notchedOutline": {
+                                borderColor: "#f5c46b",
+                              },
+                              "& .MuiSvgIcon-root": {
+                                color: "#f5c46b",
+                              },
+                            }}
+                            MenuProps={{
+                              PaperProps: {
+                                sx: {
+                                  background:
+                                    "linear-gradient(180deg, #0f172a, #020617)",
+                                  color: "#ffffff",
+                                  borderRadius: 2,
+                                  boxShadow: "0 12px 30px rgba(0,0,0,0.6)",
+                                  mt: 1,
+                                },
+                              },
+                            }}
+                            onChange={(e) => {
+                              const updated = newcarPayment.map((r) =>
+                                r.paymentId === c.paymentId ?
+                                  { ...r, paymentStatus: e.target.value }
+                                : r,
+                              );
+                              setnewcarPayment(updated);
+                            }}
+                          >
+                            <MenuItem value="PENDING">Pendig</MenuItem>
+                            <MenuItem value="RESOLVED">RESOLVED</MenuItem>
+                          </Select>
                         </>
-                      )
-                    }
+                      : <Typography variant="body2">
+                          {c.paymentStatus}
+                        </Typography>
+                      }
+                    </TableCell>
+                    <TableCell>
+                      {c.paymentStatus !== "RESOLVED" ?
+                        <>
+                          <Button
+                            size="small"
+                            sx={{
+                              px: 3,
+                              py: 0.8,
+                              m: 1,
+                              textTransform: "none",
+                              fontWeight: 600,
+                              borderRadius: "999px",
+                              color: "#0f172a",
+                              background:
+                                "linear-gradient(135deg, #f5c46b, #eab308)",
+                              boxShadow: "0 6px 18px rgba(245,196,107,0.35)",
+                              transition: "all 0.25s ease",
 
-                    <Button
-                      size="small"
-                      sx={{
-                        px: 3,
-                        py: 0.8,
-                        textTransform: "none",
-                        fontWeight: 600,
-                        borderRadius: "999px",
-                        color: "#0f172a",
-                        background: "linear-gradient(135deg, #f5c46b, #eab308)",
-                        boxShadow: "0 6px 18px rgba(245,196,107,0.35)",
-                        transition: "all 0.25s ease",
+                              "&:hover": {
+                                background:
+                                  "linear-gradient(135deg, #facc15, #f59e0b)",
+                                boxShadow: "0 10px 26px rgba(245,196,107,0.55)",
+                                transform: "translateY(-1px)",
+                              },
 
-                        "&:hover": {
+                              "&:active": {
+                                transform: "scale(0.96)",
+                              },
+
+                              "&.Mui-disabled": {
+                                background: "rgba(255,255,255,0.15)",
+                                color: "rgba(255,255,255,0.4)",
+                                boxShadow: "none",
+                              },
+                            }}
+                            onClick={() => {
+                              handlstatus(c);
+                            }}
+                          >
+                            Update
+                          </Button>
+                        </>
+                      : <>
+                          <Typography variant="body2">
+                            {c.paymentStatus}
+                          </Typography>
+                        </>
+                      }
+
+                      <Button
+                        size="small"
+                        sx={{
+                          px: 3,
+                          py: 0.8,
+                          textTransform: "none",
+                          fontWeight: 600,
+                          borderRadius: "999px",
+                          color: "#0f172a",
                           background:
-                            "linear-gradient(135deg, #facc15, #f59e0b)",
-                          boxShadow: "0 10px 26px rgba(245,196,107,0.55)",
-                          transform: "translateY(-1px)",
-                        },
+                            "linear-gradient(135deg, #f5c46b, #eab308)",
+                          boxShadow: "0 6px 18px rgba(245,196,107,0.35)",
+                          transition: "all 0.25s ease",
 
-                        "&:active": {
-                          transform: "scale(0.96)",
-                        },
+                          "&:hover": {
+                            background:
+                              "linear-gradient(135deg, #facc15, #f59e0b)",
+                            boxShadow: "0 10px 26px rgba(245,196,107,0.55)",
+                            transform: "translateY(-1px)",
+                          },
 
-                        "&.Mui-disabled": {
-                          background: "rgba(255,255,255,0.15)",
-                          color: "rgba(255,255,255,0.4)",
-                          boxShadow: "none",
-                        },
-                      }}
-                      onClick={() => {
-                        sendemail(c);
-                      }}
-                    >
-                      {/* Mony Order */}
-                      Request Payment
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              </>
-            ))}
+                          "&:active": {
+                            transform: "scale(0.96)",
+                          },
+
+                          "&.Mui-disabled": {
+                            background: "rgba(255,255,255,0.15)",
+                            color: "rgba(255,255,255,0.4)",
+                            boxShadow: "none",
+                          },
+                        }}
+                        onClick={() => {
+                          sendemail(c);
+                        }}
+                      >
+                        {/* Mony Order */}
+                        Request Payment
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                </>
+              ))}
           </TableBody>
         </Table>
 
         <TablePagination
-            count={newcarPayment.filter(c => c.paymentStatus === statusFilter).length}
-            page={page}
-            onPageChange={handlpage}
-            onRowsPerPageChange={handlrowperpage}
-            rowsPerPageOptions={[2, 4, 5]}
-            sx={{
-              color: "#e5e7eb",
-              ".MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows":
-                {
-                  color: "#94a3b8",
-                },
-              ".MuiSvgIcon-root": {
-                color: "#facc15",
+          count={
+            newcarPayment.filter((c) => c.paymentStatus === statusFilter).length
+          }
+          page={page}
+          onPageChange={handlpage}
+          onRowsPerPageChange={handlrowperpage}
+          rowsPerPageOptions={[2, 4, 5]}
+          sx={{
+            color: "#e5e7eb",
+            ".MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows":
+              {
+                color: "#94a3b8",
               },
-              ".MuiSelect-select": {
-                color: "#facc15",
-              },
-              background: "linear-gradient(180deg, #020617, #020617)",
-              borderTop: "1px solid rgba(255,255,255,0.1)",
-            }}
-          />
-
+            ".MuiSvgIcon-root": {
+              color: "#facc15",
+            },
+            ".MuiSelect-select": {
+              color: "#facc15",
+            },
+            background: "linear-gradient(180deg, #020617, #020617)",
+            borderTop: "1px solid rgba(255,255,255,0.1)",
+          }}
+        />
       </TableContainer>
 
-      <Footer/>
+      <Footer />
     </>
   );
 }

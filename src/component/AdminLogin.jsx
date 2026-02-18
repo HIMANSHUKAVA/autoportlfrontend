@@ -5,29 +5,27 @@ import { useNavigate } from "react-router-dom";
 import Typewriter from "typewriter-effect";
 import { showErrorAlert, showSuccessAlert } from "../Util/Alert";
 const initialstate = {
-  email : "",
-  password : ""
-}
+  email: "",
+  password: "",
+};
 
 const initialstate2 = {
-  email : "",
-  password : ""
-}
+  email: "",
+  password: "",
+};
 
-const reducer = (deta , action)=>{
-
+const reducer = (deta, action) => {
   switch (action.type) {
-    case "change" :
-       return {...deta , [action.field] : action.value }
+    case "change":
+      return { ...deta, [action.field]: action.value };
     case "reset":
-      return initialstate2
-    default :
-       return deta
+      return initialstate2;
+    default:
+      return deta;
   }
-}
+};
 
 export default function AdminLogin() {
-
   const inputstyle = () => ({
     mt: 2,
     "& .MuiInputLabel-root": { color: "#aaa" },
@@ -46,57 +44,48 @@ export default function AdminLogin() {
 
   const inputref = useRef();
   useEffect(() => {
-    inputref.current.focus()
-  }, [])
+    inputref.current.focus();
+  }, []);
 
   const API = import.meta.env.VITE_API_BASE_URL;
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  const [state  , dispatch] = useReducer(reducer  , initialstate)
-  const [pending, setpending] = useState(false)
-  const handlsubmit = (e)=>{
-
+  const [state, dispatch] = useReducer(reducer, initialstate);
+  const [pending, setpending] = useState(false);
+  const handlsubmit = (e) => {
     e.preventDefault();
 
-    if(!state.email || !state.password)
-    {
+    if (!state.email || !state.password) {
       alert("required fied");
       return;
     }
-    setpending(true)
+    setpending(true);
 
- axios.post(
-  `${API}/auth/login-check`,
-  {
-    email: state.email,
-    password: state.password
-  }
-)
-.then((response) => {
-  const { token, user } = response.data;
+    axios
+      .post(`${API}/auth/login-check`, {
+        email: state.email,
+        password: state.password,
+      })
+      .then((response) => {
+        const { token, user } = response.data;
 
-  localStorage.setItem("token", token);
-  localStorage.setItem("user", JSON.stringify(user));
-  localStorage.setItem("id" , user.id);
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("id", user.id);
 
-  console.log(user)
+        console.log(localStorage.getItem("token"));
 
-  showSuccessAlert("Login Successful");
-  dispatch({ type: "reset" });
-  setpending(false);
-  navigate("/admin/dash");
-})
-.catch((error) => {
-  console.log(error);
-  showErrorAlert("Invalid credentials");
-  setpending(false);
-});
-
-
-
-
-
-  }
+        showSuccessAlert("Login Successful");
+        dispatch({ type: "reset" });
+        setpending(false);
+        navigate("/admin/dash");
+      })
+      .catch((error) => {
+        console.log(error);
+        showErrorAlert("Invalid credentials");
+        setpending(false);
+      });
+  };
   return (
     <Box
       sx={{
@@ -184,11 +173,13 @@ const navigate = useNavigate();
             sx={inputstyle}
             inputRef={inputref}
             value={state.email}
-            onChange={(e)=>dispatch({
-              type : "change",
-              field : "email" ,
-              value:e.target.value
-            })}
+            onChange={(e) =>
+              dispatch({
+                type: "change",
+                field: "email",
+                value: e.target.value,
+              })
+            }
           />
 
           <TextField
@@ -199,15 +190,16 @@ const navigate = useNavigate();
             fullWidth
             value={state.password}
             sx={inputstyle}
-            onChange={(e)=>dispatch({
-              type : "change",
-              field : "password" ,
-              value:e.target.value
-            })}
+            onChange={(e) =>
+              dispatch({
+                type: "change",
+                field: "password",
+                value: e.target.value,
+              })
+            }
           />
 
           <Button
-
             type="submit"
             fullWidth
             sx={{
