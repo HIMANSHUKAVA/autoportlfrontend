@@ -34,31 +34,42 @@ export default function OldCarPaymentRemainder() {
 
   const handlePay = async () => {
     try {
-      // 1️⃣ Backend se fresh order create karo (₹40,000)
+      // 1️⃣ Backend se order create karo (₹40,000)
       const orderResponse = await axios.post(
         `${API}/auth/create-oldcar-pending-order/${paymentId}`,
         null,
         {
-          params: { amount: 40000 }, //  hardcoded amount
+          params: { amount: 40000 }, // 👈 same amount
         },
       );
 
       const orderId = orderResponse.data;
 
-      console.log("ORDER ID:", orderId);
-
-      // 2️⃣ Open Razorpay with hardcoded 40000
       const options = {
         key: "rzp_test_S0XseAdZlcbad2",
-        amount: 40000 * 100, // 👈 HARD CODED
+        amount: 40000 * 100,
         currency: "INR",
         name: "AutoPortal",
         description: "Test Payment",
         order_id: orderId,
 
-        handler: function (response) {
-          alert("Payment Successful 🎉");
-          console.log(response);
+        handler: async function (response) {
+          try {
+            // 2️⃣ PAYMENT SUCCESS KE BAAD AMOUNT UPDATE
+            await axios.put(
+              `${API}/auth/update/oldcarpaidamount/${paymentId}`,
+              null,
+              {
+                params: { amount: 40000 }, // 👈 SAME AMOUNT
+              },
+            );
+
+            alert("Payment Successful & Amount Updated ✅");
+            window.location.reload();
+          } catch (err) {
+            console.log("Update Failed:", err);
+            alert("Payment success but DB update failed ❌");
+          }
         },
 
         theme: { color: "#f5c46b" },
@@ -68,7 +79,7 @@ export default function OldCarPaymentRemainder() {
       rzp.open();
     } catch (error) {
       console.log("PAYMENT ERROR:", error);
-      alert("Payment Failed");
+      alert("Payment Failed ❌");
     }
   };
 
