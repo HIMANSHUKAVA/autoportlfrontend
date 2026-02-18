@@ -18,6 +18,8 @@ export default function OldCarPaymentRemainder() {
   const paymentId = searchParams.get("paymentId");
   const API = import.meta.env.VITE_API_BASE_URL;
 
+  console.log(localStorage.getItem("token"));
+
   useEffect(() => {
     axios
       .get(`${API}/auth/fetch/oldcarlink/payment/${paymentId}`)
