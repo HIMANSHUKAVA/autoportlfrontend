@@ -9,10 +9,10 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useReducer, useState } from "react";
-import { showErrorAlert, showSuccessAlert } from "../../Util/Alert";
-import Footer from "../../Buyer/Layout/Footer"
+import { useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Footer from "../../Buyer/Layout/Footer";
+import { showErrorAlert, showSuccessAlert } from "../../Util/Alert";
 const initialstate = {
   brand: "",
   model: "",
@@ -39,11 +39,10 @@ const reinitialstate = {
   priceRange: "",
 };
 
+const API = import.meta.env.VITE_API_BASE_URL;
 
 export default function Add_new() {
-
-const navigate = useNavigate();
-
+  const navigate = useNavigate();
 
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
@@ -66,7 +65,7 @@ const navigate = useNavigate();
 
     // const parts = text.split("-");/
 
-    const toRupees= (value) => {
+    const toRupees = (value) => {
       if (value.toLowerCase().includes("cr")) {
         return Number(value.replace(/[^\d.]/g, "")) * 10000000;
       }
@@ -74,18 +73,18 @@ const navigate = useNavigate();
     };
 
     if (text.includes("above")) {
-    const min = toRupees(text);
-    return { min, max: null };
-  }
+      const min = toRupees(text);
+      return { min, max: null };
+    }
 
-  const parts = text.split("-");
+    const parts = text.split("-");
 
-  if (parts.length !== 2) {
-    return { min: null, max: null };
-  }
+    if (parts.length !== 2) {
+      return { min: null, max: null };
+    }
 
     const min = toRupees(parts[0]);
-  const max = toRupees(parts[1]);
+    const max = toRupees(parts[1]);
 
     return { min, max };
   };
@@ -264,9 +263,9 @@ const navigate = useNavigate();
           photo: action.payload,
         };
 
-      case "RESET":{
-        return reinitialstate
-      };
+      case "RESET": {
+        return reinitialstate;
+      }
       default:
         return state;
     }
@@ -275,82 +274,75 @@ const navigate = useNavigate();
   const [validetion, setvalidetion] = useState({});
 
   const validate = () => {
-  let min = null;
-  let max = null;
+    let min = null;
+    let max = null;
 
-  // price range convert only if selected
-  if (state.priceRange) {
-    ({ min, max } = convettonumber(state.priceRange));
-  }
+    // price range convert only if selected
+    if (state.priceRange) {
+      ({ min, max } = convettonumber(state.priceRange));
+    }
 
-  const newError = {};
+    const newError = {};
 
-  // BRAND
-  if (!state.brand.trim()) {
-    newError.brand = "Brand is required";
-  }
+    // BRAND
+    if (!state.brand.trim()) {
+      newError.brand = "Brand is required";
+    }
 
-  // PRICE RANGE
-  if (!state.priceRange) {
-    newError.priceRange = "Price range is required";
-  }
+    // PRICE RANGE
+    if (!state.priceRange) {
+      newError.priceRange = "Price range is required";
+    }
 
-  // MODEL
-  if (!state.model.trim()) {
-    newError.model = "Model is required";
-  }
+    // MODEL
+    if (!state.model.trim()) {
+      newError.model = "Model is required";
+    }
 
-  // FUEL
-  if (!state.fuel.trim()) {
-    newError.fuel = "Fuel type is required";
-  }
+    // FUEL
+    if (!state.fuel.trim()) {
+      newError.fuel = "Fuel type is required";
+    }
 
-  // COLOUR
-  if (!state.colour.trim()) {
-    newError.colour = "Colour is required";
-  }
+    // COLOUR
+    if (!state.colour.trim()) {
+      newError.colour = "Colour is required";
+    }
 
-  // TRANSMISSION
-  if (!state.transmission.trim()) {
-    newError.transmission = "Transmission is required";
-  }
+    // TRANSMISSION
+    if (!state.transmission.trim()) {
+      newError.transmission = "Transmission is required";
+    }
 
-  // CAR TYPE
-  if (!state.type.trim()) {
-    newError.type = "Car type is required";
-  }
+    // CAR TYPE
+    if (!state.type.trim()) {
+      newError.type = "Car type is required";
+    }
 
-  // PHOTO
-  if (!state.photo) {
-    newError.photo = "Car photo is required";
-  }
+    // PHOTO
+    if (!state.photo) {
+      newError.photo = "Car photo is required";
+    }
 
-  // PRICE
-  if (!state.price.trim()) {
-    newError.price = "Price is required";
-  }
-  else if (isNaN(state.price)) {
-    newError.price = "Price must be a number";
-  }
-  else if (
-    min !== null &&
-    max !== null &&
-    (Number(state.price) < min || Number(state.price) > max)
-  ) {
-    newError.price = `Price should be between ${min} and ${max} Lakh`;
-  }
-  else if (min !== null && max === null && Number(state.price) < min) {
-    newError.price = `Price should be above ${min} Lakh`;
-  }
+    // PRICE
+    if (!state.price.trim()) {
+      newError.price = "Price is required";
+    } else if (isNaN(state.price)) {
+      newError.price = "Price must be a number";
+    } else if (
+      min !== null &&
+      max !== null &&
+      (Number(state.price) < min || Number(state.price) > max)
+    ) {
+      newError.price = `Price should be between ${min} and ${max} Lakh`;
+    } else if (min !== null && max === null && Number(state.price) < min) {
+      newError.price = `Price should be above ${min} Lakh`;
+    }
 
-  return newError;
-};
-
-
-
+    return newError;
+  };
 
   const [state, dispatch] = useReducer(reducer, initialstate);
-
 
   const handleSubmit = () => {
     const errors = validate();
@@ -360,53 +352,50 @@ const navigate = useNavigate();
 
     console.log(" READY TO SUBMIT", state);
 
-    const {min , max} = convettonumber(state.priceRange);
+    const { min, max } = convettonumber(state.priceRange);
     const payload = {
-    brand: state.brand,
-    model: state.model,
-    fuel: state.fuel,
-    transmission: state.transmission,
-    color: state.colour,
-    type: state.type,
-    carType: "New",
-    price: Number(state.price),
-    priceMin: min,
-    priceMax: max,
-    priceLabel: state.priceRange,
-    description: "this is best and wonderful car"
-  };
+      brand: state.brand,
+      model: state.model,
+      fuel: state.fuel,
+      transmission: state.transmission,
+      color: state.colour,
+      type: state.type,
+      carType: "New",
+      price: Number(state.price),
+      priceMin: min,
+      priceMax: max,
+      priceLabel: state.priceRange,
+      description: "this is best and wonderful car",
+    };
     const formdeta = new FormData();
 
     formdeta.append(
-       "cars",
+      "cars",
 
-      new Blob([JSON.stringify(payload)], { type: "application/json" })
-    )
+      new Blob([JSON.stringify(payload)], { type: "application/json" }),
+    );
 
-if (state.photo) {
-    formdeta.append("photo", state.photo);
-  }
+    if (state.photo) {
+      formdeta.append("photo", state.photo);
+    }
 
+    axios
+      .post(`${API}/admin/add/newcar`, formdeta, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
+      .then((Response) => {
+        const id = Response.data.id;
+        console.log(id);
 
-  axios.post(`http://localhost:3000/admin/add/newcar`, formdeta ,{
-
-  headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-  })
-  .then((Response)=>{
-
-    const id = Response.data.id;
-    console.log(id);
-
-    showSuccessAlert("Car Added Successfylly")
-    navigate(`/admin/img/${id}`)
-    dispatch({type:"RESET"})
-  })
-  .catch((error)=>{
-    showErrorAlert(error)
-  })
-
+        showSuccessAlert("Car Added Successfylly");
+        navigate(`/admin/img/${id}`);
+        dispatch({ type: "RESET" });
+      })
+      .catch((error) => {
+        showErrorAlert(error);
+      });
   };
   return (
     <>
@@ -416,19 +405,17 @@ if (state.photo) {
       <hr />
       {/* form main box */}
       <Box
-  sx={{
-    color: "white",
-    mt: 6,
-    width: "100%",
-    display: "flex",
-    flexDirection: { xs: "column", md: "row" }, //  KEY
-    gap: 4,
-    px: { xs: 2, md: 10 },
-    alignItems: "flex-start",
-  }}
->
-
-
+        sx={{
+          color: "white",
+          mt: 6,
+          width: "100%",
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" }, //  KEY
+          gap: 4,
+          px: { xs: 2, md: 10 },
+          alignItems: "flex-start",
+        }}
+      >
         {/* img section */}
         <Box
           sx={{
@@ -592,7 +579,10 @@ if (state.photo) {
             <br />
 
             {/* fuel */}
-            <FormControl sx={selectStyle(!!validetion.fuel)} error={!!validetion.fuel}>
+            <FormControl
+              sx={selectStyle(!!validetion.fuel)}
+              error={!!validetion.fuel}
+            >
               <InputLabel id="s">Select The Fuel Type</InputLabel>
 
               <Select
@@ -612,7 +602,7 @@ if (state.photo) {
                 <MenuItem value="CNG">CNG</MenuItem>
                 <MenuItem value="EV">EV</MenuItem>
               </Select>
-               {validetion.fuel && (
+              {validetion.fuel && (
                 <Typography variant="caption" color="error">
                   {validetion.fuel}
                 </Typography>
@@ -654,11 +644,14 @@ if (state.photo) {
               helperText={validetion.colour}
             />
             <br />
-            <FormControl sx={selectStyle(!!validetion.type)} error={!!validetion.type}>
+            <FormControl
+              sx={selectStyle(!!validetion.type)}
+              error={!!validetion.type}
+            >
               <InputLabel id="s">Select The Car Type Type</InputLabel>
 
               <Select
-              value={state.type}
+                value={state.type}
                 onChange={(e) => {
                   dispatch({
                     type: "NORMAL_FIELD",
@@ -721,14 +714,15 @@ if (state.photo) {
               color: "white",
               width: 100,
             }}
-            onClick={()=>{dispatch({type:"RESET"})}}
-
+            onClick={() => {
+              dispatch({ type: "RESET" });
+            }}
           >
             Reset
           </Button>
         </Box>
       </Box>
-      <Footer/>
+      <Footer />
     </>
   );
 }

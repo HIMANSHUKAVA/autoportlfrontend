@@ -1,14 +1,15 @@
 import { Delete } from "@mui/icons-material";
 import { Box, Button, IconButton, Typography } from "@mui/material";
-import React, { useState } from "react";
-import { showErrorAlert, showSuccessAlert } from "../../Util/Alert";
-import { useParams } from "react-router-dom";
 import axios from "axios";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { showErrorAlert, showSuccessAlert } from "../../Util/Alert";
 
 export default function Mulimages() {
   const [photo, setphoto] = useState([]);
 
-  const {id} = useParams();
+  const { id } = useParams();
+  const API = import.meta.env.VITE_API_BASE_URL;
 
   const handlphotochange = (e) => {
     const files = Array.from(e.target.files);
@@ -28,25 +29,25 @@ export default function Mulimages() {
       return;
     }
 
-    const formdeta =new FormData();
-    photo.forEach((photo)=>{
-formdeta.append("photos" , photo);
-    })
+    const formdeta = new FormData();
+    photo.forEach((photo) => {
+      formdeta.append("photos", photo);
+    });
 
-    axios.post(`http://localhost:3000/admin/new/carimage/add/${id}` , formdeta, {
-      headers:{
-        Authorization: "Bearer " + localStorage.getItem("token")
-      }
-    })
-    .then((Response)=>{
-      console.log(Response.data);
-      showSuccessAlert("Car Image Added Successfully")
-      setphoto([]);
-
-    })
-    .catch((Error)=>{
-      showErrorAlert(Error)
-    })
+    axios
+      .post(`${API}/admin/new/carimage/add/${id}`, formdeta, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
+      .then((Response) => {
+        console.log(Response.data);
+        showSuccessAlert("Car Image Added Successfully");
+        setphoto([]);
+      })
+      .catch((Error) => {
+        showErrorAlert(Error);
+      });
   };
 
   return (
@@ -81,7 +82,7 @@ formdeta.append("photos" , photo);
             // p: { xs: 6, md: 15 },
             minHeight: { xs: 220 }, // ✅ fixed height feel
             display: "flex",
-            p: {xs:0 , md:10},
+            p: { xs: 0, md: 10 },
             cursor: "pointer",
             // display: "block",
             borderRadius: 3,
