@@ -36,65 +36,45 @@ export default function OldCarPaymentRemainder() {
       return;
     }
 
+    const userId = searchParams.get("userId");
+    const paymentId = searchParams.get("paymentId");
+
+    if (!userId) {
+      alert("UserId missing in URL");
+      return;
+    }
+
     try {
-      // 1️⃣ Backend se fresh order create karwao
-      const orderRes = await axios.post(
-        `${API}/auth/create-oldcar-order/${payment.paymentId}`,
+      const response = await axios.get(
+        `${API}/auth/payment/linkbymobail/${paymentId}/${userId}`,
       );
 
-      const { orderId, amount } = orderRes.data;
+      const validatedPayment = response.data;
+      console.log(response.data);
 
-      if (!orderId) {
-        alert("Order creation failed");
-        return;
-      }
-
-      console.log("New Order ID:", orderId);
-      console.log("Amount (paisa):", amount);
-
-      // 2️ Razorpay options
       const options = {
-        key: "rzp_test_S0XseAdZlcbad2", // test key
-        amount: amount, // paisa (already multiplied in backend)
+        key: "rzp_test_S0XseAdZlcbad2",
+        amount: 40000 * 100,
         currency: "INR",
         name: "AutoPortal",
-        description: "Old Car Pending Payment",
-        order_id: orderId,
-
-        handler: async function (response) {
-          try {
-            console.log("Razorpay Response:", response);
-
-            // 3️⃣ Backend verification
-            await axios.post(`${API}/auth/verify-oldcar-payment`, {
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-              paymentId: payment.paymentId,
-            });
-
-            alert("Payment Successful 🎉");
-            window.location.reload();
-          } catch (err) {
-            console.log("Verification Failed:", err);
-            alert("Payment done but verification failed");
-          }
+        description: "Pending Payment",
+        order_id: validatedPayment.razorpayOrderId,
+        handler: async function () {
+          await axios.put(
+            `${API}/auth/update/oldcarpaidamount/${validatedPayment.paymentId}`,
+            null,
+            { params: { amount: 40000 } },
+          );
+          alert("Payment Successful 🎉");
+          window.location.reload();
         },
-
-        modal: {
-          ondismiss: function () {
-            console.log("Payment popup closed");
-          },
-        },
-
         theme: { color: "#f5c46b" },
       };
 
-      const rzp = new window.Razorpay(options);
-      rzp.open();
+      new window.Razorpay(options).open();
     } catch (error) {
-      console.log("Order creation failed:", error);
-      alert("Payment initiation failed");
+      console.log(error);
+      alert("Payment validation failed");
     }
   };
 
