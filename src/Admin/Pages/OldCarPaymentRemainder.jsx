@@ -65,7 +65,7 @@ export default function OldCarPaymentRemainder() {
       // 2️ Open Razorpay using validated data
       const options = {
         key: "rzp_test_S0XseAdZlcbad2",
-        amount: 40000,
+        amount: 40000 * 100,
         currency: "INR",
         name: "AutoPortal",
         description: "Pending Payment",
