@@ -169,7 +169,7 @@ export default function OldCarPaymentRemainder() {
               },
             }}
             onClick={() => {
-              handlpay();
+              handlePay();
             }}
           >
             {payment ? "Pay ₹40,000" : "Loading payment..."}
