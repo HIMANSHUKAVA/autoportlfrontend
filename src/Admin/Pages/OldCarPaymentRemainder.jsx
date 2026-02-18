@@ -54,6 +54,10 @@ export default function OldCarPaymentRemainder() {
 
       console.log("ORDER ID FROM BACKEND:", validatedPayment.razorpayOrderId);
 
+      console.log("ORDER ID FROM BACKEND:", validatedPayment.razorpayOrderId);
+      console.log("Paid From DB:", validatedPayment.paidBookingAmount);
+      console.log("Pending From DB:", validatedPayment.pendingAmount);
+
       // 2️ Open Razorpay using validated data
       const options = {
         key: "rzp_test_S0XseAdZlcbad2",
