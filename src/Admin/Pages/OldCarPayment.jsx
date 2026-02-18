@@ -25,6 +25,7 @@ export default function OldCarPayment() {
   const [oldcar, setoldcar] = useState([]);
   const API = import.meta.env.VITE_API_BASE_URL;
   const [loadingId, setLoadingId] = useState(null);
+  console.log(localStorage.getItem("token"));
   useEffect(() => {
     axios
       .get(`${API}/admin/fetch/oldcar/payment`, {

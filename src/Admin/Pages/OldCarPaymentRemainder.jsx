@@ -32,16 +32,6 @@ export default function OldCarPaymentRemainder() {
       });
   }, []);
 
-  // handler: async function () {
-  //         await axios.put(
-  //           `${API}/auth/update/oldcarpaidamount/${validatedPayment.paymentId}`,
-  //           null,
-  //           { params: { amount: 40000 } },
-  //         );
-  //         alert("Payment Successful 🎉");
-  //         window.location.reload();
-  //       },
-
   const handlePay = async () => {
     if (!payment) {
       alert("Payment data not loaded yet");
