@@ -44,6 +44,7 @@ export default function OldCarPayment() {
   const [selectesstatus, setselectesstatus] = useState({});
 
   const handlsendmain = (c) => {
+    setLoadingId(c.paymentId);
     console.log(c.paymentId);
     console.log("clicked");
     axios
