@@ -34,52 +34,70 @@ export default function OldCarPaymentRemainder() {
 
   const handlePay = async () => {
     try {
-      // 1️⃣ Backend se order create karo (₹40,000)
+      console.log("STEP 1: Creating order from backend...");
+
+      // 1️⃣ Create order with fixed ₹40000
       const orderResponse = await axios.post(
         `${API}/auth/create-oldcar-pending-order/${paymentId}`,
         null,
         {
-          params: { amount: 40000 }, // 👈 same amount
+          params: { amount: 40000 },
         },
       );
 
       const orderId = orderResponse.data;
+      console.log("ORDER CREATED:", orderId);
 
+      // 2️⃣ Razorpay options
       const options = {
         key: "rzp_test_S0XseAdZlcbad2",
-        amount: 40000 * 100,
+        amount: 40000 * 100, // always in paisa
         currency: "INR",
         name: "AutoPortal",
-        description: "Test Payment",
+        description: "Old Car Pending Payment",
         order_id: orderId,
 
         handler: async function (response) {
+          console.log("RAZORPAY SUCCESS:", response);
+
           try {
-            // 2️⃣ PAYMENT SUCCESS KE BAAD AMOUNT UPDATE
+            console.log("STEP 3: Updating DB...");
+
             await axios.put(
               `${API}/auth/update/oldcarpaidamount/${paymentId}`,
               null,
               {
-                params: { amount: 40000 }, // 👈 SAME AMOUNT
+                params: { amount: 40000 },
               },
             );
 
-            alert("Payment Successful & Amount Updated ✅");
+            console.log("DB UPDATED SUCCESSFULLY");
+            alert("Payment Successful & DB Updated 🎉");
+
             window.location.reload();
-          } catch (err) {
-            console.log("Update Failed:", err);
-            alert("Payment success but DB update failed ❌");
+          } catch (updateError) {
+            console.log("UPDATE FAILED:", updateError);
+            alert("Payment done but DB update failed");
           }
         },
 
-        theme: { color: "#f5c46b" },
+        modal: {
+          ondismiss: function () {
+            console.log("PAYMENT POPUP CLOSED");
+          },
+        },
+
+        theme: {
+          color: "#f5c46b",
+        },
       };
 
+      console.log("STEP 2: Opening Razorpay...");
       const rzp = new window.Razorpay(options);
       rzp.open();
     } catch (error) {
-      console.log("PAYMENT ERROR:", error);
-      alert("Payment Failed ❌");
+      console.log("ORDER CREATION FAILED:", error);
+      alert("Payment Failed Before Opening Razorpay");
     }
   };
 
