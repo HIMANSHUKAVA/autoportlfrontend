@@ -30,28 +30,37 @@ export default function OldCarPaymentRemainder() {
       });
   }, []);
 
-  const handlpay = async () => {
+  // handler: async function () {
+  //         await axios.put(
+  //           `${API}/auth/update/oldcarpaidamount/${validatedPayment.paymentId}`,
+  //           null,
+  //           { params: { amount: 40000 } },
+  //         );
+  //         alert("Payment Successful 🎉");
+  //         window.location.reload();
+  //       },
+
+  const handlePay = async () => {
     if (!payment) {
       alert("Payment data not loaded yet");
       return;
     }
 
-    const userId = searchParams.get("userId");
-    const paymentId = searchParams.get("paymentId");
-
-    if (!userId) {
-      alert("UserId missing in URL");
-      return;
-    }
-
     try {
+      const userId = searchParams.get("userId");
+      const paymentId = searchParams.get("paymentId");
+
+      console.log("UserId:", userId);
+      console.log("PaymentId:", paymentId);
+
+      // 1️ Validate payment from backend
       const response = await axios.get(
         `${API}/auth/payment/linkbymobail/${paymentId}/${userId}`,
       );
 
       const validatedPayment = response.data;
-      console.log(response.data);
 
+      // 2️ Open Razorpay using validated data
       const options = {
         key: "rzp_test_S0XseAdZlcbad2",
         amount: 40000 * 100,
@@ -59,15 +68,26 @@ export default function OldCarPaymentRemainder() {
         name: "AutoPortal",
         description: "Pending Payment",
         order_id: validatedPayment.razorpayOrderId,
-        handler: async function () {
-          await axios.put(
-            `${API}/auth/update/oldcarpaidamount/${validatedPayment.paymentId}`,
-            null,
-            { params: { amount: 40000 } },
-          );
-          alert("Payment Successful 🎉");
-          window.location.reload();
+
+        handler: async function (razorResponse) {
+          try {
+            await axios.put(
+              `${API}/auth/update/oldcarpaidamount/${validatedPayment.paymentId}`,
+              null,
+              {
+                params: {
+                  amount: 40000,
+                },
+              },
+            );
+            alert("Payment Successful 🎉");
+            window.location.reload();
+          } catch (err) {
+            console.log("Update Failed:", err);
+            alert("Payment done but update failed");
+          }
         },
+
         theme: { color: "#f5c46b" },
       };
 
