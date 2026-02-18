@@ -47,11 +47,16 @@ export default function OldCarPayment() {
   const [order, setorder] = useState("asc");
 
   const handlsort = (column) => {
-    const sortedData = [...newcarPayment].sort((a, b) => {
-      if (order === "asc") {
-        return a[column] > b[column] ? 1 : -1;
+    const sortedData = [...oldcar].sort((a, b) => {
+      const valueA = a[column];
+      const valueB = b[column];
+
+      if (typeof valueA === "string") {
+        return order === "asc" ?
+            valueA.localeCompare(valueB)
+          : valueB.localeCompare(valueA);
       } else {
-        return a[column] < b[column] ? 1 : -1;
+        return order === "asc" ? valueA - valueB : valueB - valueA;
       }
     });
 
@@ -103,21 +108,24 @@ export default function OldCarPayment() {
       selectesstatus[c.paymentId] || (c.status || "PENDING").toUpperCase();
     console.log(selectedStatus);
 
-    axios
-      .put(`${API}/admin/update/oldcar/status/${id}`, null, {
-        params: {
-          status: selectedStatus,
-        },
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      })
-      .then(() => {
-        showSuccessAlert("Status Updated Successfully");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    if (selectedStatus == "RESOLVED") {
+      axios
+        .put(`${API}/admin/update/oldcar/status/${id}`, null, {
+          params: {
+            status: selectedStatus,
+          },
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
+        .then(() => {
+          showSuccessAlert("Status Updated Successfully");
+          setoldcar((c) => c.filter((k) => k.paymentId != id));
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
   };
   return (
     <>
@@ -169,10 +177,20 @@ export default function OldCarPayment() {
                 },
               }}
             >
-              <TableCell>paymentid</TableCell>
+              <TableCell
+                onClick={() => handlsort("paymentId")}
+                sx={{ cursor: "pointer" }}
+              >
+                paymentid
+              </TableCell>
               <TableCell>carid</TableCell>
               <TableCell>userid</TableCell>
-              <TableCell>bookamount</TableCell>
+              <TableCell
+                onClick={() => handlsort("bookAmount")}
+                sx={{ cursor: "pointer" }}
+              >
+                bookamount
+              </TableCell>
               <TableCell>pendingamount</TableCell>
               <TableCell>totalamount</TableCell>
               <TableCell>status</TableCell>
