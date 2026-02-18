@@ -40,7 +40,7 @@ export default function OldCarPaymentRemainder() {
 
     try {
       // 1️⃣ Create fresh pending order from backend
-      const orderResponse = await axios.get(
+      const orderResponse = await axios.post(
         `${API}/auth/create-oldcar-pending-order/${paymentId}`,
       );
 
