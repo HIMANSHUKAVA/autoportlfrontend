@@ -36,48 +36,40 @@ export default function OldCarPaymentRemainder() {
       return;
     }
 
+    const userId = searchParams.get("userId");
+    const paymentId = searchParams.get("paymentId");
+
+    if (!userId) {
+      alert("UserId missing in URL");
+      return;
+    }
+
     try {
-      const userId = searchParams.get("userId");
-      const paymentId = searchParams.get("paymentId");
-
-      console.log("UserId:", userId);
-      console.log("PaymentId:", paymentId);
-
       const response = await axios.get(
         `${API}/auth/payment/linkbymobail/${paymentId}/${userId}`,
       );
 
       const validatedPayment = response.data;
 
-      const opetion = {
+      const options = {
         key: "rzp_test_S0XseAdZlcbad2",
         amount: 40000 * 100,
         currency: "INR",
         name: "AutoPortal",
         description: "Pending Payment",
         order_id: validatedPayment.razorpayOrderId,
-
-        handler: async function (razorResponse) {
-          try {
-            await axios.put(
-              `${API}/auth/update/oldcarpaidamount/${validatedPayment.paymentId}`,
-              null,
-              {
-                params: {
-                  amount: 40000,
-                },
-              },
-            );
-            alert("Payment Successful 🎉");
-            window.location.reload();
-          } catch (err) {
-            console.log("Update Failed:", err);
-            alert("Payment done but update failed");
-          }
+        handler: async function () {
+          await axios.put(
+            `${API}/auth/update/oldcarpaidamount/${validatedPayment.paymentId}`,
+            null,
+            { params: { amount: 40000 } },
+          );
+          alert("Payment Successful 🎉");
+          window.location.reload();
         },
-
         theme: { color: "#f5c46b" },
       };
+
       new window.Razorpay(options).open();
     } catch (error) {
       console.log(error);
