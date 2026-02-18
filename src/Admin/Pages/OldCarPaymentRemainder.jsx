@@ -17,6 +17,7 @@ export default function OldCarPaymentRemainder() {
   const [searchParams] = useSearchParams();
   const paymentId = searchParams.get("paymentId");
   const API = import.meta.env.VITE_API_BASE_URL;
+
   useEffect(() => {
     axios
       .get(`${API}/auth/fetch/oldcarlink/payment/${paymentId}`)
@@ -28,6 +29,61 @@ export default function OldCarPaymentRemainder() {
         console.log(error);
       });
   }, []);
+
+  const handlpay = async () => {
+    if (!payment) {
+      alert("Payment data not loaded yet");
+      return;
+    }
+
+    try {
+      const userId = searchParams.get("userId");
+      const paymentId = searchParams.get("paymentId");
+
+      console.log("UserId:", userId);
+      console.log("PaymentId:", paymentId);
+
+      const response = await axios.get(
+        `${API}/auth/payment/linkbymobail/${paymentId}/${userId}`,
+      );
+
+      const validatedPayment = response.data;
+
+      const opetion = {
+        key: "rzp_test_S0XseAdZlcbad2",
+        amount: 40000 * 100,
+        currency: "INR",
+        name: "AutoPortal",
+        description: "Pending Payment",
+        order_id: validatedPayment.razorpayOrderId,
+
+        handler: async function (razorResponse) {
+          try {
+            await axios.put(
+              `${API}/auth/update/oldcarpaidamount/${validatedPayment.paymentId}`,
+              null,
+              {
+                params: {
+                  amount: 40000,
+                },
+              },
+            );
+            alert("Payment Successful 🎉");
+            window.location.reload();
+          } catch (err) {
+            console.log("Update Failed:", err);
+            alert("Payment done but update failed");
+          }
+        },
+
+        theme: { color: "#f5c46b" },
+      };
+      new window.Razorpay(options).open();
+    } catch (error) {
+      console.log(error);
+      alert("Payment validation failed");
+    }
+  };
 
   return (
     <Box
@@ -98,6 +154,9 @@ export default function OldCarPaymentRemainder() {
                 background: "linear-gradient(135deg, #facc15, #f59e0b)",
                 boxShadow: "0 12px 30px rgba(245,196,107,0.6)",
               },
+            }}
+            onClick={() => {
+              handlpay();
             }}
           >
             {payment ? "Pay ₹40,000" : "Loading payment..."}
