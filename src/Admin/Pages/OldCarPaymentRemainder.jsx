@@ -33,60 +33,42 @@ export default function OldCarPaymentRemainder() {
   }, []);
 
   const handlePay = async () => {
-    if (!payment) {
-      alert("Payment data not loaded yet");
-      return;
-    }
-
     try {
-      const userId = searchParams.get("userId");
-      const paymentId = searchParams.get("paymentId");
-
-      console.log("UserId:", userId);
-      console.log("PaymentId:", paymentId);
-
-      // 1️ Validate payment from backend
-      const response = await axios.get(
-        `https://autoportal.onrender.com/auth/payment/linkbymobail//${paymentId}/${payment.r.id}`,
+      // 1️⃣ Backend se fresh order create karo (₹40,000)
+      const orderResponse = await axios.post(
+        `${API}/auth/create-oldcar-pending-order/${paymentId}`,
+        null,
+        {
+          params: { amount: 40000 }, //  hardcoded amount
+        },
       );
 
-      const validatedPayment = response.data;
+      const orderId = orderResponse.data;
 
-      // 2️ Open Razorpay using validated data
+      console.log("ORDER ID:", orderId);
+
+      // 2️⃣ Open Razorpay with hardcoded 40000
       const options = {
         key: "rzp_test_S0XseAdZlcbad2",
-        amount: 40000 * 100,
+        amount: 40000 * 100, // 👈 HARD CODED
         currency: "INR",
         name: "AutoPortal",
-        description: "Pending Payment",
-        order_id: validatedPayment.razorpayOrderId,
+        description: "Test Payment",
+        order_id: orderId,
 
-        // handler: async function (razorResponse) {
-        //   try {
-        //     await axios.put(
-        //       `https://autoportal.onrender.com/auth/pending/amount/${validatedPayment.paymentId}`,
-        //       null,
-        //       {
-        //         params: {
-        //           amount: 40000,
-        //         },
-        //       },
-        //     );
-        //     alert("Payment Successful 🎉");
-        //     window.location.reload();
-        //   } catch (err) {
-        //     console.log("Update Failed:", err);
-        //     alert("Payment done but update failed");
-        //   }
-        // },
+        handler: function (response) {
+          alert("Payment Successful 🎉");
+          console.log(response);
+        },
 
         theme: { color: "#f5c46b" },
       };
 
-      new window.Razorpay(options).open();
+      const rzp = new window.Razorpay(options);
+      rzp.open();
     } catch (error) {
-      console.log(error);
-      alert("Payment validation failed");
+      console.log("PAYMENT ERROR:", error);
+      alert("Payment Failed");
     }
   };
 
