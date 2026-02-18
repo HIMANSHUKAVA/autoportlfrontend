@@ -39,45 +39,37 @@ export default function OldCarPaymentRemainder() {
     }
 
     try {
-      const userId = searchParams.get("userId");
-      const paymentId = searchParams.get("paymentId");
-
-      console.log("UserId:", userId);
-      console.log("PaymentId:", paymentId);
-
-      // 1️ Validate payment from backend
-      const response = await axios.get(
-        `${API}/auth/payment/linkbymobail/${paymentId}/${userId}`,
+      // 1️⃣ Create fresh pending order from backend
+      const orderResponse = await axios.get(
+        `${API}/auth/create-oldcar-pending-order/${paymentId}`,
       );
 
-      const validatedPayment = response.data;
+      const orderId = orderResponse.data;
 
-      console.log("ORDER ID FROM BACKEND:", validatedPayment.razorpayOrderId);
+      console.log("NEW ORDER ID:", orderId);
+      console.log("Pending:", payment.pendingAmount);
 
-      console.log("ORDER ID FROM BACKEND:", validatedPayment.razorpayOrderId);
-      console.log("Paid From DB:", validatedPayment.paidBookingAmount);
-      console.log("Pending From DB:", validatedPayment.pendingAmount);
-
-      // 2️ Open Razorpay using validated data
+      // 2️⃣ Open Razorpay
       const options = {
         key: "rzp_test_S0XseAdZlcbad2",
-        amount: 40000 * 100,
+        amount: payment.pendingAmount * 100, // 🔥 Dynamic amount
         currency: "INR",
         name: "AutoPortal",
         description: "Pending Payment",
-        order_id: validatedPayment.razorpayOrderId,
+        order_id: orderId,
 
-        handler: async function (razorResponse) {
+        handler: async function () {
           try {
             await axios.put(
-              `${API}/auth/update/oldcarpaidamount/${validatedPayment.paymentId}`,
+              `${API}/auth/update/oldcarpaidamount/${paymentId}`,
               null,
               {
                 params: {
-                  amount: 40000,
+                  amount: payment.pendingAmount,
                 },
               },
             );
+
             alert("Payment Successful 🎉");
             window.location.reload();
           } catch (err) {
@@ -91,8 +83,8 @@ export default function OldCarPaymentRemainder() {
 
       new window.Razorpay(options).open();
     } catch (error) {
-      console.log(error);
-      alert("Payment validation failed");
+      console.log("PAYMENT ERROR:", error);
+      alert("Payment failed");
     }
   };
 
