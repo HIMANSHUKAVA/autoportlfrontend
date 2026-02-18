@@ -29,6 +29,7 @@ import ContectFromUser from "./Admin/Pages/ContectFromUser";
 import EditAdminProfile from "./Admin/Pages/EditAdminProfile";
 import Mulimages from "./Admin/Pages/Mulimages";
 import OldCarPayment from "./Admin/Pages/OldCarPayment";
+import OldCarPaymentRemainder from "./Admin/Pages/OldCarPaymentRemainder";
 import PaymentRemainder from "./Admin/Pages/PaymentRemainder";
 import SellarConects from "./Admin/Pages/SellarConects";
 import ViewAdmin from "./Admin/Pages/ViewAdmin";
@@ -265,7 +266,7 @@ function App() {
           <Route path="view/oldcar/payments" element={<OldCarPayment />} />
         </Route>
         <Route path="/pay" element={<PaymentRemainder />} />
-        <Route path="/oldpay" element={<PaymentRemainder />} />
+        <Route path="/oldpay" element={<OldCarPaymentRemainder />} />
       </Routes>
     </BrowserRouter>
   );

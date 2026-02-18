@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 export default function OldCarPaymentRemainder() {
-  const [payment, setpayment] = useState([]);
+  const [payment, setpayment] = useState(null);
 
   const [searchParams] = useSearchParams();
   const paymentId = searchParams.get("paymentId");

@@ -15,6 +15,7 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { showErrorAlert, showSuccessAlert } from "../../Util/Alert";
+
 import {
   buttonstyle,
   selectMenuProps,
@@ -23,6 +24,7 @@ import {
 export default function OldCarPayment() {
   const [oldcar, setoldcar] = useState([]);
   const API = import.meta.env.VITE_API_BASE_URL;
+  const [loadingId, setLoadingId] = useState(null);
   useEffect(() => {
     axios
       .get(`${API}/admin/fetch/oldcar/payment`, {
@@ -56,6 +58,9 @@ export default function OldCarPayment() {
       .catch((error) => {
         showErrorAlert("Somthing Went Wrong");
         console.log(error);
+      })
+      .finally(() => {
+        setLoadingId(null);
       });
   };
   return (
@@ -212,9 +217,14 @@ export default function OldCarPayment() {
                     </Select>
                   </TableCell>
                   <TableCell>
-                    <Button sx={buttonstyle} onClick={() => handlsendmain(c)}>
-                      Remainder
+                    <Button
+                      sx={buttonstyle}
+                      disabled={loadingId === c.paymentId}
+                      onClick={() => handlsendmain(c)}
+                    >
+                      {loadingId === c.paymentId ? "Sending..." : "Remainder"}
                     </Button>
+
                     <Button sx={buttonstyle}>Update</Button>
                   </TableCell>
                 </TableRow>
