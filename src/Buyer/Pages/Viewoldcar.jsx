@@ -93,7 +93,7 @@ export default function Viewoldcar() {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
           },
-        }
+        },
       )
       .then(() => navigate("/add-to-cart"))
       .catch(console.error);
@@ -107,6 +107,8 @@ export default function Viewoldcar() {
     try {
       const user_id = localStorage.getItem("user_id");
 
+      // const bookingAmount = 40000 * 0.1;
+
       const payload = {
         totalAmount: totalamount,
         paidBookingAmount: 40000,
@@ -118,9 +120,10 @@ export default function Viewoldcar() {
         payload,
         {
           headers: {
+            "Content-Type": "application/json",
             Authorization: "Bearer " + localStorage.getItem("token"),
           },
-        }
+        },
       );
 
       buynow.payNow(response.data.amount, response.data.razorpayOrderId);
@@ -186,7 +189,7 @@ export default function Viewoldcar() {
                 </CardActionArea>
 
                 <CardActions>
-                  <Button variant="outlined" onClick={handlpayment(car)}>
+                  <Button variant="outlined" onClick={() => handlpayment(car)}>
                     Buy Now
                   </Button>
                   <Button variant="outlined" onClick={() => handleCart(car.id)}>

@@ -60,6 +60,8 @@ export default function OldCarPaymentRemainder() {
 
       const validatedPayment = response.data;
 
+      console.log(validatedPayment.razorpayOrderId);
+
       // 2️ Open Razorpay using validated data
       const options = {
         key: "rzp_test_S0XseAdZlcbad2",
