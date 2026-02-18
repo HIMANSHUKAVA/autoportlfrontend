@@ -50,6 +50,7 @@ export default function OldCarPaymentRemainder() {
       );
 
       const validatedPayment = response.data;
+      console.log(response.data);
 
       const options = {
         key: "rzp_test_S0XseAdZlcbad2",
