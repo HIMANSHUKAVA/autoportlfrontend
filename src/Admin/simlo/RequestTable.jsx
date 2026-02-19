@@ -192,7 +192,7 @@ export default function RequestTable() {
                       onChange={(e) => {
                         setstatusfilter((prev) => ({
                           ...prev,
-                          [s.id]: e.target.value,
+                          [e.id]: e.target.value,
                         }));
                       }}
                       MenuProps={{
