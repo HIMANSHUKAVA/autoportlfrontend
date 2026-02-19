@@ -17,6 +17,7 @@ export default function RequestTable() {
   const [car, setcar] = useState([]);
 
   const API = import.meta.env.VITE_API_BASE_URL;
+  const [statusfilter, setstatusfilter] = useState("PENDING");
 
   useEffect(() => {
     axios
@@ -35,6 +36,60 @@ export default function RequestTable() {
       });
   }, []);
   const sdeta = car.slice(0, 8);
+
+  // VITE_API_BASE_URL
+  const API = import.meta.env,VITE_API_BASE_URL
+
+  const handlupdate = (car) => {
+    const id = car.id;
+    const status = statusfilter[id](car.status || "PENDING").toUpperCase();
+
+     const payload = {
+      brand: car.brand,
+      model: car.model,
+      fuel: car.fuel,
+      transmission: car.transmission,
+      color: car.colour || car.color,
+      km_driven: car.km_driven,
+      priceLabel: car.priceLabel,
+      priceMin: car.priceMin,
+      priceMax: car.priceMax,
+      year: car.year,
+      type: car.type,
+      description: "best car",
+      carType: "OLD",
+      carcondition: car.carcondition,
+      image_url: car.photo,
+      status: status,
+    };
+       if (status === "APPROVED") {
+      axios
+        .post(`${API}/admin/request/view/singleimages/${id}`, payload, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
+        .then(() => {
+          showSuccessAlert("Car Status Update Successfully");
+          setrequest((prev) => prev.filter((r) => r.sellarcarid !== id));
+        });
+    } else if (status === "REJECTED") {
+      axios
+        .delete(`${API}/admin/request/reject/${id}`, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
+        .then(() => {
+          showSuccessAlert("Car deleted  Successfully");
+          setrequest((prev) => prev.filter((r) => r.sellarcarid !== id));
+        })
+        .catch((error) => {
+          console.log(error);
+          showErrorAlert("Approve failed");
+        });
+    }
+  };
 
   return (
     <>
@@ -112,7 +167,9 @@ export default function RequestTable() {
                   <TableCell>{s.price}</TableCell>
                   <TableCell>
                     <Select
-                      value={s.status}
+                      value={statusfilter[s.id]
+                        (s.status || "PENDING").toUpperCase(),
+                      }
                       size="small"
                       sx={{
                         color: "#fff",
@@ -128,6 +185,12 @@ export default function RequestTable() {
                         "& .MuiSvgIcon-root": {
                           color: "#f5c46b",
                         },
+                      }}
+                      onChange={(e) => {
+                        setstatusfilter((prev) => ({
+                          ...prev,
+                          [e.id]: e.target.value,
+                        }));
                       }}
                       MenuProps={{
                         PaperProps: {
@@ -154,6 +217,7 @@ export default function RequestTable() {
                         border: "1px solid #FACC15",
                         color: "#FACC15",
                       }}
+                      onClick={() => handlupdate(s)}
                     >
                       Update Status
                     </Button>
