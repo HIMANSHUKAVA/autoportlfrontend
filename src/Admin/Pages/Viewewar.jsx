@@ -90,6 +90,7 @@ export default function ViewNewCar() {
                   />
 
                   <CardContent>
+                    {console.log(c.image_url)}
                     <Typography variant="h5">Brand : {c.brand}</Typography>
                     <Typography variant="h5">Model : {c.model}</Typography>
                     <Typography variant="h5">Price : {c.price}</Typography>
