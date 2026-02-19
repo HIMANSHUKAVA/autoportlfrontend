@@ -266,7 +266,6 @@ export default function CarrequestView() {
                         }}
                         onError={(e) => {
                           e.target.onerror = null;
-                          e.target.src = "/images/maruti.avif";
                         }}
                       />
                     </TableCell>
