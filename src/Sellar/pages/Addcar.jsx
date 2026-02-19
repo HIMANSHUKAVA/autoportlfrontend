@@ -292,7 +292,7 @@ export default function Addcar() {
     formdeta.append("photo", photo);
     axios
       .post(
-        `${API}/sellar/request/add/${localStorage.getItem("user_id")}`,
+        `${API}/seller/request/add/${localStorage.getItem("user_id")}`,
         formdeta,
         {
           headers: {

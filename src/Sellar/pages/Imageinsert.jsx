@@ -39,7 +39,7 @@ export default function Imageinsert() {
     const API = import.meta.env.VITE_API_BASE_URL;
 
     axios
-      .post(`${API}/sellar/request/image/add/${id}`, payload, {
+      .post(`${API}/seller/request/image/add/${id}`, payload, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },

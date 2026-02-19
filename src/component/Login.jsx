@@ -9,14 +9,13 @@ export default function Login() {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
 
-
   const navigate = useNavigate();
   const handlloginsubmitevent = async (e) => {
     e.preventDefault();
 
     await axios
       .post(
-        `http://localhost:3000/auth/login-person?email=${email}&password=${password}`
+        `http://localhost:3000/auth/login-person?email=${email}&password=${password}`,
       )
       .then((Response) => {
         const { user, token } = Response.data;
@@ -47,7 +46,7 @@ export default function Login() {
         navigate("/");
         setemail("");
         setpassword("");
-        console.log(error);
+        // console.log(error);
       });
   };
   return (
