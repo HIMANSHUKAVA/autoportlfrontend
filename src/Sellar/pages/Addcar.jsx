@@ -1,28 +1,24 @@
 import {
   Box,
   Button,
-  Divider,
   FormControl,
-  FormControlLabel,
-  Grid,
   InputLabel,
   MenuItem,
   Select,
-  TextareaAutosize,
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
-import NavbarAndDrawer from "../layout/NavbarAndDrawer";
-import Footer from "../../Buyer/Layout/Footer";
 import axios from "axios";
-import { showSuccessAlert, showErrorAlert } from "../../Util/Alert";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Footer from "../../Buyer/Layout/Footer";
+import { showErrorAlert, showSuccessAlert } from "../../Util/Alert";
+import NavbarAndDrawer from "../layout/NavbarAndDrawer";
 export default function Addcar() {
   const [photo, setPhoto] = useState(null);
+  const API = import.meta.env.VITE_API_BASE_URL;
 
   const navigate = useNavigate();
-
 
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
@@ -30,31 +26,28 @@ export default function Addcar() {
       setPhoto(file);
     }
   };
-const convettonumber = (text) => {
-  if (!text) return { min: null, max: null };
+  const convettonumber = (text) => {
+    if (!text) return { min: null, max: null };
 
-  const toRupees = (value) => {
-    if (value.toLowerCase().includes("cr")) {
-      return Number(value.replace(/[^\d.]/g, "")) * 10000000;
+    const toRupees = (value) => {
+      if (value.toLowerCase().includes("cr")) {
+        return Number(value.replace(/[^\d.]/g, "")) * 10000000;
+      }
+      return Number(value.replace(/[^\d.]/g, "")) * 100000;
+    };
+
+    if (text.toLowerCase().includes("above")) {
+      return { min: toRupees(text), max: null };
     }
-    return Number(value.replace(/[^\d.]/g, "")) * 100000;
+
+    const parts = text.split("-");
+    if (parts.length !== 2) return { min: null, max: null };
+
+    return {
+      min: toRupees(parts[0]),
+      max: toRupees(parts[1]),
+    };
   };
-
-  if (text.toLowerCase().includes("above")) {
-    return { min: toRupees(text), max: null };
-  }
-
-  const parts = text.split("-");
-  if (parts.length !== 2) return { min: null, max: null };
-
-  return {
-    min: toRupees(parts[0]),
-    max: toRupees(parts[1]),
-  };
-};
-
-
-
 
   const oldcardeta = [
     {
@@ -149,27 +142,26 @@ const convettonumber = (text) => {
     km_driven: "",
     photo: photo,
     price: "",
-    year :"",
-    type :""
+    year: "",
+    type: "",
   });
 
   const [validate, setValidate] = useState({});
 
   const validation = () => {
     const newError = {};
-     let min= null;
-     let max = null;
+    let min = null;
+    let max = null;
 
-if (!selectedPrice) {
-    newError.priceRange = "Price range is required";
-  } else {
-    ({ min, max } = convettonumber(selectedPrice));
-  }
+    if (!selectedPrice) {
+      newError.priceRange = "Price range is required";
+    } else {
+      ({ min, max } = convettonumber(selectedPrice));
+    }
 
     if (!selectedBrand) {
-  newError.brand = "Brand is required";
-}
-
+      newError.brand = "Brand is required";
+    }
 
     if (!car.model.trim()) {
       newError.model = "Model Name is required";
@@ -190,16 +182,15 @@ if (!selectedPrice) {
     if (!car.transmission.trim()) {
       newError.transmission = "Transmission is required";
     }
-if (!car.type.trim()) {
-  newError.type = "Type is required";
-}
+    if (!car.type.trim()) {
+      newError.type = "Type is required";
+    }
 
-if (!car.year.trim()) {
-  newError.year = "Year is required";
-} else if (isNaN(car.year)) {
-  newError.year = "Year must be a number";
-}
-
+    if (!car.year.trim()) {
+      newError.year = "Year is required";
+    } else if (isNaN(car.year)) {
+      newError.year = "Year must be a number";
+    }
 
     if (!car.km_driven.trim()) {
       newError.km_driven = "KM Driven is required";
@@ -214,18 +205,15 @@ if (!car.year.trim()) {
       newError.price = "Price is required";
     } else if (isNaN(car.price)) {
       newError.price = "Price must be a number";
+    } else if (
+      min !== null &&
+      max !== null &&
+      (Number(car.price) < min || Number(car.price) > max)
+    ) {
+      newError.price = `Price should be between ${min} and ${max} Lakh`;
+    } else if (min !== null && max === null && Number(car.price) < min) {
+      newError.price = `Price should be above ${min}`;
     }
-   else if (
-    min !== null &&
-    max !== null &&
-    (Number(car.price) < min || Number(car.price) > max)
-  ) {
-    newError.price = `Price should be between ${min} and ${max} Lakh`;
-  }
-  else if (min !== null && max === null && Number(car.price) < min) {
-  newError.price = `Price should be above ${min}`;
-}
-
 
     setValidate(newError);
 
@@ -276,25 +264,24 @@ if (!car.year.trim()) {
       return;
     }
 
-    const {min , max} = convettonumber(selectedPrice);
+    const { min, max } = convettonumber(selectedPrice);
     const formdeta = new FormData();
 
-   const payload = {
-  brand: selectedBrand,
-  model: car.model,
-  fuel: car.fuel,
-  colour: car.colour,
-  condition: car.condition,
-  transmission: car.transmission,
-  km_driven: Number(car.km_driven),
-  price: Number(car.price),
-  priceLabel: selectedPrice,
-  priceMin: min,
-  priceMax: max,
-  type: car.type,
-  year: Number(car.year)
-};
-
+    const payload = {
+      brand: selectedBrand,
+      model: car.model,
+      fuel: car.fuel,
+      colour: car.colour,
+      condition: car.condition,
+      transmission: car.transmission,
+      km_driven: Number(car.km_driven),
+      price: Number(car.price),
+      priceLabel: selectedPrice,
+      priceMin: min,
+      priceMax: max,
+      type: car.type,
+      year: Number(car.year),
+    };
 
     formdeta.append(
       "car",
@@ -305,9 +292,7 @@ if (!car.year.trim()) {
     formdeta.append("photo", photo);
     axios
       .post(
-        `http://localhost:3000/sellar/request/add/${localStorage.getItem(
-          "user_id",
-        )}`,
+        `${API}/sellar/request/add/${localStorage.getItem("user_id")}`,
         formdeta,
         {
           headers: {
@@ -342,7 +327,7 @@ if (!car.year.trim()) {
       });
   };
 
-    const selectStyle = (hasError = false) => ({
+  const selectStyle = (hasError = false) => ({
     mb: 2,
 
     "& .MuiOutlinedInput-root": {
@@ -385,7 +370,6 @@ if (!car.year.trim()) {
       marginLeft: "4px",
     },
   });
-
 
   return (
     <>
@@ -510,8 +494,9 @@ if (!car.year.trim()) {
               }}
             >
               <FormControl
-              sx={selectStyle(!!validate.brand)} fullWidth
-                error={!!validate. brand}
+                sx={selectStyle(!!validate.brand)}
+                fullWidth
+                error={!!validate.brand}
               >
                 <InputLabel id="s1">Select The Brand</InputLabel>
 
@@ -529,7 +514,9 @@ if (!car.year.trim()) {
                 </Select>
               </FormControl>
 
-              <FormControl sx={selectStyle(!!validate.priceRange)} fullWidth
+              <FormControl
+                sx={selectStyle(!!validate.priceRange)}
+                fullWidth
                 error={!!validate.priceRange}
               >
                 <InputLabel id="price-label">Select The Price Range</InputLabel>
@@ -619,7 +606,7 @@ if (!car.year.trim()) {
               />
 
               <TextField
-              type="number"
+                type="number"
                 label="Enter The Model Year"
                 name="year"
                 id="year"
@@ -642,8 +629,6 @@ if (!car.year.trim()) {
                 helperText={validate.type}
               />
               <br />
-
-
 
               <TextField
                 label="Enter The Expected Price"

@@ -1,10 +1,10 @@
-import { Box, Button, IconButton, Typography } from "@mui/material";
-import React, { useState } from "react";
-import NavbarAndDrawer from "../layout/NavbarAndDrawer";
-import { showErrorAlert, showSuccessAlert } from "../../Util/Alert";
 import { Delete } from "@mui/icons-material";
-import { useNavigate, useParams } from "react-router-dom";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import axios from "axios";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { showErrorAlert, showSuccessAlert } from "../../Util/Alert";
+import NavbarAndDrawer from "../layout/NavbarAndDrawer";
 export default function Imageinsert() {
   const [image, setimage] = useState([]);
   const navigate = useNavigate();
@@ -36,9 +36,10 @@ export default function Imageinsert() {
     image.forEach((image) => {
       payload.append("photos", image);
     });
+    const API = import.meta.env.VITE_API_BASE_URL;
 
     axios
-      .post(`http://localhost:3000/sellar/request/image/add/${id}`, payload, {
+      .post(`${API}/sellar/request/image/add/${id}`, payload, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
