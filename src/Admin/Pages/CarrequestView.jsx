@@ -21,9 +21,10 @@ export default function CarrequestView() {
   const [request, setrequest] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState({});
 
+  const API = import.meta.env.VITE_API_BASE_URL;
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/admin/view/r`, {
+      .get(`${API}/admin/view/r`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
@@ -42,8 +43,8 @@ export default function CarrequestView() {
     const status = selectedStatus[car.sellarcarid];
     const id = car.sellarcarid;
 
-    console.log("button clicked")
-    console.log(status)
+    console.log("button clicked");
+    console.log(status);
     console.log(id);
 
     const payload = {
@@ -66,22 +67,18 @@ export default function CarrequestView() {
     };
     if (status === "APPROVED") {
       axios
-        .post(
-          `http://localhost:3000/admin/request/view/singleimages/${id}`,
-          payload,
-          {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("token"),
-            },
+        .post(`${API}/admin/request/view/singleimages/${id}`, payload, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
           },
-        )
+        })
         .then(() => {
           showSuccessAlert("Car Status Update Successfully");
           setrequest((prev) => prev.filter((r) => r.sellarcarid !== id));
         });
     } else if (status === "REJECTED") {
       axios
-        .delete(`http://localhost:3000/admin/request/reject/${id}`, {
+        .delete(`${API}/admin/request/reject/${id}`, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
           },
@@ -252,17 +249,24 @@ export default function CarrequestView() {
                       },
                     }}
                   >
-
                     <TableCell>
                       <Box
                         component="img"
-                        src={car.photo}
+                        src={
+                          car.photo ?
+                            `${API}/images/${car.image_url}`
+                          : "/images/kia-ev9.jpg"
+                        }
                         sx={{
                           // width:"60px"/
                           width: 90,
                           height: 60,
                           borderRa1dius: 1,
                           objectFit: "cover",
+                        }}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "/images/maruti.avif";
                         }}
                       />
                     </TableCell>
@@ -277,7 +281,9 @@ export default function CarrequestView() {
                         <>{car.status}</>
                       : <>
                           <Select
-                            value={selectedStatus[car.sellarcarid] || car.status}
+                            value={
+                              selectedStatus[car.sellarcarid] || car.status
+                            }
                             size="small"
                             sx={{
                               color: "#fff",
