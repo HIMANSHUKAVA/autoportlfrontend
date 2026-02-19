@@ -17,6 +17,9 @@ export default function ViewNewCar() {
   const API = import.meta.env.VITE_API_BASE_URL;
   const [car, setcar] = useState([]);
   const BASE_URL = "https://your-app-name.onrender.com";
+
+  console.log(import.meta.env.VITE_API_BASE_URL);
+
   useEffect(() => {
     axios
       .get(`${API}/admin/view/anewcar`, {
