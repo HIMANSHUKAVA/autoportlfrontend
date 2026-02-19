@@ -86,7 +86,7 @@ export default function ViewNewCar() {
                 <CardActionArea>
                   <CardMedia
                     component="img"
-                    image={`${API}/images/${c.photo}`}
+                    image={`${API}/images/${c.image_url}`}
                   />
 
                   <CardContent>
