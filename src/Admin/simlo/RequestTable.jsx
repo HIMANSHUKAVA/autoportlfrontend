@@ -16,9 +16,11 @@ import { useEffect, useState } from "react";
 export default function RequestTable() {
   const [car, setcar] = useState([]);
 
+  const API = import.meta.env.VITE_API_BASE_URL;
+
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/admin/request/view`, {
+      .get(`${API}/admin/request/view`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
@@ -34,7 +36,6 @@ export default function RequestTable() {
   }, []);
   const sdeta = car.slice(0, 8);
 
-  const API = import.meta.env.VITE_API_BASE_URL;
   return (
     <>
       <Box
@@ -91,7 +92,7 @@ export default function RequestTable() {
                         // width:"60px"/
                         width: 90,
                         height: 60,
-                        borderRa1dius: 1,
+                        borderRadius: 1,
                         objectFit: "cover",
                       }}
                     />
