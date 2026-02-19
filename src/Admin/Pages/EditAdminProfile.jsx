@@ -2,7 +2,11 @@ import { Box, Button, InputLabel, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { showConfirmAlert, showErrorAlert, showSuccessAlert } from "../../Util/Alert";
+import {
+  showConfirmAlert,
+  showErrorAlert,
+  showSuccessAlert,
+} from "../../Util/Alert";
 import { inputStyle } from "../commonfiles/common";
 
 export default function EditAdminProfile() {
@@ -14,18 +18,16 @@ export default function EditAdminProfile() {
     if (file) setphoto(file);
   };
 
-
   const api = import.meta.env.VITE_API_BASE_URL;
 
-
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
   const [update, setupdate] = useState({
     username: "",
     email: "",
     role: "",
     photo: "",
     newPassword: "",
-    oldPassword : ""
+    oldPassword: "",
   });
 
   useEffect(() => {
@@ -40,9 +42,7 @@ export default function EditAdminProfile() {
           username: res.data.username || "",
           email: res.data.email || "",
           role: res.data.role || "",
-          photo: res.data.photo
-  ? `${api}/images/${res.data.photo}`
-  : "",
+          photo: res.data.photo ? `${api}/images/${res.data.photo}` : "",
 
           password: "",
         });
@@ -50,7 +50,6 @@ export default function EditAdminProfile() {
       .catch((error) => {
         console.log(error.response);
         showErrorAlert(error.response?.data?.message);
-
       });
   }, [id]);
 
@@ -80,54 +79,51 @@ export default function EditAdminProfile() {
     { label: "Role", name: "role", placeholder: "Role" },
   ];
 
-
-  const handlupdateprofile = (e)=>{
-
+  const handlupdateprofile = (e) => {
     e.preventDefault();
 
     const oldpassword = update.oldPassword;
 
-
-    if(update.newPassword && !oldpassword)
-    {
-       showErrorAlert("Old password required to change password");
-            return;
+    if (update.newPassword && !oldpassword) {
+      showErrorAlert("Old password required to change password");
+      return;
     }
-
 
     const payload = {
-      username : update.username,
-      email : update.email,
-      password : update.newPassword,
-      role : update.role
-    }
+      username: update.username,
+      email: update.email,
+      password: update.newPassword,
+      role: update.role,
+    };
 
     const formdeta = new FormData();
 
     formdeta.append(
-        "profile",
-      new Blob([JSON.stringify(payload)], { type: "application/json" })
-    )
+      "profile",
+      new Blob([JSON.stringify(payload)], { type: "application/json" }),
+    );
 
-     formdeta.append("old_password", oldpassword);
+    formdeta.append("old_password", oldpassword);
 
-         if (photo) {
+    if (photo) {
       formdeta.append("photo", photo);
     }
 
-
-    axios.put(`${api}/admin/update/admin/prfofile/${id}` , formdeta , {
-      headers:{
-        Authorization : "Bearer " + localStorage.getItem("token")
-      }
-    }).then((res)=>{
-      console.log(res)
-      showSuccessAlert("Profile changed Successfullly");
-      setupdate({...update , newPassword : "" , oldPassword : ""})
-    }).catch((error)=>{
-      showErrorAlert(error)
-    })
-  }
+    axios
+      .put(`${api}/admin/update/admin/prfofile/${id}`, formdeta, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        showSuccessAlert("Profile changed Successfullly");
+        setupdate({ ...update, newPassword: "", oldPassword: "" });
+      })
+      .catch((error) => {
+        showErrorAlert(error);
+      });
+  };
 
   return (
     <>
@@ -150,7 +146,7 @@ export default function EditAdminProfile() {
         {/* image box */}
         <Box
           sx={{
-            width: {xs:"100%" , md : "20%"},
+            width: { xs: "100%", md: "20%" },
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -184,6 +180,10 @@ export default function EditAdminProfile() {
                       height: "100%",
                       overflow: "hidden",
                       objectFit: "cover",
+                    }}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/images/noperson.png"; // public folder wali default image
                     }}
                   />
                 </Box>
@@ -234,7 +234,7 @@ export default function EditAdminProfile() {
             }}
           >
             <Button
-            type="submit"
+              type="submit"
               sx={{
                 border: "1px solid #38BDF8",
                 color: "#38BDF8",
@@ -251,15 +251,15 @@ export default function EditAdminProfile() {
                 m: 2,
               }}
               onClick={() => {
-                                showConfirmAlert(
-                                  "Edit Profile?",
-                                  "Are you sure you do not want to update your password?",
-                                  "Update",
-                                  "Cancel"
-                                ).then(() => {
-                                  navigate("/admin/dash");
-                                });
-                              }}
+                showConfirmAlert(
+                  "Edit Profile?",
+                  "Are you sure you do not want to update your password?",
+                  "Update",
+                  "Cancel",
+                ).then(() => {
+                  navigate("/admin/dash");
+                });
+              }}
             >
               Cancel Changes
             </Button>

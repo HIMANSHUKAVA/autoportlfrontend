@@ -87,13 +87,21 @@ export default function RequestTable() {
                   <TableCell>
                     <Box
                       component="img"
-                      src={`${API}/images/${s.photo}`}
+                      src={
+                        s.photo ?
+                          `${API}/images/${s.photo}`
+                        : "/images/hyundai.avif"
+                      }
                       sx={{
                         // width:"60px"/
                         width: 90,
                         height: 60,
                         borderRadius: 1,
                         objectFit: "cover",
+                      }}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "/images/bmw.avif";
                       }}
                     />
                   </TableCell>
