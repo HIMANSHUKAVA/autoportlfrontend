@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
-
+import { showErrorAlert, showSuccessAlert } from "../../Util/Alert";
 export default function RequestTable() {
   const [car, setcar] = useState([]);
 
@@ -66,6 +66,34 @@ export default function RequestTable() {
       image_url: car.photo,
       status: status,
     };
+
+    if (status === "APPROVED") {
+      axios
+        .post(`${API}/admin/request/view/singleimages/${id}`, payload, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
+        .then(() => {
+          showSuccessAlert("Car Status Update Successfully");
+          setcar((prev) => prev.filter((r) => r.sellarcarid !== id));
+        });
+    } else if (status === "REJECTED") {
+      axios
+        .delete(`${API}/admin/request/reject/${id}`, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
+        .then(() => {
+          showSuccessAlert("Car deleted  Successfully");
+          setcar((prev) => prev.filter((r) => r.sellarcarid !== id));
+        })
+        .catch((error) => {
+          console.log(error);
+          showErrorAlert("Approve failed");
+        });
+    }
   };
 
   return (
