@@ -308,16 +308,21 @@ export default function Addcar() {
         console.log(car_id);
 
         setcar({
-          name: "",
           model: "",
-          colour: "",
-          transmission: "",
-          photo: "",
-          Purchase_year: "",
           fuel: "",
-          price: "",
+          colour: "",
+          condition: "",
+          transmission: "",
           km_driven: "",
+          price: "",
+          year: "",
+          type: "",
         });
+
+        setSelectedBrand("");
+        setSelectedPrice("");
+        setPriceOptions([]);
+        setPhoto(null);
 
         console.log(response.data);
       })
