@@ -46,7 +46,7 @@ export default function ViewNewCar() {
       })
       .then(() => {
         showSuccessAlert("Car Delete Successfully");
-        setcar((c) => c.filter((k) => k.id != id));
+        setcar((c) => c.filter((k) => k.id !== id));
       });
   };
 
@@ -58,10 +58,10 @@ export default function ViewNewCar() {
         <hr />
       </Box>
 
-      <Grid container sx={{ m: 2 }}>
+      <Grid container spacing={3} sx={{ p: 2 }}>
         {car.map((c) => (
           <>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={4} key={c.id}>
               <Card
                 sx={{
                   width: 320,
