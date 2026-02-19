@@ -86,7 +86,16 @@ export default function ViewNewCar() {
                 <CardActionArea>
                   <CardMedia
                     component="img"
-                    image={`${API}/images/${c.image_url}`}
+                    alt="car Images"
+                    image={
+                      c.image_url ?
+                        `${API}/images/${c.image_url}`
+                      : "/images/bmw.avif"
+                    }
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/images/bmw.avif";
+                    }}
                   />
 
                   <CardContent>
