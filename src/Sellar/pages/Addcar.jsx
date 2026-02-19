@@ -18,6 +18,9 @@ export default function Addcar() {
   const [photo, setPhoto] = useState(null);
   const API = import.meta.env.VITE_API_BASE_URL;
 
+  console.log(localStorage.getItem("user_id"));
+  console.log(localStorage.getItem("token"));
+
   const navigate = useNavigate();
 
   const handlePhotoChange = (e) => {
