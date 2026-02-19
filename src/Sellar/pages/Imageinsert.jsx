@@ -41,7 +41,8 @@ export default function Imageinsert() {
     axios
       .post(`${API}/seller/request/image/add/${id}`, payload, {
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "multipart/form-data",
         },
       })
       .then(() => {
