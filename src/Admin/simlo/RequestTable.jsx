@@ -9,10 +9,9 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function RequestTable() {
   const [car, setcar] = useState([]);
@@ -34,6 +33,8 @@ export default function RequestTable() {
       });
   }, []);
   const sdeta = car.slice(0, 8);
+
+  const API = import.meta.env.VITE_API_BASE_URL;
   return (
     <>
       <Box
@@ -85,7 +86,7 @@ export default function RequestTable() {
                   <TableCell>
                     <Box
                       component="img"
-                      src={s.photo}
+                      src={`${API}/images/${s.photo}`}
                       sx={{
                         // width:"60px"/
                         width: 90,
