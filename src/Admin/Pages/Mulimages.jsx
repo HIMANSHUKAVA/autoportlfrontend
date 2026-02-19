@@ -37,7 +37,8 @@ export default function Mulimages() {
     axios
       .post(`${API}/admin/new/carimage/add/${id}`, formdeta, {
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "multipart/form-data",
         },
       })
       .then((Response) => {
