@@ -42,8 +42,11 @@ export default function RequestTable() {
   // VITE_API_BASE_URL;
 
   const handlupdate = (car) => {
-    const id = car.id;
+    const id = car.sellarcarid;
     const status = statusfilter[id] || (car.status || "PENDING").toUpperCase();
+
+    console.log(id);
+    console.log(status);
 
     const payload = {
       brand: car.brand,
@@ -63,33 +66,6 @@ export default function RequestTable() {
       image_url: car.photo,
       status: status,
     };
-    if (status === "APPROVED") {
-      axios
-        .post(`${API}/admin/request/view/singleimages/${id}`, payload, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        })
-        .then(() => {
-          showSuccessAlert("Car Status Update Successfully");
-          setrequest((prev) => prev.filter((r) => r.sellarcarid !== id));
-        });
-    } else if (status === "REJECTED") {
-      axios
-        .delete(`${API}/admin/request/reject/${id}`, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        })
-        .then(() => {
-          showSuccessAlert("Car deleted  Successfully");
-          setrequest((prev) => prev.filter((r) => r.sellarcarid !== id));
-        })
-        .catch((error) => {
-          console.log(error);
-          showErrorAlert("Approve failed");
-        });
-    }
   };
 
   return (
@@ -128,11 +104,9 @@ export default function RequestTable() {
 
             <TableBody>
               {sdeta.map((s) => {
-                console.log(s.id);
-
                 return (
                   <TableRow
-                    key={s.id}
+                    key={s.sellarcarid}
                     sx={{
                       "& td": {
                         color: "white", //  BODY TEXT COLOR
@@ -196,7 +170,7 @@ export default function RequestTable() {
                         onChange={(e) => {
                           setstatusfilter((prev) => ({
                             ...prev,
-                            [s.id]: e.target.value,
+                            [s.sellarcarid]: e.target.value,
                           }));
                         }}
                         MenuProps={{
