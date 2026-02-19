@@ -38,8 +38,8 @@ export default function RequestTable() {
   const sdeta = car.slice(0, 8);
 
   // VITE_API_BASE_URL
-  const API = import.meta.env,
-    VITE_API_BASE_URL;
+  // const API = import.meta.env
+  // VITE_API_BASE_URL;
 
   const handlupdate = (car) => {
     const id = car.id;
