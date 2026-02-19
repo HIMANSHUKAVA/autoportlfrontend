@@ -23,7 +23,7 @@ import {
   Menu,
   MenuItem,
   Toolbar,
-  Typography
+  Typography,
 } from "@mui/material";
 // import LogoutIcon from "@mui/icons-material/Logout";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -37,7 +37,6 @@ import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 export default function Layout() {
-
   const id = localStorage.getItem("id");
   const menuButtonStyle = {
     position: "relative",
@@ -99,33 +98,53 @@ export default function Layout() {
           </ListItemIcon>
           <ListItemText>Add New Car</ListItemText>
         </MenuItem>
-        <MenuItem onClick={() => setbuyer(null)} to="/admin/view/newcar" component={Link}>
+        <MenuItem
+          onClick={() => setbuyer(null)}
+          to="/admin/view/newcar"
+          component={Link}
+        >
           <ListItemIcon>
             <DirectionsCarIcon />
           </ListItemIcon>
           <ListItemText>View New Car</ListItemText>
         </MenuItem>
-        <MenuItem onClick={() => setbuyer(null)} component={Link} to="/admin/view/Booking/list">
+        <MenuItem
+          onClick={() => setbuyer(null)}
+          component={Link}
+          to="/admin/view/Booking/list"
+        >
           <ListItemIcon>
             <TimeToLeave />
           </ListItemIcon>
           <ListItemText>Book Drive</ListItemText>
         </MenuItem>
 
-<MenuItem onClick={() => setbuyer(null)} component={Link} to="/admin/view/oldcar/payments">
+        <MenuItem
+          onClick={() => setbuyer(null)}
+          component={Link}
+          to="/admin/view/oldcar/payments"
+        >
           <ListItemIcon>
             <TimeToLeave />
           </ListItemIcon>
           <ListItemText>Old Car Payment</ListItemText>
         </MenuItem>
 
-        <MenuItem onClick={() => setbuyer(null)} component={Link} to="/admin/view/new/car/payment">
+        <MenuItem
+          onClick={() => setbuyer(null)}
+          component={Link}
+          to="/admin/view/new/car/payment"
+        >
           <ListItemIcon>
             <PaymentIcon />
           </ListItemIcon>
           <ListItemText>Payment</ListItemText>
         </MenuItem>
-        <MenuItem onClick={() => setbuyer(null)} component={Link} to="/admin/view/quary/buyer">
+        <MenuItem
+          onClick={() => setbuyer(null)}
+          component={Link}
+          to="/admin/view/quary/buyer"
+        >
           <ListItemIcon>
             <CallIcon />
           </ListItemIcon>
@@ -154,13 +173,21 @@ export default function Layout() {
           },
         }}
       >
-        <MenuItem onClick={() => setold(null)} component={Link} to="/admin/view/request/sellar" >
+        <MenuItem
+          onClick={() => setold(null)}
+          component={Link}
+          to="/admin/view/request/sellar"
+        >
           <ListItemIcon>
             <AssignmentTurnedIn />
           </ListItemIcon>
           <ListItemText>Car request</ListItemText>
         </MenuItem>
-        <MenuItem onClick={() => setold(null)} component={Link} to="/admin/view/sellar/contect">
+        <MenuItem
+          onClick={() => setold(null)}
+          component={Link}
+          to="/admin/view/sellar/contect"
+        >
           <ListItemIcon>
             <CallIcon />
           </ListItemIcon>
@@ -184,12 +211,12 @@ export default function Layout() {
         }}
       >
         <List
-        sx={{
-          display:"flex",
-          flexDirection:"column",
-          mt:2 ,
-          gap:1
-        }}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            mt: 2,
+            gap: 1,
+          }}
         >
           <ListItemButton component={Link} to="/admin/dash">
             <ListItemIcon>
@@ -218,44 +245,66 @@ export default function Layout() {
                 mt: 2,
               }}
             >
-              <ListItemButton sx={menuButtonStyle} component={Link} to="/admin/add">
+              <ListItemButton
+                sx={menuButtonStyle}
+                component={Link}
+                to="/admin/add"
+              >
                 <ListItemIcon>
                   <AddCircleOutlineIcon />
                 </ListItemIcon>
                 <ListItemText>Add New Car</ListItemText>
               </ListItemButton>
 
-              <ListItemButton sx={menuButtonStyle} component={Link} to="/admin/view/newcar">
+              <ListItemButton
+                sx={menuButtonStyle}
+                component={Link}
+                to="/admin/view/newcar"
+              >
                 <ListItemIcon>
                   <AddCircleOutlineIcon />
                 </ListItemIcon>
                 <ListItemText>View New Car</ListItemText>
               </ListItemButton>
 
-              <ListItemButton sx={menuButtonStyle} component={Link} to="/admin/view/Booking/list">
+              <ListItemButton
+                sx={menuButtonStyle}
+                component={Link}
+                to="/admin/view/Booking/list"
+              >
                 <ListItemIcon>
                   <AddAPhotoOutlined />
                 </ListItemIcon>
                 <ListItemText>Book Drive</ListItemText>
               </ListItemButton>
 
-
-
-              <ListItemButton sx={menuButtonStyle} component={Link} to="/admin/view/oldcar/payments">
+              <ListItemButton
+                sx={menuButtonStyle}
+                component={Link}
+                to="/admin/view/oldcar/payments"
+              >
                 <ListItemIcon>
                   <PaymentIcon />
                 </ListItemIcon>
                 <ListItemText>Old Car Payment</ListItemText>
               </ListItemButton>
 
-              <ListItemButton sx={menuButtonStyle} component={Link} to="/admin/view/new/car/payment">
+              <ListItemButton
+                sx={menuButtonStyle}
+                component={Link}
+                to="/admin/view/new/car/payment"
+              >
                 <ListItemIcon>
                   <PaymentIcon />
                 </ListItemIcon>
                 <ListItemText>Payment</ListItemText>
               </ListItemButton>
 
-              <ListItemButton sx={menuButtonStyle} component={Link} to="/admin/view/quary/buyer">
+              <ListItemButton
+                sx={menuButtonStyle}
+                component={Link}
+                to="/admin/view/quary/buyer"
+              >
                 <ListItemIcon>
                   <CallIcon />
                 </ListItemIcon>
@@ -328,7 +377,10 @@ export default function Layout() {
             : <ExpandMore />}
           </ListItemButton>
           <Collapse in={profile} unmountOnExit timeout="auto">
-            <ListItemButton component={Link} to={`/admin/edit/admins/profile/${id}`}>
+            <ListItemButton
+              component={Link}
+              to={`/admin/edit/admins/profile/${id}`}
+            >
               <ListItemIcon>
                 <EditIcon />
               </ListItemIcon>
@@ -447,7 +499,6 @@ export default function Layout() {
                 {buyer ?
                   <ExpandLess />
                 : <ExpandMore />}
-
               </Button>
               {s}
 
@@ -469,7 +520,9 @@ export default function Layout() {
                 onClick={(e) => setbuttonprofile(e.currentTarget)}
               >
                 Profile
-                {buttonprofile ? <ExpandLess/> : <ExpandMore/>}
+                {buttonprofile ?
+                  <ExpandLess />
+                : <ExpandMore />}
               </Button>
 
               <Menu
@@ -486,9 +539,12 @@ export default function Layout() {
                     minWidth: 40,
                   },
                 }}
-
               >
-                <MenuItem onClick={() => setbuttonprofile(null)} component={Link} to={`/admin/edit/admins/profile/${id}`}>
+                <MenuItem
+                  onClick={() => setbuttonprofile(null)}
+                  component={Link}
+                  to={`/admin/edit/admins/profile/${id}`}
+                >
                   <ListItemIcon>
                     <EditIcon />
                   </ListItemIcon>
@@ -503,8 +559,6 @@ export default function Layout() {
                 </MenuItem>
               </Menu>
 
-
-
               <Button
                 color="inherit"
                 sx={menuButtonStyle}
@@ -512,8 +566,12 @@ export default function Layout() {
               >
                 Logout
               </Button>
-
             </Box>
+
+            <Typography variant="body1" sx={{ ml: "auto" }}>
+              Hello {localStorage.getItem("useradmin")} <br />
+              role : {localStorage.getItem("roleadmin")}
+            </Typography>
           </Toolbar>
         </AppBar>
         <Drawer
@@ -553,22 +611,21 @@ export default function Layout() {
             p: 3,
           }}
         >
-          <Toolbar/>
+          <Toolbar />
           {draweritem}
         </Drawer>
-<Box
-        component="main"
-        sx={{
-          ml: { xs: 0, md: "220px" },
-          mt: "140px", // 64 + 2 + 64 = ~130px
-          px: { xs: 2, md: 3 },
-          minHeight: "100vh",
-        }}
-      >
-        <Outlet />
+        <Box
+          component="main"
+          sx={{
+            ml: { xs: 0, md: "220px" },
+            mt: "140px", // 64 + 2 + 64 = ~130px
+            px: { xs: 2, md: 3 },
+            minHeight: "100vh",
+          }}
+        >
+          <Outlet />
+        </Box>
       </Box>
-      </Box>
-
     </>
   );
 }
