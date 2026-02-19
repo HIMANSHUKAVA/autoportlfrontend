@@ -81,12 +81,13 @@ export default function ViewNewCar() {
                 }}
               >
                 <CardActionArea>
-                  <CardMedia component="img" image={c.image_url} />
+                  <CardMedia
+                    component="img"
+                    image={`${API}/images/${c.photo}`}
+                  />
 
                   <CardContent>
-                    <Typography variant="h5">
-                      Brand : {API}/{c.brand}
-                    </Typography>
+                    <Typography variant="h5">Brand : {c.brand}</Typography>
                     <Typography variant="h5">Model : {c.model}</Typography>
                     <Typography variant="h5">Price : {c.price}</Typography>
                     <Typography variant="h5">Tyep : {c.type}</Typography>
