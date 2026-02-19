@@ -16,6 +16,7 @@ import { showSuccessAlert } from "../../Util/Alert";
 export default function ViewNewCar() {
   const API = import.meta.env.VITE_API_BASE_URL;
   const [car, setcar] = useState([]);
+  const BASE_URL = "https://your-app-name.onrender.com";
   useEffect(() => {
     axios
       .get(`${API}/admin/view/anewcar`, {
@@ -83,7 +84,9 @@ export default function ViewNewCar() {
                   <CardMedia component="img" image={c.image_url} />
 
                   <CardContent>
-                    <Typography variant="h5">Brand : {c.brand}</Typography>
+                    <Typography variant="h5">
+                      Brand : {API}/{c.brand}
+                    </Typography>
                     <Typography variant="h5">Model : {c.model}</Typography>
                     <Typography variant="h5">Price : {c.price}</Typography>
                     <Typography variant="h5">Tyep : {c.type}</Typography>
