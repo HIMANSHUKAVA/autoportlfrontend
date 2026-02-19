@@ -119,7 +119,7 @@ export default function RequestTable() {
                   },
                 }}
               >
-                <TableCell>Image</TableCell>
+                <TableCell>Images</TableCell>
                 <TableCell>Model</TableCell>
                 <TableCell>Transmission</TableCell>
                 <TableCell>fuel</TableCell>
