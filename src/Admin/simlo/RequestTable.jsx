@@ -17,7 +17,7 @@ export default function RequestTable() {
   const [car, setcar] = useState([]);
 
   const API = import.meta.env.VITE_API_BASE_URL;
-  const [statusfilter, setstatusfilter] = useState("PENDING");
+  const [statusfilter, setstatusfilter] = useState({});
 
   useEffect(() => {
     axios
@@ -43,7 +43,7 @@ export default function RequestTable() {
 
   const handlupdate = (car) => {
     const id = car.id;
-    const status = statusfilter[id](car.status || "PENDING").toUpperCase();
+    const status = statusfilter[id] || (car.status || "PENDING").toUpperCase();
 
     const payload = {
       brand: car.brand,
@@ -192,7 +192,7 @@ export default function RequestTable() {
                       onChange={(e) => {
                         setstatusfilter((prev) => ({
                           ...prev,
-                          [e.id]: e.target.value,
+                          [s.id]: e.target.value,
                         }));
                       }}
                       MenuProps={{
