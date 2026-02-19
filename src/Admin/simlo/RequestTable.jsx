@@ -69,7 +69,7 @@ export default function RequestTable() {
 
     if (status === "APPROVED") {
       axios
-        .post(`${API}/admin/request/view/singleimages/${id}`, payload, {
+        .post(`${API}/admin/request/view/singleimages/${id}`, null, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
           },
