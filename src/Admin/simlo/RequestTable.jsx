@@ -38,13 +38,14 @@ export default function RequestTable() {
   const sdeta = car.slice(0, 8);
 
   // VITE_API_BASE_URL
-  const API = import.meta.env,VITE_API_BASE_URL
+  const API = import.meta.env,
+    VITE_API_BASE_URL;
 
   const handlupdate = (car) => {
     const id = car.id;
     const status = statusfilter[id](car.status || "PENDING").toUpperCase();
 
-     const payload = {
+    const payload = {
       brand: car.brand,
       model: car.model,
       fuel: car.fuel,
@@ -62,7 +63,7 @@ export default function RequestTable() {
       image_url: car.photo,
       status: status,
     };
-       if (status === "APPROVED") {
+    if (status === "APPROVED") {
       axios
         .post(`${API}/admin/request/view/singleimages/${id}`, payload, {
           headers: {
@@ -167,8 +168,10 @@ export default function RequestTable() {
                   <TableCell>{s.price}</TableCell>
                   <TableCell>
                     <Select
-                      value={statusfilter[s.id]
-                        (s.status || "PENDING").toUpperCase(),
+                      value={
+                        statusfilter[s.id] ?
+                          statusfilter[s.id]
+                        : (s.status || "PENDING").toUpperCase()
                       }
                       size="small"
                       sx={{
