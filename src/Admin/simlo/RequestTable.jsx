@@ -146,9 +146,8 @@ export default function RequestTable() {
                     <TableCell>
                       <Select
                         value={
-                          statusfilter[s.id] ?
-                            statusfilter[s.id]
-                          : (s.status || "PENDING").toUpperCase()
+                          statusfilter[s.sellarcarid] ||
+                          (s.status || "PENDING").toUpperCase()
                         }
                         size="small"
                         sx={{
