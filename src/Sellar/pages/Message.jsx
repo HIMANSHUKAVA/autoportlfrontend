@@ -6,11 +6,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
-import NavbarAndDrawer from "../layout/NavbarAndDrawer";
-import { BorderColor } from "@mui/icons-material";
+import axios from "axios";
+import { useState } from "react";
 import Footer from "../../Buyer/Layout/Footer";
-import { showSuccessAlert, showErrorAlert } from "../../Util/Alert";
+import { showErrorAlert, showSuccessAlert } from "../../Util/Alert";
+import NavbarAndDrawer from "../layout/NavbarAndDrawer";
 export default function Message() {
   const [form, setform] = useState({
     name: localStorage.getItem("username"),
@@ -18,16 +18,30 @@ export default function Message() {
     message: "",
   });
 
+  const API = import.meta.env.VITE_API_BASE_URL;
   const handlsubmit = (e) => {
     e.preventDefault();
     if (form.message == "") {
       // alert("message can not be empty");
       showErrorAlert("Message Can Not Be Empty");
     } else {
-      showSuccessAlert("Message Sent Successfully");
-      setform({
+      axios
+        .post(`${API}/seller/contect/s`, form, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
+        .then(() => {
+          showSuccessAlert("Message Sent Successfully");
+        })
+        .catch((e) => {
+          console.log(e);
+          showErrorAlert("Something Went Wrong Please Try Again Latter..");
+        });
+      setform((prev) => ({
+        ...prev,
         message: "",
-      });
+      }));
     }
   };
   const makeStyle = () => ({
