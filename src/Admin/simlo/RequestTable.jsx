@@ -9,6 +9,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -172,63 +173,74 @@ export default function RequestTable() {
                     <TableCell>{s.requestAt}</TableCell>
                     <TableCell>{s.price}</TableCell>
                     <TableCell>
-                      <Select
-                        value={
-                          statusfilter[s.sellarcarid] ||
-                          (s.status || "PENDING").toUpperCase()
-                        }
-                        size="small"
-                        sx={{
-                          color: "#fff",
-                          background:
-                            "linear-gradient(180deg, #0f172a, #020617)",
-                          borderRadius: 1.5,
-                          minWidth: 140,
-                          ".MuiOutlinedInput-notchedOutline": {
-                            borderColor: "rgba(255,255,255,0.25)",
-                          },
-                          "&:hover .MuiOutlinedInput-notchedOutline": {
-                            borderColor: "#f5c46b",
-                          },
-                          "& .MuiSvgIcon-root": {
-                            color: "#f5c46b",
-                          },
-                        }}
-                        onChange={(e) => {
-                          setstatusfilter((prev) => ({
-                            ...prev,
-                            [s.sellarcarid]: e.target.value,
-                          }));
-                        }}
-                        MenuProps={{
-                          PaperProps: {
-                            sx: {
+                      {s.status === "PENDING" ?
+                        <>
+                          <Select
+                            value={
+                              statusfilter[s.sellarcarid] ||
+                              (s.status || "PENDING").toUpperCase()
+                            }
+                            size="small"
+                            sx={{
+                              color: "#fff",
                               background:
                                 "linear-gradient(180deg, #0f172a, #020617)",
-                              color: "#ffffff",
-                              borderRadius: 2,
-                              boxShadow: "0 12px 30px rgba(0,0,0,0.6)",
-                              mt: 1,
-                            },
-                          },
-                        }}
-                      >
-                        <MenuItem value="PENDING">PENDING</MenuItem>
-                        <MenuItem value="APPROVED">APPROVED</MenuItem>
-                        <MenuItem value="REJECTED">REJECT</MenuItem>
-                      </Select>
+                              borderRadius: 1.5,
+                              minWidth: 140,
+                              ".MuiOutlinedInput-notchedOutline": {
+                                borderColor: "rgba(255,255,255,0.25)",
+                              },
+                              "&:hover .MuiOutlinedInput-notchedOutline": {
+                                borderColor: "#f5c46b",
+                              },
+                              "& .MuiSvgIcon-root": {
+                                color: "#f5c46b",
+                              },
+                            }}
+                            onChange={(e) => {
+                              setstatusfilter((prev) => ({
+                                ...prev,
+                                [s.sellarcarid]: e.target.value,
+                              }));
+                            }}
+                            MenuProps={{
+                              PaperProps: {
+                                sx: {
+                                  background:
+                                    "linear-gradient(180deg, #0f172a, #020617)",
+                                  color: "#ffffff",
+                                  borderRadius: 2,
+                                  boxShadow: "0 12px 30px rgba(0,0,0,0.6)",
+                                  mt: 1,
+                                },
+                              },
+                            }}
+                          >
+                            <MenuItem value="PENDING">PENDING</MenuItem>
+                            <MenuItem value="APPROVED">APPROVED</MenuItem>
+                            <MenuItem value="REJECTED">REJECT</MenuItem>
+                          </Select>
+                        </>
+                      : <Typography variant="body2">{s.status}</Typography>}
                     </TableCell>
 
                     <TableCell>
-                      <Button
-                        sx={{
-                          border: "1px solid #FACC15",
-                          color: "#FACC15",
-                        }}
-                        onClick={() => handlupdate(s)}
-                      >
-                        Update Status
-                      </Button>
+                      {s.status === "RESOLVED" ?
+                        <>
+                          <Typography variant="body2">{s.status}</Typography>
+                        </>
+                      : <>
+                          <Button
+                            sx={{
+                              border: "1px solid #FACC15",
+                              color: "#FACC15",
+                            }}
+                            onClick={() => handlupdate(s)}
+                          >
+                            Update Status
+                          </Button>
+                        </>
+                      }
                     </TableCell>
                   </TableRow>
                 );
