@@ -47,7 +47,6 @@ export default function Viewcars() {
     ).then((res) => {
       if (res.isConfirmed) {
         deletevehiclebyid(id).then(() => {
-          showSuccessAlert("Car Has Been Deleted");
           setcar((prev) => prev.filter((c) => c.sellarcarid !== id));
         });
       }
