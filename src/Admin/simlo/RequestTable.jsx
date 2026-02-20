@@ -36,7 +36,7 @@ export default function RequestTable() {
         console.log(error);
       });
   }, []);
-  const sdeta = car.slice(0, 8);
+  const sdeta = car.filter((f) => f.status === "PENDING").slice(0, 8);
 
   // VITE_API_BASE_URL
   // const API = import.meta.env
@@ -132,121 +132,116 @@ export default function RequestTable() {
             </TableHead>
 
             <TableBody>
-              {sdeta
-                .filter((f) => f.status === "PENDING")
-                .map((s) => {
-                  return (
-                    <TableRow
-                      key={s.sellarcarid}
-                      sx={{
-                        "& td": {
-                          color: "white", //  BODY TEXT COLOR
-                          borderBottom: "1px solid rgba(255,255,255,0.08)",
-                        },
-                        "&:hover": {
-                          background: "rgba(255,255,255,0.04)",
-                        },
-                      }}
-                    >
-                      <TableCell>
-                        <Box
-                          component="img"
-                          src={
-                            s.photo ?
-                              `${API}/images/${s.photo}`
-                            : "/images/hyundai.avif"
-                          }
-                          sx={{
-                            // width:"60px"/
-                            width: 90,
-                            height: 60,
-                            borderRadius: 1,
-                            objectFit: "cover",
-                          }}
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = "/images/bmw.avif";
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell>{s.model}</TableCell>
-                      <TableCell>{s.transmission}</TableCell>
-                      <TableCell>{s.fuel}</TableCell>
-                      <TableCell>{s.requestAt}</TableCell>
-                      <TableCell>{s.price}</TableCell>
-                      <TableCell>
-                        {s.status === "PENDING" ?
-                          <>
-                            <Select
-                              value={
-                                statusfilter[s.sellarcarid] ||
-                                (s.status || "PENDING").toUpperCase()
-                              }
-                              size="small"
-                              sx={{
-                                color: "#fff",
-                                background:
-                                  "linear-gradient(180deg, #0f172a, #020617)",
-                                borderRadius: 1.5,
-                                minWidth: 140,
-                                ".MuiOutlinedInput-notchedOutline": {
-                                  borderColor: "rgba(255,255,255,0.25)",
-                                },
-                                "&:hover .MuiOutlinedInput-notchedOutline": {
-                                  borderColor: "#f5c46b",
-                                },
-                                "& .MuiSvgIcon-root": {
-                                  color: "#f5c46b",
-                                },
-                              }}
-                              onChange={(e) => {
-                                setstatusfilter((prev) => ({
-                                  ...prev,
-                                  [s.sellarcarid]: e.target.value,
-                                }));
-                              }}
-                              MenuProps={{
-                                PaperProps: {
-                                  sx: {
-                                    background:
-                                      "linear-gradient(180deg, #0f172a, #020617)",
-                                    color: "#ffffff",
-                                    borderRadius: 2,
-                                    boxShadow: "0 12px 30px rgba(0,0,0,0.6)",
-                                    mt: 1,
-                                  },
-                                },
-                              }}
-                            >
-                              <MenuItem value="PENDING">PENDING</MenuItem>
-                              <MenuItem value="APPROVED">APPROVED</MenuItem>
-                              <MenuItem value="REJECTED">REJECT</MenuItem>
-                            </Select>
-                          </>
-                        : <Typography variant="body2">{s.status}</Typography>}
-                      </TableCell>
-
-                      <TableCell>
-                        {s.status !== "RESOLVED" ?
-                          <>
-                            <Button
-                              sx={{
-                                border: "1px solid #FACC15",
-                                color: "#FACC15",
-                              }}
-                              onClick={() => handlupdate(s)}
-                            >
-                              Update Status
-                            </Button>
-                          </>
-                        : <>
-                            <Typography variant="body2">{s.status}</Typography>
-                          </>
+              {sdeta.length > 0 ?
+                sdeta.map((s) => (
+                  <TableRow
+                    key={s.sellarcarid}
+                    sx={{
+                      "& td": {
+                        color: "white",
+                        borderBottom: "1px solid rgba(255,255,255,0.08)",
+                      },
+                      "&:hover": {
+                        background: "rgba(255,255,255,0.04)",
+                      },
+                    }}
+                  >
+                    <TableCell>
+                      <Box
+                        component="img"
+                        src={
+                          s.photo ?
+                            `${API}/images/${s.photo}`
+                          : "/images/hyundai.avif"
                         }
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                        sx={{
+                          width: 90,
+                          height: 60,
+                          borderRadius: 1,
+                          objectFit: "cover",
+                        }}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "/images/bmw.avif";
+                        }}
+                      />
+                    </TableCell>
+
+                    <TableCell>{s.model}</TableCell>
+                    <TableCell>{s.transmission}</TableCell>
+                    <TableCell>{s.fuel}</TableCell>
+                    <TableCell>{s.requestAt}</TableCell>
+                    <TableCell>{s.price}</TableCell>
+
+                    <TableCell>
+                      <Select
+                        value={
+                          statusfilter[s.sellarcarid] ||
+                          (s.status || "PENDING").toUpperCase()
+                        }
+                        size="small"
+                        sx={{
+                          color: "#fff",
+                          background:
+                            "linear-gradient(180deg, #0f172a, #020617)",
+                          borderRadius: 1.5,
+                          minWidth: 140,
+                          ".MuiOutlinedInput-notchedOutline": {
+                            borderColor: "rgba(255,255,255,0.25)",
+                          },
+                          "&:hover .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "#f5c46b",
+                          },
+                          "& .MuiSvgIcon-root": {
+                            color: "#f5c46b",
+                          },
+                        }}
+                        onChange={(e) => {
+                          setstatusfilter((prev) => ({
+                            ...prev,
+                            [s.sellarcarid]: e.target.value,
+                          }));
+                        }}
+                        MenuProps={{
+                          PaperProps: {
+                            sx: {
+                              background:
+                                "linear-gradient(180deg, #0f172a, #020617)",
+                              color: "#ffffff",
+                              borderRadius: 2,
+                              boxShadow: "0 12px 30px rgba(0,0,0,0.6)",
+                              mt: 1,
+                            },
+                          },
+                        }}
+                      >
+                        <MenuItem value="PENDING">PENDING</MenuItem>
+                        <MenuItem value="APPROVED">APPROVED</MenuItem>
+                        <MenuItem value="REJECTED">REJECT</MenuItem>
+                      </Select>
+                    </TableCell>
+
+                    <TableCell>
+                      <Button
+                        onClick={() => handlupdate(s)}
+                        sx={{
+                          border: "1px solid #FACC15",
+                          color: "#FACC15",
+                        }}
+                      >
+                        Update Status
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              : <TableRow>
+                  <TableCell colSpan={8}>
+                    <Typography align="center">
+                      No Pending Request Found
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              }
             </TableBody>
           </Table>
         </TableContainer>
