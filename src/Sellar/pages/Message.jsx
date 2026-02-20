@@ -160,6 +160,7 @@ export default function Message() {
             }}
           >
             <Button
+              component="form"
               sx={{
                 color: "#38BDF8",
                 "&:hover": {
@@ -171,7 +172,7 @@ export default function Message() {
                 borderRadius: 2,
               }}
               type="submit"
-              onClick={() => handlsubmit()}
+              onClick={handlsubmit}
             >
               Send Message
             </Button>
