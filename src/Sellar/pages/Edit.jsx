@@ -33,7 +33,7 @@ export default function Edit() {
 
   useEffect(() => {
     axios
-      .get(`${API}//sellar/request/get/${id}`, {
+      .get(`${API}/seller/request/get/${id}`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
@@ -154,7 +154,7 @@ export default function Edit() {
     }
 
     axios
-      .put(`${API}/sellar/request/update/model/${id}`, formdeta, {
+      .put(`${API}/seller/request/update/model/${id}`, formdeta, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
