@@ -273,6 +273,10 @@ export default function Edit() {
                     objectFit: "cover",
                     borderRadius: "10px",
                   }}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/images/mahindra-xuv.avif"; // public folder wali default image
+                  }}
                 />
               : <>
                   <Typography variant="h5">⬆</Typography>
