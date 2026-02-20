@@ -1,8 +1,8 @@
-import { Box, Button, InputLabel, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
-import NavbarAndDrawer from "../layout/NavbarAndDrawer";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { Box, Button, InputLabel, TextField, Typography } from "@mui/material";
+import axios from "axios";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Footer from "../../Buyer/Layout/Footer";
 import {
@@ -10,7 +10,7 @@ import {
   showErrorAlert,
   showSuccessAlert,
 } from "../../Util/Alert";
-import axios from "axios";
+import NavbarAndDrawer from "../layout/NavbarAndDrawer";
 export default function Changepass() {
   const [currentpass, setcurrentpass] = useState("");
   const [newpass, setnewpass] = useState("");
@@ -47,6 +47,7 @@ export default function Changepass() {
     special: /[^A-Za-z0-9]/.test(newpass),
   };
 
+  const API = import.meta.env.VITE_API_BASE_URL;
   const handlsubmit = (e) => {
     e.preventDefault();
 
@@ -56,7 +57,7 @@ export default function Changepass() {
     }
 
     axios
-      .put(`http://localhost:3000/sellar/editpassword/${id}`, null, {
+      .put(`${API}/sellar/editpassword/${id}`, null, {
         params: { currentpassword: currentpass, newpassword: newpass },
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
@@ -81,11 +82,9 @@ export default function Changepass() {
         alignItems: "center",
       }}
     >
-      {value ? (
+      {value ?
         <CheckCircleIcon sx={{ color: "#22c55e" }} />
-      ) : (
-        <CancelIcon sx={{ color: "#64748b" }} />
-      )}
+      : <CancelIcon sx={{ color: "#64748b" }} />}
       <Typography variant="body2" sx={{ color: value ? "#22c55e" : "#94a3b8" }}>
         {label}
       </Typography>
@@ -103,11 +102,9 @@ export default function Changepass() {
             alignItems: "center",
           }}
         >
-          {isMatch ? (
+          {isMatch ?
             <CheckCircleIcon sx={{ color: "#22c55e" }} />
-          ) : (
-            <CancelIcon sx={{ color: "#64748b" }} />
-          )}
+          : <CancelIcon sx={{ color: "#64748b" }} />}
 
           <Typography
             variant="body2"
@@ -125,7 +122,7 @@ export default function Changepass() {
       "Change Password?",
       "Are you sure you want to update your password?",
       "Update",
-      "Cancel"
+      "Cancel",
     ).then(() => {
       navigate("/sellardashboard");
     });

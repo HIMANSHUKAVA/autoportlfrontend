@@ -1,3 +1,4 @@
+import { Api } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -10,13 +11,15 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { showErrorAlert, showSuccessAlert } from "../../Util/Alert";
 
 export default function ViewAdmin() {
   const [admin, setadmin] = useState([]);
+  const API = import.meta.env.VITE_API_BASE_URL;
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/admin/viewadmin`, {
+      .get(`${API}/admin/viewadmin`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
@@ -31,6 +34,23 @@ export default function ViewAdmin() {
       });
   }, []);
 
+  const handldeletedeta = (a) => {
+    const id = a.id;
+
+    axios
+      .delete(`${Api}/deleteadminfromid/${id}`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
+      .then(() => {
+        showSuccessAlert("Delete Successfully");
+      })
+      .catch((e) => {
+        console.log(e);
+        showErrorAlert("something Went Wrong Please Try Again Latter");
+      });
+  };
   return (
     <>
       <Box sx={{ p: 3 }}>
@@ -97,6 +117,9 @@ export default function ViewAdmin() {
                             color: "red",
                             borderColor: "red",
                           },
+                        }}
+                        onClick={() => {
+                          handldeletedeta(a);
                         }}
                       >
                         Delete

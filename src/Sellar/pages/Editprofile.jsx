@@ -1,17 +1,18 @@
 import { Box, Button, InputLabel, TextField, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import NavbarAndDrawer from "../layout/NavbarAndDrawer";
-import Footer from "../../Buyer/Layout/Footer";
-import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import Footer from "../../Buyer/Layout/Footer";
 import {
-  showSuccessAlert,
-  showErrorAlert,
   showConfirmAlert,
+  showErrorAlert,
+  showSuccessAlert,
 } from "../../Util/Alert";
+import NavbarAndDrawer from "../layout/NavbarAndDrawer";
 export default function Editprofile() {
   const { id } = useParams();
   const [photo, setPhoto] = useState(null);
+  const API = import.meta.env.VITE_API_BASE_URL;
 
   const photourl = photo ? `http://localhost:3000/images/${photo}` : "";
 
@@ -34,7 +35,7 @@ export default function Editprofile() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/sellar/get/${id}`, {
+      .get(`${API}/sellar/get/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -44,9 +45,7 @@ export default function Editprofile() {
           username: res.data.username || "",
           email: res.data.email || "",
           role: res.data.role || "",
-          photo: res.data.photo
-            ? `http://localhost:3000/images/${res.data.photo}`
-            : "",
+          photo: res.data.photo ? `${API}/images/${res.data.photo}` : "",
           password: "",
         });
       });
@@ -69,7 +68,7 @@ export default function Editprofile() {
     const formdeta = new FormData();
     formdeta.append(
       "profile",
-      new Blob([JSON.stringify(profilepayload)], { type: "application/json" })
+      new Blob([JSON.stringify(profilepayload)], { type: "application/json" }),
     );
 
     formdeta.append("old_password", oldpassword);
@@ -82,7 +81,7 @@ export default function Editprofile() {
     }
 
     axios
-      .put(`http://localhost:3000/sellar/editprofile/${id}`, formdeta, {
+      .put(`${API}/sellar/editprofile/${id}`, formdeta, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -173,7 +172,7 @@ export default function Editprofile() {
                 onChange={handlePhotoChange}
               />
 
-              {photo || update.photo ? (
+              {photo || update.photo ?
                 <Box
                   sx={{
                     width: 160,
@@ -190,11 +189,13 @@ export default function Editprofile() {
                       height: "100%",
                       objectFit: "cover",
                     }}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/images/noperson.png"; // public folder wali default image
+                    }}
                   />
                 </Box>
-              ) : (
-                <Typography>⬆ Upload Profile Photo</Typography>
-              )}
+              : <Typography>⬆ Upload Profile Photo</Typography>}
             </Button>
           </Box>
 
@@ -281,7 +282,7 @@ export default function Editprofile() {
                     "Edit Profile?",
                     "Are you sure you do not want to update your password?",
                     "Update",
-                    "Cancel"
+                    "Cancel",
                   ).then(() => {
                     navigate("/sellardashboard");
                   });

@@ -1,10 +1,10 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import NavbarAndDrawer from "../layout/NavbarAndDrawer";
-import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Footer from "../../Buyer/Layout/Footer";
 import { showSuccessAlert } from "../../Util/Alert";
+import NavbarAndDrawer from "../layout/NavbarAndDrawer";
 
 export default function Edit() {
   const navigate = useNavigate();
@@ -29,9 +29,11 @@ export default function Edit() {
     });
   };
 
+  const API = import.meta.env.VITE_API_BASE_URL;
+
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/sellar/request/get/${id}`, {
+      .get(`${API}//sellar/request/get/${id}`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
@@ -57,8 +59,9 @@ export default function Edit() {
       color: "#cbd5f5",
 
       "& fieldset": {
-        borderColor: hasError
-          ? "#ef4444" // 🔴 error
+        borderColor:
+          hasError ?
+            "#ef4444" // 🔴 error
           : "rgba(148,163,184,0.4)", // normal
       },
 
@@ -143,7 +146,7 @@ export default function Edit() {
 
     formdeta.append(
       "car",
-      new Blob([JSON.stringify(car)], { type: "application/json" })
+      new Blob([JSON.stringify(car)], { type: "application/json" }),
     );
 
     if (photofile) {
@@ -151,15 +154,11 @@ export default function Edit() {
     }
 
     axios
-      .put(
-        `http://localhost:3000/sellar/request/update/model/${id}`,
-        formdeta,
-        {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        }
-      )
+      .put(`${API}/sellar/request/update/model/${id}`, formdeta, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
       .then(() => {
         showSuccessAlert("Car Update Successfully");
         navigate("/sellardashboard");
@@ -222,8 +221,9 @@ export default function Edit() {
               width: "90%",
               maxWidth: 550,
               height: 260,
-              border: validate.photo
-                ? "2px dotted #ef4444" //  error
+              border:
+                validate.photo ?
+                  "2px dotted #ef4444" //  error
                 : "2px dotted rgba(148,163,184,0.6)",
               display: "flex",
               alignItems: "center",
@@ -252,7 +252,7 @@ export default function Edit() {
 
               {/* photo preview */}
 
-              {photopreview ? (
+              {photopreview ?
                 <img
                   src={photopreview}
                   alt="preview"
@@ -263,7 +263,7 @@ export default function Edit() {
                     borderRadius: "10px",
                   }}
                 />
-              ) : car.photo ? (
+              : car.photo ?
                 <img
                   src={car.photo}
                   alt="existing"
@@ -274,12 +274,11 @@ export default function Edit() {
                     borderRadius: "10px",
                   }}
                 />
-              ) : (
-                <>
+              : <>
                   <Typography variant="h5">⬆</Typography>
                   <Typography variant="h4">upload Car Photo</Typography>{" "}
                 </>
-              )}
+              }
             </Button>
           </Box>
 
