@@ -265,7 +265,7 @@ export default function Edit() {
                 />
               : car.photo ?
                 <img
-                  src={car.photo}
+                  src={`${API}/images/${car.photo}`}
                   alt="existing"
                   style={{
                     width: "100%",
