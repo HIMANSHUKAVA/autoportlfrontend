@@ -9,19 +9,20 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import NavbarAndDrawer from "../layout/NavbarAndDrawer";
-import Footer from "../../Buyer/Layout/Footer";
 import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Footer from "../../Buyer/Layout/Footer";
 import { showConfirmAlert, showSuccessAlert } from "../../Util/Alert";
 import { deletevehiclebyid } from "../../comoonfunction/Vehicledelete";
+import NavbarAndDrawer from "../layout/NavbarAndDrawer";
 export default function Viewcars() {
   const [car, setcar] = useState([]);
+  const API = import.meta.env.VITE_API_BASE_URL;
   const navigate = useNavigate();
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/sellar/request/view`, {
+      .get(`${API}/sellar/request/view`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
@@ -42,7 +43,7 @@ export default function Viewcars() {
       "Delete Car",
       "This action cannot be undone!",
       "Delete",
-      "Cancel"
+      "Cancel",
     ).then((res) => {
       if (res.isConfirmed) {
         deletevehiclebyid(id).then(() => {
