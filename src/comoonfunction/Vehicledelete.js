@@ -3,7 +3,7 @@ import { showErrorAlert, showSuccessAlert } from "../Util/Alert";
 const API = import.meta.env.VITE_API_BASE_URL;
 export const deletevehiclebyid = (id) => {
   return axios
-    .delete(`${API}/seller/request/reject/${id}`, {
+    .delete(`${API}/seller/delete/carbyid/${id}`, {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
