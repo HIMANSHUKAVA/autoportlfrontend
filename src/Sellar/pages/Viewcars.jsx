@@ -22,7 +22,7 @@ export default function Viewcars() {
   const navigate = useNavigate();
   useEffect(() => {
     axios
-      .get(`${API}/sellar/request/view`, {
+      .get(`${API}/seller/request/view`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
@@ -122,11 +122,17 @@ export default function Viewcars() {
                 >
                   <CardMedia
                     component="img"
-                    src={c.photo}
+                    src={
+                      c.photo ? `${API}/images/${c.photo}` : "/images/bmw.avif"
+                    }
                     sx={{
                       objectFit: "cover",
                       height: { xs: 220, md: 300 },
                       minWidth: 500,
+                    }}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/images/bmw.avif";
                     }}
                   />
                   <CardContent
