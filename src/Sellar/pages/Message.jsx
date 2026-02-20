@@ -29,6 +29,7 @@ export default function Message() {
         .post(`${API}/seller/contect/s`, form, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
+            "Content-Type": "application/json",
           },
         })
         .then(() => {
