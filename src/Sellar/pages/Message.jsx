@@ -130,7 +130,10 @@ export default function Message() {
             placeholder="Type Your Message Here...."
             value={form.message}
             onChange={(e) => {
-              setform(e.target.value);
+              setform((prev) => ({
+                ...prev,
+                message: e.target.value,
+              }));
             }}
             minRows={5}
             style={{
@@ -168,7 +171,7 @@ export default function Message() {
                 borderRadius: 2,
               }}
               type="submit"
-              onClick={handlsubmit}
+              onClick={() => handlsubmit()}
             >
               Send Message
             </Button>
