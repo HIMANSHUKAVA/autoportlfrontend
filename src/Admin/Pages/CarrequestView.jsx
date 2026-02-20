@@ -47,27 +47,9 @@ export default function CarrequestView() {
     console.log(status);
     console.log(id);
 
-    const payload = {
-      brand: car.brand,
-      model: car.model,
-      fuel: car.fuel,
-      transmission: car.transmission,
-      color: car.colour || car.color,
-      km_driven: car.km_driven,
-      priceLabel: car.priceLabel,
-      priceMin: car.priceMin,
-      priceMax: car.priceMax,
-      year: car.year,
-      type: car.type,
-      description: "best car",
-      carType: "OLD",
-      carcondition: car.carcondition,
-      image_url: car.photo,
-      status: status,
-    };
     if (status === "APPROVED") {
       axios
-        .post(`${API}/admin/request/view/singleimages/${id}`, payload, {
+        .post(`${API}/admin/request/view/singleimages/${id}`, null, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
           },
