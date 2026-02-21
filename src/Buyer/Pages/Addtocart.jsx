@@ -1,3 +1,4 @@
+import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Box,
   Button,
@@ -11,23 +12,22 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import Navbar from "../Layout/Navbar";
-import Footer from "../Layout/Footer";
-import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BuyNow from "../../Util/BuyNow";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import Footer from "../Layout/Footer";
+import Navbar from "../Layout/Navbar";
 export default function Addtocart() {
   // http://localhost:3000/addtocart/
 
+  const API = import.meta.env.VITE_API_BASE_URL;
   const [cart, setcart] = useState([]);
   const neonBlue = "#1e90ff";
   const buynow = BuyNow();
   const handldelete = (id) => {
     axios
-      .delete(`http://localhost:3000/buyer/addtocart/delete/${id}`, {
+      .delete(`${API}/buyer/addtocart/delete/${id}`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
@@ -40,7 +40,7 @@ export default function Addtocart() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/buyer/addtocart/view`, {
+      .get(`${API}/buyer/addtocart/view`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
@@ -74,9 +74,9 @@ export default function Addtocart() {
 
       //  IMPORTANT PART
       if (car.carType === "NEW") {
-        url = `http://localhost:3000/buyer/car/payment/add/${user_id}/${car.id}`;
+        url = `${API}/buyer/car/payment/add/${user_id}/${car.id}`;
       } else if (car.carType === "OLD") {
-        url = `http://localhost:3000/buyer/oldcar/payment/add/${user_id}/${car.id}`;
+        url = `${API}/buyer/oldcar/payment/add/${user_id}/${car.id}`;
       } else {
         alert("Unknown car type");
         return;
@@ -227,21 +227,6 @@ export default function Addtocart() {
           <Typography variant="h4" sx={{ mt: 2 }}>
             Total Price: ₹{total_price.toLocaleString("en-IN")}
           </Typography>
-
-          {/* <Button
-            fullWidth
-            sx={{
-              mt: 3,
-              background: "linear-gradient(90deg, #007BFF, #FF4D4D)",
-              color: "#fff",
-              fontWeight: "bold",
-              "&:hover": {
-                background: "linear-gradient(90deg, #005BEA, #FF1E56)",
-              },
-            }}
-          >
-            Proceed to Checkout
-          </Button> */}
         </Box>
       </Box>
       <Footer />

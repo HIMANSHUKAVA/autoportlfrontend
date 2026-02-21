@@ -16,13 +16,12 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import axios from "axios";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { showErrorAlert, showSuccessAlert } from "../../Util/Alert";
 import Footer from "../Layout/Footer";
 import Navbar from "../Layout/Navbar";
-import { useState } from "react";
-import { Subject } from "@mui/icons-material";
-import { showSuccessAlert, showErrorAlert } from "../../Util/Alert";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
 export default function Contect() {
   // create state for
 
@@ -45,6 +44,7 @@ export default function Contect() {
   };
 
   const navigate = useNavigate();
+  const API = import.meta.env.VITE_API_BASE_URL;
 
   const handlsubmitevent = (e) => {
     e.preventDefault();
@@ -55,7 +55,7 @@ export default function Contect() {
     }
 
     axios
-      .post("http://localhost:3000/buyer/contect/save", contect, {
+      .post(`${API}/buyer/contect/save`, contect, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },

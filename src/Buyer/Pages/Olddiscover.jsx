@@ -19,9 +19,11 @@ import Navbar from "../Layout/Navbar";
 export default function Discover() {
   const [cars, setCars] = useState([]);
 
+  const API = import.meta.env.VITE_API_BASE_URL;
+
   useEffect(() => {
     axios
-      .get("http://localhost:3000/buyer/oldcars/featured", {
+      .get(`${API}/buyer/oldcars/featured`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
@@ -40,7 +42,7 @@ export default function Discover() {
   const neonBlue = "#1e90ff";
 
   const id1 = localStorage.getItem("user_id");
-  const API = import.meta.env.VITE_API_BASE_URL;
+
   const handlcart = (id) => {
     axios
       .post(`${API}/buyer/addtocart/add/${id1}/${id}`, null, {
@@ -157,15 +159,6 @@ export default function Discover() {
                       gap: 2,
                     }}
                   >
-                    <Button
-                      variant="outlined"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        console.log("clicked buy");
-                      }}
-                    >
-                      BuyNow
-                    </Button>
                     <Button
                       variant="outlined"
                       onClick={(e) => {

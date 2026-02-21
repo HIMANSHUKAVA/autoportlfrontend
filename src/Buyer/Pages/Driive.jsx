@@ -6,12 +6,12 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
-import Navbar from "../Layout/Navbar";
-import Footer from "../Layout/Footer";
+import axios from "axios";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios, { Axios } from "axios";
 import { showErrorAlert, showSuccessAlert } from "../../Util/Alert";
+import Footer from "../Layout/Footer";
+import Navbar from "../Layout/Navbar";
 
 export default function Driive() {
   const { id } = useParams();
@@ -28,6 +28,7 @@ export default function Driive() {
     city: "",
   });
 
+  const API = import.meta.env.VITE_API_BASE_URL;
   const handlsubmitevent = async (e) => {
     e.preventDefault();
 
@@ -41,15 +42,11 @@ export default function Driive() {
       };
 
       await axios
-        .post(
-          `http://localhost:3000/buyer/booking/add/${user_id}/${id}`,
-          payload,
-          {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("token"),
-            },
-          }
-        )
+        .post(`${API}/buyer/booking/add/${user_id}/${id}`, payload, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
         .then(() => {
           showSuccessAlert("Booked Successful");
           navigate("/dashboard");

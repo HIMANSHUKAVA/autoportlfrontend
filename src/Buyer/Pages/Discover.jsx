@@ -10,11 +10,11 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import Navbar from "../Layout/Navbar";
-import Footer from "../Layout/Footer";
 import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Footer from "../Layout/Footer";
+import Navbar from "../Layout/Navbar";
 
 export default function Discover() {
   const [cars, setCars] = useState([]);
@@ -37,18 +37,16 @@ export default function Discover() {
       .catch(console.log);
   }, []);
 
+  const API = import.meta.env.VITE_API_BASE_URL;
+
   // 🔹 Add to cart
   const handleCart = (carId) => {
     axios
-      .post(
-        `http://localhost:3000/buyer/addtocart/add/${userId}/${carId}`,
-        null,
-        {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        }
-      )
+      .post(`${API}/buyer/addtocart/add/${userId}/${carId}`, null, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
       .then(() => navigate("/add-to-cart"))
       .catch(console.log);
   };
@@ -135,15 +133,6 @@ export default function Discover() {
                       mb: 2,
                     }}
                   >
-                    <Button
-                      variant="outlined"
-                      data-aos="fade-up"
-                      data-aos-delay="200"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      Buy Now
-                    </Button>
-
                     <Button
                       variant="outlined"
                       data-aos="fade-up"
