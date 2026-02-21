@@ -31,40 +31,41 @@ export default function Viewoldcar() {
     // eslint-disable-next-line
   }, [brand, type, price]);
 
+  const API = import.meta.env.VITE_API_BASE_URL;
   const fetchCars = async () => {
     try {
       let res;
 
       if (brand && type && price) {
-        res = await axios.get("http://localhost:3000/buyer/oldcar/filter", {
+        res = await axios.get(`${API}/buyer/oldcar/filter`, {
           params: { brand, type, pricelabel: price },
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
           },
         });
       } else if (brand && type) {
-        res = await axios.get("http://localhost:3000/buyer/oldcar/brand/type", {
+        res = await axios.get(`${API}/buyer/oldcar/brand/type`, {
           params: { brand, type },
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
           },
         });
       } else if (brand) {
-        res = await axios.get("http://localhost:3000/buyer/oldcar/brand", {
+        res = await axios.get(`${API}/buyer/oldcar/brand`, {
           params: { brand },
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
           },
         });
       } else if (type) {
-        res = await axios.get("http://localhost:3000/buyer/oldcar/type", {
+        res = await axios.get(`${API}/buyer/oldcar/type`, {
           params: { type },
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
           },
         });
       } else if (price) {
-        res = await axios.get("http://localhost:3000/buyer/oldcar/pricelabel", {
+        res = await axios.get(`${API}/buyer/oldcar/pricelabel`, {
           params: { price },
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
@@ -86,15 +87,11 @@ export default function Viewoldcar() {
 
   const handleCart = (carId) => {
     axios
-      .post(
-        `http://localhost:3000/buyer/addtocart/add/${userId}/${carId}`,
-        null,
-        {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
+      .post(`${API}/buyer/addtocart/add/${userId}/${carId}`, null, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
         },
-      )
+      })
       .then(() => navigate("/add-to-cart"))
       .catch(console.error);
   };
@@ -116,7 +113,7 @@ export default function Viewoldcar() {
       };
 
       const response = await axios.post(
-        `http://localhost:3000/buyer/oldcar/payment/add/${user_id}/${car.id}`,
+        `${API}/buyer/oldcar/payment/add/${user_id}/${car.id}`,
         payload,
         {
           headers: {
@@ -166,13 +163,21 @@ export default function Viewoldcar() {
                   >
                     <CardMedia
                       component="img"
-                      image={car.image_url || "/no-image.png"}
+                      image={
+                        car.image_url ?
+                          `${API}/images/${car.image_url}`
+                        : "/images/bmw.avif"
+                      }
                       sx={{
                         objectFit: "cover",
                         width: "100%",
                         height: "100%",
 
                         overflow: "hidden",
+                      }}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "/images/bmw.avif";
                       }}
                     />
                   </Box>

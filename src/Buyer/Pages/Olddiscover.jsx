@@ -5,20 +5,16 @@ import {
   CardActionArea,
   CardActions,
   CardContent,
-  CardHeader,
   CardMedia,
-  Container,
   Grid,
   Toolbar,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import Navbar from "../Layout/Navbar";
-import Footer from "../Layout/Footer";
-import { X } from "@mui/icons-material";
 import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import BuyNow from "../../Util/BuyNow";
+import Footer from "../Layout/Footer";
+import Navbar from "../Layout/Navbar";
 
 export default function Discover() {
   const [cars, setCars] = useState([]);
@@ -44,9 +40,10 @@ export default function Discover() {
   const neonBlue = "#1e90ff";
 
   const id1 = localStorage.getItem("user_id");
+  const API = import.meta.env.VITE_API_BASE_URL;
   const handlcart = (id) => {
     axios
-      .post(`http://localhost:3000/buyer/addtocart/add/${id1}/${id}`, null, {
+      .post(`${API}/buyer/addtocart/add/${id1}/${id}`, null, {
         headers: {
           Authorization: "Beared " + localStorage.getItem("token"),
         },
@@ -117,13 +114,21 @@ export default function Discover() {
                   >
                     <CardMedia
                       component="img"
-                      image={car.image_url}
+                      image={
+                        car.image_url ?
+                          `${API}/images/${car.image_url}`
+                        : "/images/bmw.avif"
+                      }
                       sx={{
                         objectFit: "cover",
                         width: "100%",
                         height: "100%",
 
                         overflow: "hidden",
+                      }}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "/images/bmw.avif";
                       }}
                     />
                   </Box>

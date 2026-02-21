@@ -1,3 +1,4 @@
+import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Box,
   Button,
@@ -11,21 +12,21 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import Navbar from "../Layout/Navbar";
-import Footer from "../Layout/Footer";
-import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BuyNow from "../../Util/BuyNow";
+import Footer from "../Layout/Footer";
+import Navbar from "../Layout/Navbar";
 
 export default function Wishlist() {
   const [cars, setcars] = useState([]);
 
+  const API = import.meta.env.VITE_API_BASE_URL;
   const buynow = BuyNow();
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/buyer/wishlist/view`, {
+      .get(`${API}/buyer/wishlist/view`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
 
@@ -42,7 +43,7 @@ export default function Wishlist() {
 
   const handldelete = (id) => {
     axios
-      .delete(`http://localhost:3000/wishlist/delete/${id}`, {
+      .delete(`${API}/wishlist/delete/${id}`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
@@ -73,9 +74,9 @@ export default function Wishlist() {
 
       //  IMPORTANT PART
       if (car.carType === "NEW") {
-        url = `http://localhost:3000/buyer/car/payment/add/${user_id}/${car.id}`;
+        url = `${API}/buyer/car/payment/add/${user_id}/${car.id}`;
       } else if (car.carType === "OLD") {
-        url = `http://localhost:3000/buyer/oldcar/payment/add/${user_id}/${car.id}`;
+        url = `${API}/buyer/oldcar/payment/add/${user_id}/${car.id}`;
       } else {
         alert("Unknown car type");
         return;
@@ -149,11 +150,19 @@ export default function Wishlist() {
                 >
                   <CardMedia
                     component="img"
-                    image={item.c.image_url}
+                    image={
+                      item.c.image_url ?
+                        `${API}/images/${item.c.image_url}`
+                      : "/images/bmw.avif"
+                    }
                     sx={{
                       height: 220,
                       width: "100%",
                       objectFit: "cover",
+                    }}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/images/bmw.avif";
                     }}
                   />
 

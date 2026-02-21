@@ -5,20 +5,17 @@ import {
   CardActionArea,
   CardActions,
   CardContent,
-  CardHeader,
   CardMedia,
-  Container,
   Grid,
   Toolbar,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import Navbar from "../Layout/Navbar";
-import Footer from "../Layout/Footer";
-import { X } from "@mui/icons-material";
 import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import BuyNow from "../../Util/BuyNow";
+import Footer from "../Layout/Footer";
+import Navbar from "../Layout/Navbar";
 
 export default function Viewcar() {
   const [cars, setCars] = useState([]);
@@ -41,16 +38,15 @@ export default function Viewcar() {
         paymentMethod: "RAZORPAY",
       };
 
-const response = await axios.post(
-  `https://autoportal.onrender.com/buyer/car/payment/add/${user_id}/${car.id}`,
-  payload,
-  {
-    headers: {
-      Authorization: "Bearer " + localStorage.getItem("token"),
-    },
-  }
-);
-
+      const response = await axios.post(
+        `https://autoportal.onrender.com/buyer/car/payment/add/${user_id}/${car.id}`,
+        payload,
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        },
+      );
 
       buynow.payNow(response.data.amount, response.data.razorpayOrderId);
     } catch (error) {
@@ -64,10 +60,11 @@ const response = await axios.post(
     fetchCars();
   }, [brand, type, price]);
 
+  const API = import.meta.env.VITE_API_BASE_URL;
   const fetchCars = async () => {
     try {
       if (brand && type && price) {
-        const res = await axios.get("http://localhost:3000/buyer/car/filter", {
+        const res = await axios.get(`${API}/buyer/car/filter`, {
           params: { brand, type, pricelabel: price },
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
@@ -75,18 +72,15 @@ const response = await axios.post(
         });
         setCars(res.data);
       } else if (brand && type) {
-        const res = await axios.get(
-          "http://localhost:3000/buyer/cars/brand/type",
-          {
-            params: { brand, type },
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("token"),
-            },
-          }
-        );
+        const res = await axios.get(`${API}/buyer/cars/brand/type`, {
+          params: { brand, type },
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        });
         setCars(res.data);
       } else if (brand) {
-        const res = await axios.get("http://localhost:3000/buyer/cars/brand", {
+        const res = await axios.get(`${API}/buyer/cars/brand`, {
           params: { brand },
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
@@ -94,7 +88,7 @@ const response = await axios.post(
         });
         setCars(res.data);
       } else if (type) {
-        const res = await axios.get("http://localhost:3000/buyer/cars/type", {
+        const res = await axios.get(`${API}/buyer/cars/type`, {
           params: { type },
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
@@ -102,19 +96,16 @@ const response = await axios.post(
         });
         setCars(res.data);
       } else if (price) {
-        const res = await axios.get(
-          "http://localhost:3000/buyer/cars/price-label",
-          {
-            params: { pricelabel: price },
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("token"),
-            },
-          }
-        );
+        const res = await axios.get(`${API}/buyer/cars/price-label`, {
+          params: { pricelabel: price },
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        });
         setCars(res.data);
       } else {
         //  IMPORTANT PART
-        const res = await axios.get("http://localhost:3000/buyer/cars", {
+        const res = await axios.get(`${API}/buyer/cars`, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
           },
@@ -133,7 +124,7 @@ const response = await axios.post(
   const id1 = localStorage.getItem("user_id");
   const handlcart = (id) => {
     axios
-      .post(`http://localhost:3000/buyer/addtocart/add/${id1}/${id}`)
+      .post(`${API}/buyer/addtocart/add/${id1}/${id}`)
       .then(() => {
         console.log("Cart Added");
         navigate("/add-to-cart");
@@ -200,13 +191,21 @@ const response = await axios.post(
                   >
                     <CardMedia
                       component="img"
-                      image={car.image_url}
+                      image={
+                        car.image_url ?
+                          `${API}/images/${car.image_url}`
+                        : "/images/bmw.avif"
+                      }
                       sx={{
                         objectFit: "cover",
                         width: "100%",
                         height: "100%",
 
                         overflow: "hidden",
+                      }}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "/images/bmw.avif";
                       }}
                     />
                   </Box>
