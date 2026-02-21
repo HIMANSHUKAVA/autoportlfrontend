@@ -265,8 +265,13 @@ export default function Edit() {
                 />
               : car.photo ?
                 <img
-                  src={`${API}/images/${car.photo}`}
-                  alt="existing"
+                  src={
+                    photopreview ? photopreview
+                    : car.photo ?
+                      `${API}/images/${car.photo}`
+                    : "/images/mahindra-xuv.avif"
+                  }
+                  alt="car"
                   style={{
                     width: "100%",
                     height: "100%",
@@ -275,7 +280,7 @@ export default function Edit() {
                   }}
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = "/images/mahindra-xuv.avif"; // public folder wali default image
+                    e.target.src = "/images/mahindra-xuv.avif";
                   }}
                 />
               : <>
@@ -309,7 +314,7 @@ export default function Edit() {
                 InputLabelProps={{ shrink: true }}
                 name="name"
                 id="name"
-                value={car.name}
+                value={car.brand}
                 sx={inputStyle(Boolean(validate.name))}
                 onChange={handlevent}
                 error={Boolean(validate.name)}
