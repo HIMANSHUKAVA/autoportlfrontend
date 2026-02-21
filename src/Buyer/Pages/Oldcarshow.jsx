@@ -201,7 +201,7 @@ export default function Oldcarshow() {
                         : "/images/mahindra-xuv.avif"
                       }
                       sx={{ width: "100%", height: "100%", objectFit: "cover" }}
-                      nError={(e) => {
+                      onError={(e) => {
                         e.target.onerror = null;
                         e.target.src = "/images/mahindra-xuv.avif";
                       }}
