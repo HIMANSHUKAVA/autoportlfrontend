@@ -167,17 +167,6 @@ export default function Oldcarshow() {
                 backgroundColor: "#000",
               }}
             >
-              {/* <Box
-                component="img"
-                src={car.image_url || "/no-image.png"}
-                alt={car.model}
-                sx={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
-              /> */}
-
               <Swiper
                 modules={[Navigation, Pagination]}
                 slidesPerView={1}
@@ -189,7 +178,11 @@ export default function Oldcarshow() {
                     <SwiperSlide key={index}>
                       <Box
                         component="img"
-                        src={img.url}
+                        src={
+                          img.url ?
+                            `${API}/images/${img.url}`
+                          : "/images/mahindra-xuv.avif"
+                        }
                         alt={`car-${index}`}
                         sx={{
                           width: "100%",
