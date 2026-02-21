@@ -195,7 +195,11 @@ export default function Oldcarshow() {
                 : <SwiperSlide>
                     <Box
                       component="img"
-                      src={car.image_url || "/no-image.png"}
+                      src={
+                        car.image_url ?
+                          `${API}/images/${car.image_url}`
+                        : "/images/mahindra-xuv.avif"
+                      }
                       sx={{ width: "100%", height: "100%", objectFit: "cover" }}
                     />
                   </SwiperSlide>
