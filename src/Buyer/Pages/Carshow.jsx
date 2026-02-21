@@ -197,12 +197,16 @@ export default function Oldcarshow() {
                     <SwiperSlide key={index}>
                       <Box
                         component="img"
-                        src={img.url}
+                        src={`${API}/images/${img.url}`}
                         alt={`car-${index}`}
                         sx={{
                           width: "100%",
                           height: "100%",
                           objectFit: "cover",
+                        }}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "/images/mahindra-xuv.avif";
                         }}
                       />
                     </SwiperSlide>
@@ -210,8 +214,16 @@ export default function Oldcarshow() {
                 : <SwiperSlide>
                     <Box
                       component="img"
-                      src={car.image_url || "/no-image.png"}
+                      src={
+                        car.image_url ?
+                          `${API}/images/${car.image_url}`
+                        : "/images/mahindra-xuv.avif"
+                      }
                       sx={{ width: "100%", height: "100%", objectFit: "cover" }}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "/images/mahindra-xuv.avif";
+                      }}
                     />
                   </SwiperSlide>
                 }
