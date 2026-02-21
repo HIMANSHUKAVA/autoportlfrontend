@@ -1,3 +1,6 @@
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import {
   Box,
   Button,
@@ -9,20 +12,18 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { showConfirmAlert, showSuccessAlert } from "../../Util/Alert";
 import { deletevehiclebyid } from "../../comoonfunction/Vehicledelete";
 export default function Vehicle() {
   const [car, setcar] = useState([]);
 
+  const API = import.meta.env.VITE_API_BASE_URL;
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/sellar/request/view`, {
+      .get(`${API}/seller/request/view`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
@@ -46,7 +47,7 @@ export default function Vehicle() {
       "Delete Car",
       "This action cannot be undone!",
       "Delete",
-      "Cancel"
+      "Cancel",
     ).then((res) => {
       if (res.isConfirmed) {
         deletevehiclebyid(id).then(() => {
@@ -145,13 +146,21 @@ export default function Vehicle() {
                   <TableCell>
                     <Box
                       component="img"
-                      src={t.photo}
+                      src={
+                        t.photo ?
+                          `${API}/images/${t.photo}`
+                        : "/images/bmw.avif"
+                      }
                       alt="Vehicle"
                       sx={{
                         width: 90,
                         height: 60,
                         borderRa1dius: 1,
                         objectFit: "cover",
+                      }}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "/images/bmw.avif";
                       }}
                     />
                   </TableCell>

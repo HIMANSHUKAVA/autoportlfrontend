@@ -57,7 +57,7 @@ export default function Changepass() {
     }
 
     axios
-      .put(`${API}/sellar/editpassword/${id}`, null, {
+      .put(`${API}/seller/editpassword/${id}`, null, {
         params: { currentpassword: currentpass, newpassword: newpass },
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
