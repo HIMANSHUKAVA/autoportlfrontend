@@ -22,7 +22,7 @@ export default function Ragister() {
   });
 
   const [validetion, setvalidetion] = useState({});
-
+  const API = import.meta.env.VITE_API_BASE_URL;
   const validetions = () => {
     const newerror = {};
 
@@ -60,37 +60,33 @@ export default function Ragister() {
     setvalidetion({});
 
     try {
-      const verify = await axios.post(
-        "http://localhost:3000/auth/check-email",
-        null,
-        {
-          params: { email: formdeta.email },
-          validateStatus: () => true,
-        }
-      );
+      const verify = await axios.post(`${API}/auth/check-email`, null, {
+        params: { email: formdeta.email },
+        validateStatus: () => true,
+      });
 
       if (
         verify.status === 409 ||
         verify.data.trim() === "User Already Registered"
       ) {
         showErrorAlert(
-          "User Already Registered! Please use a different Email ID."
+          "User Already Registered! Please use a different Email ID.",
         );
         return;
       }
 
-      await axios.get("http://localhost:3000/auth/generate-otp", {
+      await axios.get(`${API}/auth/generate-otp`, {
         params: { email: formdeta.email },
       });
 
       navigate(
         `/otp?name=${encodeURIComponent(
-          formdeta.username
+          formdeta.username,
         )}&email=${encodeURIComponent(
-          formdeta.email
+          formdeta.email,
         )}&password=${encodeURIComponent(
-          formdeta.Password
-        )}&type=${encodeURIComponent(formdeta.type)}`
+          formdeta.Password,
+        )}&type=${encodeURIComponent(formdeta.type)}`,
       );
     } catch (error) {
       console.error("Error while checking email:", error);

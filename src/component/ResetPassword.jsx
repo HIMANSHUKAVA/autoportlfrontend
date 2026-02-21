@@ -21,19 +21,20 @@ export default function ResetPassword() {
     setconformpassword(value);
   };
 
+  const API = import.meta.env.VITE_API_BASE_URL;
   const handlsubmitevent = async (e) => {
     e.preventDefault();
 
     if (conformpassword !== password) {
       showErrorAlert(
-        "Password And Conform Password Did Not Matched Please Try Again"
+        "Password And Conform Password Did Not Matched Please Try Again",
       );
 
       setpassword("");
       setconformpassword("");
     } else {
       await axios
-        .post(`http://localhost:3000/auth/reset-password`, null, {
+        .post(`${API}/auth/reset-password`, null, {
           params: { email, password },
         })
         .then(() => {
@@ -64,7 +65,7 @@ export default function ResetPassword() {
           width: "100%",
           height: "100%",
           objectFit: "cover",
-          zIndex: -1,
+          zIndex: 0,
         }}
       >
         <source src="/videos/login.mp4" />

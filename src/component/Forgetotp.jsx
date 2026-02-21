@@ -28,6 +28,7 @@ export default function Forgetotp() {
 
   const location = useLocation();
   const query = new URLSearchParams(location.search);
+  const API = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const enteremail = query.get("email");
@@ -40,18 +41,18 @@ export default function Forgetotp() {
   const handlreset = async () => {
     const newotp = otp.join("");
     await axios
-      .post(`http://localhost:3000/auth/varify-otp`, {
+      .post(`${API}/auth/varify-otp`, {
         otp: Number(newotp),
       })
       .then(() => {
         axios
-          .post(`http://localhost:3000/auth/verify-reset-link`, {
+          .post(`${API}/auth/verify-reset-link`, {
             email: email,
             otp: Number(newotp),
           })
           .then(() => {
             showSuccessAlert(
-              "Otp Varified And Password Update Link Sent Your Mail"
+              "Otp Varified And Password Update Link Sent Your Mail",
             );
             navigate("/reset-otp");
             setotp("");
@@ -83,7 +84,7 @@ export default function Forgetotp() {
           style={{
             width: "100%",
             height: "100%",
-            zIndex: -1,
+            zIndex: 0,
             position: "fixed",
             top: 0,
             left: 0,

@@ -9,14 +9,13 @@ export default function Login() {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
 
+  const API = import.meta.env.VITE_API_BASE_URL;
   const navigate = useNavigate();
   const handlloginsubmitevent = async (e) => {
     e.preventDefault();
 
     await axios
-      .post(
-        `http://localhost:3000/auth/login-person?email=${email}&password=${password}`,
-      )
+      .post(`${API}/auth/login-person?email=${email}&password=${password}`)
       .then((Response) => {
         const { user, token } = Response.data;
         console.log(Response.data);
@@ -192,6 +191,8 @@ export default function Login() {
                 color: "#66b2ff",
                 mt: 2,
                 fontSize: "0.9rem",
+                textDecoration: "none",
+
                 "&:hover": { textDecoration: "underline", cursor: "pointer" },
               }}
               component={Link}
@@ -205,6 +206,7 @@ export default function Login() {
             <Typography
               sx={{
                 color: "#66b2ff",
+                textDecoration: "none",
                 mt: 1,
                 fontSize: "0.9rem",
                 "&:hover": { textDecoration: "underline", cursor: "pointer" },

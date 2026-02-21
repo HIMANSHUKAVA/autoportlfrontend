@@ -35,9 +35,10 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import PaymentIcon from "@mui/icons-material/Payment";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 export default function Layout() {
   const id = localStorage.getItem("id");
+  const navigate = useNavigate();
   const menuButtonStyle = {
     position: "relative",
     overflow: "visible",
@@ -387,7 +388,17 @@ export default function Layout() {
               <ListItemText>Edit Profile</ListItemText>
             </ListItemButton>
           </Collapse>
-          <ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              localStorage.removeItem("user");
+              localStorage.removeItem("id");
+              localStorage.removeItem("useradmin");
+              localStorage.removeItem("roleadmin");
+              localStorage.removeItem("token");
+
+              navigate("/admin/login");
+            }}
+          >
             <ListItemIcon>
               <LogoutIcon />
             </ListItemIcon>
@@ -563,6 +574,15 @@ export default function Layout() {
                 color="inherit"
                 sx={menuButtonStyle}
                 endIcon={<LogoutIcon sx={{ color: "#f5c46b" }} />}
+                onClick={() => {
+                  localStorage.removeItem("user");
+                  localStorage.removeItem("id");
+                  localStorage.removeItem("useradmin");
+                  localStorage.removeItem("roleadmin");
+                  localStorage.removeItem("token");
+
+                  navigate("/admin/login");
+                }}
               >
                 Logout
               </Button>

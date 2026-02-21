@@ -64,6 +64,7 @@ export default function Otp() {
     }
   };
 
+  const API = import.meta.env.VITE_API_BASE_URL;
   // verify otp and ragister
   const handlragister = async (e) => {
     e.preventDefault();
@@ -72,19 +73,13 @@ export default function Otp() {
 
     try {
       // 1️⃣ Verify OTP
-      const verifyOtp = await axios.post(
-        "http://localhost:3000/auth/varify-otp",
-        {
-          otp: Number(enterotp),
-        }
-      );
+      const verifyOtp = await axios.post(`${API}/auth/varify-otp`, {
+        otp: Number(enterotp),
+      });
 
       if (verifyOtp.data.trim() === "Otp Varified Successfully") {
         try {
-          const response = await axios.post(
-            "http://localhost:3000/auth/add",
-            formdeta
-          );
+          const response = await axios.post(`${API}/auth/add`, formdeta);
 
           localStorage.setItem("user_id", response.data.id);
           localStorage.setItem("user_name", response.data.username);
@@ -95,7 +90,7 @@ export default function Otp() {
         } catch (error) {
           showErrorAlert(
             "Something went wrong! Please check your connection.",
-            error
+            error,
           );
         }
 
@@ -112,7 +107,7 @@ export default function Otp() {
   };
 
   const handlresendotp = async () => {
-    axios.get(`http://localhost:3000/auth/generate-otp`, {
+    axios.get(`${API}/auth/generate-otp`, {
       params: { email: formdeta.email },
     });
   };
@@ -243,18 +238,17 @@ export default function Otp() {
             VERIFY OTP
           </Button>
 
-          {counter > 0 ? (
+          {counter > 0 ?
             <Typography sx={{ mt: 2, color: "#ccc" }}>
               Resend Otp In : {counter}
             </Typography>
-          ) : (
-            <Button
+          : <Button
               sx={{ mt: 2, textTransform: "none", color: "#00bfff" }}
               onClick={handlresendotp}
             >
               Resend Otp
             </Button>
-          )}
+          }
         </Box>
       </Box>
     </>
