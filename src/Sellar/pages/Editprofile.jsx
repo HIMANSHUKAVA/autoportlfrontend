@@ -14,7 +14,7 @@ export default function Editprofile() {
   const [photo, setPhoto] = useState(null);
   const API = import.meta.env.VITE_API_BASE_URL;
 
-  const photourl = photo ? `http://localhost:3000/images/${photo}` : "";
+  const photourl = photo ? `${API}/images/${photo}` : "";
 
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
