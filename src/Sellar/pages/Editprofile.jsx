@@ -35,7 +35,7 @@ export default function Editprofile() {
 
   useEffect(() => {
     axios
-      .get(`${API}/sellar/get/${id}`, {
+      .get(`${API}/seller/get/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -81,7 +81,7 @@ export default function Editprofile() {
     }
 
     axios
-      .put(`${API}/sellar/editprofile/${id}`, formdeta, {
+      .put(`${API}/seller/editprofile/${id}`, formdeta, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
