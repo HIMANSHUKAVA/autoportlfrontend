@@ -1,16 +1,11 @@
-import React, { useEffect, useState } from "react";
 import { Box, Button, Grid, Typography } from "@mui/material";
-import NavbarAndDrawer from "../layout/NavbarAndDrawer";
-import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import Footer from "../../Buyer/Layout/Footer";
-import {
-  Autoplay,
-  EffectCoverflow,
-  Navigation,
-  Pagination,
-} from "swiper/modules";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import Footer from "../../Buyer/Layout/Footer";
+import NavbarAndDrawer from "../layout/NavbarAndDrawer";
 
 import "swiper/css/bundle";
 import { showConfirmAlert, showSuccessAlert } from "../../Util/Alert";
@@ -22,9 +17,10 @@ export default function Singlecarpage() {
 
   const [car, setCar] = useState(null);
 
+  const API = import.meta.env.VITE_API_BASE_URL;
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/sellar/request/get/${id}`, {
+      .get(`${API}/seller/request/get/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -36,7 +32,7 @@ export default function Singlecarpage() {
   if (!car) return null;
 
   const carDetails = [
-    ["Car Name", car.name],
+    ["Car Name", car.brand],
     ["Model", car.model],
     ["Fuel Type", car.fuel],
     ["Colour", car.colour],
@@ -52,7 +48,7 @@ export default function Singlecarpage() {
       "Delete Car",
       "This action cannot be undone!",
       "Delete",
-      "Cancel"
+      "Cancel",
     ).then((res) => {
       if (res.isConfirmed) {
         deletevehiclebyid(id).then(() => {
@@ -118,37 +114,48 @@ export default function Singlecarpage() {
               modules={[Navigation, Pagination]}
               slidesPerView={1}
               pagination={{ clickable: true }}
-              Navigation
+              navigation
             >
-              {car.images && car.images.length > 0 ? (
+              {car.images && car.images.length > 0 ?
                 car.images.map((c, index) => (
                   <SwiperSlide key={index}>
                     <Box
                       component="img"
-                      src={`http://localhost:3000/images/${c.photos}`}
+                      src={`${API}/images/${c.photos}`}
                       sx={{
                         width: "100%",
                         height: { xs: "auto", md: "520px" },
                         objectFit: "cover",
                         borderRadius: 2,
                       }}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "/images/mahindra-xuv.avif";
+                      }}
                     />
                   </SwiperSlide>
                 ))
-              ) : (
-                <SwiperSlide>
+              : <SwiperSlide>
                   <Box
                     component="img"
-                    src={car.photo || "/no-image.png"}
+                    src={
+                      car.photo && car.photo !== "null" ?
+                        `${API}/images/${car.photo}`
+                      : "/images/mahindra-xuv.avif"
+                    }
                     sx={{
                       width: "100%",
                       height: { xs: "auto", md: "520px" },
                       objectFit: "cover",
                       borderRadius: 2,
                     }}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/images/mahindra-xuv.avif";
+                    }}
                   />
                 </SwiperSlide>
-              )}
+              }
             </Swiper>
           </Box>
 
@@ -162,6 +169,7 @@ export default function Singlecarpage() {
                   py: 1.5,
                   borderBottom: "1px solid rgba(255,255,255,0.1)",
                 }}
+                spacing={3}
               >
                 <Grid item xs={12} sm={5}>
                   <Typography
@@ -201,6 +209,9 @@ export default function Singlecarpage() {
                 sx={{
                   border: "1px solid #FACC15",
                   color: "#FACC15",
+                }}
+                onClick={() => {
+                  navigate(`/edit/${id}`);
                 }}
               >
                 Edit
