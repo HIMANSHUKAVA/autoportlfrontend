@@ -7,12 +7,7 @@ import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SpeedIcon from "@mui/icons-material/Speed";
 import StarsIcon from "@mui/icons-material/Stars";
-import {
-  Autoplay,
-  EffectCoverflow,
-  Navigation,
-  Pagination,
-} from "swiper/modules";
+import { Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css/bundle";
@@ -31,9 +26,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import Navbar from "../Layout/Navbar";
-import Footer from "../Layout/Footer";
 import BuyNow from "../../Util/BuyNow";
+import Footer from "../Layout/Footer";
+import Navbar from "../Layout/Navbar";
 
 export default function Oldcarshow() {
   const neonBlue = "#1e90ff";
@@ -43,10 +38,10 @@ export default function Oldcarshow() {
 
   const user_id = localStorage.getItem("user_id");
   const buynow = BuyNow();
-
+  const API = import.meta.env.VITE_API_BASE_URL;
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/buyer/oldcar/${id}`, {
+      .get(`${API}/buyer/oldcar/${id}`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
@@ -57,7 +52,7 @@ export default function Oldcarshow() {
 
   const handleWishlist = () => {
     axios
-      .post(`http://localhost:3000/buyer/wishlist/add/${user_id}/${id}`, null, {
+      .post(`${API}/buyer/wishlist/add/${user_id}/${id}`, null, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
@@ -86,13 +81,13 @@ export default function Oldcarshow() {
       };
 
       const response = await axios.post(
-        `http://localhost:3000/buyer/oldcar/payment/add/${user_id}/${id}`,
+        `${API}/buyer/oldcar/payment/add/${user_id}/${id}`,
         payload,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       console.log("Payment initiated:", response.data);
@@ -189,7 +184,7 @@ export default function Oldcarshow() {
                 pagination={{ clickable: true }}
                 navigation
               >
-                {car.images && car.images.length > 0 ? (
+                {car.images && car.images.length > 0 ?
                   car.images.map((img, index) => (
                     <SwiperSlide key={index}>
                       <Box
@@ -204,15 +199,14 @@ export default function Oldcarshow() {
                       />
                     </SwiperSlide>
                   ))
-                ) : (
-                  <SwiperSlide>
+                : <SwiperSlide>
                     <Box
                       component="img"
                       src={car.image_url || "/no-image.png"}
                       sx={{ width: "100%", height: "100%", objectFit: "cover" }}
                     />
                   </SwiperSlide>
-                )}
+                }
               </Swiper>
             </Box>
           </Grid>
