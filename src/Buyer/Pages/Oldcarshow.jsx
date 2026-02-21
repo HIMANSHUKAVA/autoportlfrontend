@@ -69,6 +69,8 @@ export default function Oldcarshow() {
     if (!car) return; // safety
 
     const totalamount = car.price;
+    console.log("Car Price:", car.price);
+    console.log("Type:", typeof car.price);
 
     try {
       const user_id = localStorage.getItem("user_id");
