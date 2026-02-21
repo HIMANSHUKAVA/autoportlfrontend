@@ -11,7 +11,7 @@ export default function Edit() {
   const { id } = useParams();
   // const [photo, setPhoto] = useState(null);
   const [car, setcar] = useState({
-    name: "",
+    brand: "",
     model: "",
     fuel: "",
     colour: "",
@@ -40,7 +40,17 @@ export default function Edit() {
       })
       .then((Response) => {
         console.log(Response.data);
-        setcar(Response.data);
+        setcar({
+          brand: Response.data.brand || "",
+          model: Response.data.model || "",
+          fuel: Response.data.fuel || "",
+          colour: Response.data.colour || "",
+          condition: Response.data.condition || "",
+          transmission: Response.data.transmission || "",
+          km_driven: Response.data.km_driven || "",
+          price: Response.data.price || "",
+          photo: Response.data.photo || "",
+        });
       });
   }, [id]);
 
@@ -90,7 +100,7 @@ export default function Edit() {
   const validation = () => {
     const newError = {};
 
-    if (!car.name.trim()) {
+    if (!car.brand.trim()) {
       newError.name = "Car Name is required";
     }
 
@@ -312,13 +322,13 @@ export default function Edit() {
               <TextField
                 label="Enter The Car Name"
                 InputLabelProps={{ shrink: true }}
-                name="name"
-                id="name"
+                name="brand"
+                id="brand"
                 value={car.brand}
-                sx={inputStyle(Boolean(validate.name))}
+                sx={inputStyle(Boolean(validate.brand))}
                 onChange={handlevent}
-                error={Boolean(validate.name)}
-                helperText={validate.name}
+                error={Boolean(validate.brand)}
+                helperText={validate.brand}
               />
               <br />
               <TextField
